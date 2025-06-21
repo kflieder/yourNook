@@ -2,13 +2,14 @@
 import React, { useState } from 'react'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../../lib/firebase';
+import {useRouter} from 'next/navigation';
 
 function SignupForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [username, setUsername] = useState('');
-
+    const router = useRouter();
 
     async function handleSignup(e: React.FormEvent) {
         e.preventDefault();
@@ -17,6 +18,7 @@ function SignupForm() {
             await updateProfile(userCredential.user, {
                 displayName: username
             });
+            router.push('/profile-settings');
         } catch (error) {
             console.log("Error signing up:", error);
         }
