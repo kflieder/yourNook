@@ -4,15 +4,22 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../lib/firebase";
 import { IoSettingsOutline } from "react-icons/io5";
 import Link from 'next/link'
-
-const AuthContext = createContext(null);
-
+import { User } from "firebase/auth";
 
 
 
-export function AuthProvider({ children }) {
+interface AuthContextType {
+  username: User | null;
+  loading: boolean;
+}
 
-  const [username, setUsername] = useState(null);
+const AuthContext = createContext<AuthContextType | null>(null);
+
+
+
+export function AuthProvider({ children } : { children: React.ReactNode }) {
+
+  const [username, setUsername] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -44,7 +51,7 @@ export function RenderUsername() {
 
   if (!username) return <p>  Please Log In </p>
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 mr-2">
       Welcome, {username.displayName}!
       <Link href="/profile-settings">
                 <IoSettingsOutline />
