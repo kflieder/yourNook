@@ -55,10 +55,11 @@ function ProfilePicutre() {
 
 
     return (
-        <div className="flex flex-col items-center gap-4">
-            
+        <div className="flex flex-col bg-white border-2 border-blue-950 rounded p-5 items-center gap-4">
+            <div className='border p-5'>
+
                 {previewUrl && (
-                    <div className="mt-4">
+                    <div>
                         <img
                             src={previewUrl}
                             alt="Profile Preview"
@@ -66,35 +67,43 @@ function ProfilePicutre() {
                         />
                     </div>
                 )}
-                <div>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                                setProfilePicture(file);
-                                setPreviewUrl(URL.createObjectURL(file));
-                            }
+            </div>
+            <div>
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                            setProfilePicture(file);
+                            setPreviewUrl(URL.createObjectURL(file));
                         }
-                        }
-                        className='hidden'
-                        id="profilePicture"
-                        name="profilePicture"
-                    />
-                    <label htmlFor="profilePicture" className="cursor-pointer mt-2 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
-                        Choose File
-                    </label>
-                </div>
+                    }
+                    }
+                    className='hidden'
+                    id="profilePicture"
+                    name="profilePicture"
+                />
+                {
+                    !profilePicture ? (
+                        <label htmlFor="profilePicture" className="inline-block text-center px-4 py-2 rounded cursor-pointer transition-colors bg-gray-200 hover:bg-gray-300">
+                            Choose Picture
+                        </label>
+                    ) : (
+                        <button
+                            onClick={handleUploadProfilePic}
+                            className="inline-block text-center px-4 py-2 rounded cursor-pointer transition-colors bg-blue-500"
+                        >
+                            Upload Picture
+                        </button>
+                    )
 
-    
-            <button
-                onClick={handleUploadProfilePic}
-                className={` ${!profilePicture ? 'opacity-50 cursor-not-allowed' : 'mt-2 px-4 py-2 bg-blue-500 text-white rounded'}`}
-                disabled={!profilePicture}
-            >
-                Upload Profile Picture
-            </button>
+                }
+
+            </div>
+
+
+
 
 
         </div>
