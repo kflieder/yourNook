@@ -1,38 +1,19 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { useAuth } from '@/context/AuthContext';
 import { useUserDoc } from '@/hooks/useUserDoc';
 import { storage } from '../../lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { displayProfilePic } from '@/hooks/displayProfilePic';
 
 
 function ProfilePicutre() {
+    const { username }: any = useAuth();
+    const { profilePicture,
+        previewUrl,
+        setProfilePicture,
+        setPreviewUrl } = displayProfilePic();
 
-
-    const [profilePicture, setProfilePicture] = useState<File | null>(null);
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-    const { username, loading }: any = useAuth();
-
-
-    useEffect(() => {
-        if (loading || !username?.uid) return;
-        const { fetchUserData } = useUserDoc(username?.uid);
-
-
-        async function fetchProfilePicture() {
-
-            try {
-                const data = await fetchUserData();
-                if (data?.profilePicture) {
-                    setPreviewUrl(data.profilePicture);
-                }
-            } catch (error) {
-                console.error('Error fetching profile picture:', error);
-
-            }
-        }
-        fetchProfilePicture();
-    }, [loading, username]);
 
     async function handleUploadProfilePic() {
         if (!profilePicture) return;
@@ -58,15 +39,15 @@ function ProfilePicutre() {
         <div className="flex flex-col bg-white border-2 border-blue-950 rounded p-5 items-center gap-4">
             <div className='border p-5'>
 
-                {previewUrl && (
+                
                     <div>
                         <img
-                            src={previewUrl}
+                            src={previewUrl  ?? '/profileAvatar.png'}
                             alt="Profile Preview"
                             className="w-56 h-56 rounded-full object-cover border-2"
                         />
                     </div>
-                )}
+                
             </div>
             <div>
                 <input

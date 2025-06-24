@@ -12,6 +12,25 @@ interface Props {
   };
 }
 
+type BioProps = {
+  userData: {
+    displayName: string;
+    pronouns?: {
+      she?: boolean;
+      he?: boolean;
+      theyThem?: boolean;
+      other?: string;
+    };
+    bio?: string;
+    links?: string;
+    uniqueUrl?: string;
+    profilePicture?: string;
+  };
+};
+
+
+
+
 export default async function UserProfile({ params }: Props) {
   const { identifier } = await params;
   const db = admin.firestore();
@@ -23,6 +42,7 @@ export default async function UserProfile({ params }: Props) {
   const urlQuery = await usersRef.where('uniqueUrl', '==', identifier).limit(1).get();
 
   let userData;
+  
 
   if (!urlQuery.empty) {
     userData = urlQuery.docs[0].data();
@@ -38,14 +58,14 @@ export default async function UserProfile({ params }: Props) {
       return notFound(); // 404 page
     }
   }
-
-  
-
+  if (!userData) {
+    return notFound(); // 404 page
+  }
+  console.log('User data:', userData);
 
   return (
     <div className="p-4">
-      <h1>hi</h1>
-      <Bio />
+      <Bio userData={userData as BioProps['userData']} />
     </div>
   );
 }

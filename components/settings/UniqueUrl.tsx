@@ -3,7 +3,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase'; 
 import { useUserDoc } from '@/hooks/useUserDoc'; 
 import { useAuth } from '@/context/AuthContext'
-import { useUniqueUrl } from '@/hooks/useUniqueUrl'; 
+import { useUniqueUrl } from '@/hooks/displayUniqueUrl'; 
 
 function UniqueUrl() {
     const { username }: any = useAuth();

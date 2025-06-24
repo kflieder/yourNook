@@ -10,7 +10,7 @@ export function useUserDoc(uid: string | undefined) {
         return docSnap.exists() ? docSnap.data() : null;
     }
     const updateUserData = async (data: Record<string, any>) => {
-        await updateDoc(userRef, data);
+        await setDoc(userRef, data, { merge: true });
     }
     const setUserData = async (data: Record<string, any>) => {
         await setDoc(userRef, data, { merge: true });

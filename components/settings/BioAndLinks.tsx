@@ -2,47 +2,13 @@
 import React, { useState, useEffect } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { useUserDoc } from '@/hooks/useUserDoc';
+import { displayBioInfo } from '@/hooks/displayBioInfo';
 
 function BioAndLinks() {
     const { username }: any = useAuth();
-    const [displayName, setDisplayName] = useState(username?.displayName || '');
-    const [pronouns, setPronouns] = useState({
-        she: false,
-        he: false,
-        theyThem: false,
-        other: ''
-    });
-    const [bio, setBio] = useState('');
-    const [links, setLinks] = useState('');
     const [isEditable, setIsEditable] = useState(false);
 
-    useEffect(() => {
-        async function fetchSettings() {
-            if (!username?.uid) return;
-            const userDoc = useUserDoc(username?.uid);
-            if (!userDoc) {
-                console.error('User document not found');
-                return;
-            }
-            await userDoc.fetchUserData().then(data => {
-                if (data) {
-                    setDisplayName(data.displayName || '');
-                    setPronouns({
-                        she: data.pronouns?.she || false,
-                        he: data.pronouns?.he || false,
-                        theyThem: data.pronouns?.theyThem || false,
-                        other: data.pronouns?.other || ''
-                    });
-                    setBio(data.bio || '');
-                    setLinks(data.links || '');
-                }
-            }
-            ).catch(error => {
-                console.error('Error fetching user data:', error);
-            });
-        }
-        fetchSettings();
-    }, [username]);
+    
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -69,6 +35,7 @@ function BioAndLinks() {
         setIsEditable(true);
     }
 
+    const { displayName, setDisplayName, pronouns, setPronouns, bio, setBio, links, setLinks } = displayBioInfo();
 
     return (
         <div className='flex flex-col bg-white gap-4 border-2 border-blue-950 rounded p-5 w-full'>
