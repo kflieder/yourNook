@@ -34,14 +34,14 @@ function Bio({ userData}: BioProps) {
       </div>
       <div className='border w-4/5 p-10'>
         <h1>{displayName}</h1>
-
-        <div className="flex flex-wrap gap-2">
+        <h2 className="text-gray-500">Pronouns:</h2>
+        <div className="flex flex-wrap gap-2 capitalize">
           {pronouns.she && <span><strong>she/her</strong></span>}
           {pronouns.he && <span><strong>he/him</strong></span>}
           {pronouns.theyThem && <span><strong>they/them</strong></span>}
           {pronouns.other && <span><strong>{pronouns.other}</strong></span>}
         </div>
-
+        <h2 className="text-gray-500 mt-4">Bio:</h2>
         <h3>{uniqueUrl}</h3>
         <p>{bio}</p>
         <a href={links} target="_blank" rel="noopener noreferrer">{links}</a>
