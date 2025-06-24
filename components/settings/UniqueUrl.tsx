@@ -1,33 +1,21 @@
-import React, { useState, useEffect, use } from 'react'
+import React, { useState, useEffect } from 'react'
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase'; 
 import { useUserDoc } from '@/hooks/useUserDoc'; 
 import { useAuth } from '@/context/AuthContext'
-
+import { useUniqueUrl } from '@/hooks/useUniqueUrl'; 
 
 function UniqueUrl() {
-    const [uniqueUrl, setUniqueUrl] = useState('');
     const { username }: any = useAuth();
     const [isEditable, setIsEditable] = useState(false);
-    const [originalUrl, setOriginalUrl] = useState('');
+   
 
-    useEffect(() => {
-        if (username?.uid) {
-            const { fetchUserData } = useUserDoc(username?.uid);
-            async function fetchUniqueUrl() {
-                try {
-                    const data = await fetchUserData();
-                    if (data?.uniqueUrl) {
-                        setUniqueUrl(data.uniqueUrl);
-                        setOriginalUrl(data.uniqueUrl);
-                    }
-                } catch (error) {
-                    console.error('Error fetching unique URL:', error);
-                }
-            }
-            fetchUniqueUrl();
-        }
-    }, [username]);
+   const {
+        uniqueUrl,
+        setUniqueUrl,
+        originalUrl,
+        setOriginalUrl,
+   } = useUniqueUrl();
 
 
 
@@ -43,7 +31,8 @@ function UniqueUrl() {
         if (!querySnapshot.empty) {
             alert('This URL is unavailable!');
         } else {
-            await updateUserData({ uniqueUrl });
+            await updateUserData({ uniqueUrl: uniqueUrl.trim().toLowerCase() });
+            
             setOriginalUrl(uniqueUrl);
             setIsEditable(false);
         }
@@ -97,7 +86,6 @@ function UniqueUrl() {
             <label htmlFor='uniqueUrl' className="text-sm text-gray-500 mt-2">
                 This will be your unique URL for your profile.
             </label>
-            
         </div>
     )
 }

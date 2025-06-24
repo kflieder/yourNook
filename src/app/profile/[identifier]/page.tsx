@@ -1,6 +1,10 @@
 // app/profile/[identifier]/page.tsx
 import admin from '../../../../lib/firebaseAdmin';
 import { notFound } from 'next/navigation';
+import Bio from '../../../../components/profile/Bio';
+
+
+export const dynamic = 'force-dynamic'; // Ensure this page is always dynamic
 
 interface Props {
   params: {
@@ -9,36 +13,39 @@ interface Props {
 }
 
 export default async function UserProfile({ params }: Props) {
-  const { identifier } = params;
-
+  const { identifier } = await params;
   const db = admin.firestore();
   const usersRef = db.collection('users');
 
-  // Step 1: Try finding user by uniqueUrl
+  console.log('Identifier param:', identifier);
+
+  // Step 1: Try finding user by uniqueUrl field first
   const urlQuery = await usersRef.where('uniqueUrl', '==', identifier).limit(1).get();
 
   let userData;
-  console.log('URL Query:', urlQuery);
-  console.log(userData)
 
   if (!urlQuery.empty) {
     userData = urlQuery.docs[0].data();
+    console.log('Matched by uniqueUrl');
   } else {
-    // Step 2: Try finding user by UID
-    const uidQuery = await usersRef.where('uid', '==', identifier).limit(1).get();
+    // Step 2: Try matching document ID (i.e., UID)
+    const userDoc = await usersRef.doc(identifier).get();
 
-    if (!uidQuery.empty) {
-      userData = uidQuery.docs[0].data();
+    if (userDoc.exists) {
+      userData = userDoc.data();
+      console.log('Matched by doc ID (UID)');
     } else {
-      return notFound(); // 404 page if not found
+      return notFound(); // 404 page
     }
   }
 
+  
+
+
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold">{userData.displayName || 'Unnamed User'}</h1>
-      <p>UID: {userData.uid}</p>
-      <p>URL: {userData.uniqueUrl}</p>
+      <h1>hi</h1>
+      <Bio />
     </div>
   );
 }
