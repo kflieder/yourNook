@@ -21,6 +21,9 @@ function Header() {
         />
         </Link>
       </div>
+      <div>
+        <Link href="/feed" >Feed</Link>
+      </div>
       <div className="flex items-center">
         <RenderUsername />
         <LogOutButton />

@@ -16,6 +16,7 @@ export function useUserDoc(uid: string | undefined) {
         await setDoc(userRef, data, { merge: true });
     }
 
+
     return {
         fetchUserData,
         updateUserData,

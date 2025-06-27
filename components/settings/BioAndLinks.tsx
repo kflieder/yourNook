@@ -1,8 +1,10 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { useUserDoc } from '@/hooks/useUserDoc';
 import { displayBioInfo } from '@/hooks/displayBioInfo';
+import { auth } from '../../lib/firebase';
+import { updateProfile } from 'firebase/auth';
 
 function BioAndLinks() {
     const { username }: any = useAuth();
@@ -23,12 +25,14 @@ function BioAndLinks() {
             bio,
             links
         });
+        if (auth.currentUser) {
+            await updateProfile(auth.currentUser, {
+                displayName,
+            });
+        } else {
+            console.error('No authenticated user found');
+        }
         setIsEditable(false);
-        console.log('Profile updated successfully!');
-        console.log('Display Name:', displayName);
-        console.log('Pronouns:', pronouns);
-        console.log('Bio:', bio);
-        console.log('Links:', links);
     }
 
     function handleEdit() {

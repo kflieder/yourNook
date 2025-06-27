@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../../lib/firebase';
 import {useRouter} from 'next/navigation';
+import { useUserDoc } from '@/hooks/useUserDoc';
 
 function SignupForm() {
     const [email, setEmail] = useState('');
@@ -13,12 +14,24 @@ function SignupForm() {
 
     async function handleSignup(e: React.FormEvent) {
         e.preventDefault();
+
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             await updateProfile(userCredential.user, {
                 displayName: username
+                
             });
-            router.push('/profile-settings');
+            const userDoc = useUserDoc(userCredential.user.uid);
+            await userDoc.setUserData({
+                displayName: username,
+                uniqueUrl: username.toLowerCase().replace(/\s+/g, '-'),
+                pronouns: {other: 'other'},
+                bio: 'Please edit your profile ',
+                links: 'edit profile',
+                profilePicture: '/profileAvatar.png',
+                uid: userCredential.user.uid
+            });
+            router.push('/profile/' + username.toLowerCase().replace(/\s+/g, '-'));
         } catch (error) {
             console.log("Error signing up:", error);
         }

@@ -1,7 +1,7 @@
 // app/profile/[identifier]/page.tsx
 import admin from '../../../../lib/firebaseAdmin';
 import { notFound } from 'next/navigation';
-import Bio from '../../../../components/profile/Bio';
+import ProfilePage from '../../../../components/profile/ProfilePage';
 
 
 export const dynamic = 'force-dynamic'; // Ensure this page is always dynamic
@@ -12,7 +12,7 @@ interface Props {
   };
 }
 
-type BioProps = {
+type ProfilePageProps = {
   userData: {
     displayName: string;
     pronouns?: {
@@ -25,47 +25,60 @@ type BioProps = {
     links?: string;
     uniqueUrl?: string;
     profilePicture?: string;
+    uid?: string; 
   };
+  posts: Array<{
+    id: string;
+    [key: string]: any;
+  }>;
 };
-
-
 
 
 export default async function UserProfile({ params }: Props) {
   const { identifier } = await params;
   const db = admin.firestore();
   const usersRef = db.collection('users');
-
-  console.log('Identifier param:', identifier);
-
-  // Step 1: Try finding user by uniqueUrl field first
   const urlQuery = await usersRef.where('uniqueUrl', '==', identifier).limit(1).get();
-
   let userData;
   
-
   if (!urlQuery.empty) {
-    userData = urlQuery.docs[0].data();
-    console.log('Matched by uniqueUrl');
+    const doc =  urlQuery.docs[0];
+    userData = { uid: doc.id, ...doc.data() } as ProfilePageProps['userData'];
+   
   } else {
     // Step 2: Try matching document ID (i.e., UID)
     const userDoc = await usersRef.doc(identifier).get();
 
     if (userDoc.exists) {
-      userData = userDoc.data();
-      console.log('Matched by doc ID (UID)');
+      userData = { uid: userDoc.id, ...userDoc.data() } as BioProps['userData'];
     } else {
       return notFound(); // 404 page
     }
   }
-  if (!userData) {
+  if (!userData || !userData.displayName) {
     return notFound(); // 404 page
   }
-  console.log('User data:', userData);
+
+  // Step 3: Fetch posts by the user
+  const postsSnapshot = await  db.collection('posts')
+    .where('uid', '==', userData.uid)
+    .orderBy('createdAt', 'desc')
+    .get();
+
+    const posts = postsSnapshot.docs.map(doc => {
+      const data = doc.data();
+    
+      return {
+        id: doc.id,
+        ...data,
+        createdAt: data.createdAt ? data.createdAt.toDate().toISOString() : null,
+      };
+    });
+  
 
   return (
     <div className="p-4">
-      <Bio userData={userData as BioProps['userData']} />
+      <ProfilePage userData={userData as ProfilePageProps['userData']} posts={posts} />
     </div>
   );
 }
