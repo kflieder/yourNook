@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useRef, useCallback} from 'react'
 import { collection, getDocs, query, orderBy, limit, startAfter } from 'firebase/firestore'
 import { db } from '../../lib/firebase'
+import PostLikes from '../PostActions/Likes'
 
 interface Post {
   id: string;
@@ -84,6 +85,7 @@ function GlobalFeed() {
               <img src={post.mediaUrl} alt="Post media" className="w-84 h-auto" />
             )
           )}
+          <PostLikes docId={post.id} currentLikes={post.likes || []} collectionName="posts" />
         </div>
       ))}
     </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import Likes from '../PostActions/Likes';
 
 function UserPosts({ posts }: { posts: Array<{ id: string;[key: string]: any }> }) {
 
@@ -21,6 +22,7 @@ function UserPosts({ posts }: { posts: Array<{ id: string;[key: string]: any }> 
               ) : null}
 
             <span className="text-gray-500 text-sm">Posted on: {new Date(post.createdAt).toLocaleDateString()}</span>
+            <Likes docId={post.id} currentLikes={post.likes || []} collectionName="posts" />
           </div>
         ))}
       </div>

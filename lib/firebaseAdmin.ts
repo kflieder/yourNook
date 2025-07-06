@@ -7,5 +7,6 @@ if (!admin.apps.length) {
     credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
   });
 }
+console.log('Firebase Admin initialized', serviceAccount.client_email);
 
 export default admin;

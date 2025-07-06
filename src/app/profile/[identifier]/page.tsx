@@ -41,6 +41,9 @@ export default async function UserProfile({ params }: Props) {
   const urlQuery = await usersRef.where('uniqueUrl', '==', identifier).limit(1).get();
   let userData;
   
+  console.log('Fetching user profile for identifier:', identifier);
+
+
   if (!urlQuery.empty) {
     const doc =  urlQuery.docs[0];
     userData = { uid: doc.id, ...doc.data() } as ProfilePageProps['userData'];
@@ -50,7 +53,7 @@ export default async function UserProfile({ params }: Props) {
     const userDoc = await usersRef.doc(identifier).get();
 
     if (userDoc.exists) {
-      userData = { uid: userDoc.id, ...userDoc.data() } as BioProps['userData'];
+      userData = { uid: userDoc.id, ...userDoc.data() } as ProfilePageProps['userData'];
     } else {
       return notFound(); // 404 page
     }
