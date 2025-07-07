@@ -1,4 +1,5 @@
 import React from 'react'
+import FollowButton from './FollowButton';
 
 interface BioProps {
   userData: {
@@ -13,7 +14,8 @@ interface BioProps {
     links?: string;
     uniqueUrl?: string;
     profilePicture?: string;
-  };
+    uid?: string;
+  }
 }
 
 
@@ -51,6 +53,7 @@ function Bio({ userData }: BioProps) {
           <h2 className="">Bio:</h2>
           <p>{bio}</p>
         </div>
+        <FollowButton targetUid={userData.uid ?? ''} targetDisplayName={displayName} />
       </div>
     </div>
   );
