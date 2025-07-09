@@ -1,6 +1,6 @@
 'use client';
 import { useAuth } from '@/context/AuthContext';
-import { useUserDoc } from '@/hooks/useUserDoc';
+import { useUserDoc } from './useUserDoc';
 import { useEffect, useState } from 'react';
 
 

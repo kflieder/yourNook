@@ -1,5 +1,7 @@
 import React from 'react'
 import FollowButton from './FollowButton';
+import FollowerCountPopup from './FollowerCountPopup';
+import { useAuth } from '@/context/AuthContext';
 
 interface BioProps {
   userData: {
@@ -20,9 +22,10 @@ interface BioProps {
 
 
 function Bio({ userData }: BioProps) {
-
+  const { username } = useAuth();
+  const isOwner = username?.uid === userData.uid;
   const { displayName, pronouns = {}, bio, links, uniqueUrl, profilePicture } = userData;
-
+  
   return (
     <div className='flex justify-between items-center w-full border'>
       <div>
@@ -53,7 +56,12 @@ function Bio({ userData }: BioProps) {
           <h2 className="">Bio:</h2>
           <p>{bio}</p>
         </div>
-        <FollowButton targetUid={userData.uid ?? ''} targetDisplayName={displayName} />
+        { !isOwner && <FollowButton targetUid={userData.uid ?? ''} targetDisplayName={displayName} />
+       }
+         <div className='border'>
+          <FollowerCountPopup userId={userData.uid ?? ''} />
+        </div>
+        
       </div>
     </div>
   );
