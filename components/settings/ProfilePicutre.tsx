@@ -1,10 +1,10 @@
 'use client'
 import React from 'react'
 import { useAuth } from '@/context/AuthContext';
-import { useUserDoc } from '@/hooks/useUserDoc';
+import { useUserDoc } from '@/utilities/useUserDoc';
 import { storage } from '../../lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { displayProfilePic } from '@/hooks/displayProfilePic';
+import { displayProfilePic } from '@/utilities/displayProfilePic';
 
 
 function ProfilePicutre() {

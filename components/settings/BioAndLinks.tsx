@@ -1,8 +1,8 @@
 'use client'
 import React, { useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
-import { useUserDoc } from '@/hooks/useUserDoc';
-import { displayBioInfo } from '@/hooks/displayBioInfo';
+import { useUserDoc } from '@/utilities/useUserDoc';
+import { displayBioInfo } from '@/utilities/displayBioInfo';
 import { auth } from '../../lib/firebase';
 import { updateProfile } from 'firebase/auth';
 

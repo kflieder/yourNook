@@ -1,6 +1,6 @@
 import React, { useState, useEffect, use } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { useUserDoc } from "@/hooks/useUserDoc";
+import { useUserDoc } from "@/utilities/useUserDoc";
 
 interface FollowButtonProps {
   targetUid: string;

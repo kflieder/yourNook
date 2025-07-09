@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../../lib/firebase';
 import {useRouter} from 'next/navigation';
-import { useUserDoc } from '@/hooks/useUserDoc';
+import { useUserDoc } from '@/utilities/useUserDoc';
 
 function SignupForm() {
     const [email, setEmail] = useState('');
