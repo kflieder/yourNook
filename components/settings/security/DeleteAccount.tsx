@@ -4,12 +4,12 @@ import { deleteUser } from 'firebase/auth'
 import { useUserDoc } from '@/hooks/useUserDoc'
 
 function DeleteAccount() {
-    const { username } = useAuth()
+    const { username, firebaseUser } = useAuth()
     
     
     async function handleDeleteAccount() {
         
-        if (!username) {
+        if (!username || !firebaseUser) {
             console.error('No user is logged in')
             return
         }
@@ -17,7 +17,7 @@ function DeleteAccount() {
         
         try {
             await setUserData({deleted: true})
-            await deleteUser(username)
+            await deleteUser(firebaseUser)
             console.log('Account deleted successfully')
             // Optionally, redirect to a different page or show a success message
         } catch (error) {

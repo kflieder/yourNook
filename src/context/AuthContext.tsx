@@ -11,6 +11,7 @@ import { db } from "../../lib/firebase";
 
 
 interface AuthContextType {
+  firebaseUser: User | null;
   username: ExtendedUser | null;
   loading: boolean;
 }
@@ -58,7 +59,7 @@ export function AuthProvider({ children } : { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ username, loading }}>
+    <AuthContext.Provider value={{ username, loading, firebaseUser: auth.currentUser }}>
       {!loading && children}
     </AuthContext.Provider>
   )
