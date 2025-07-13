@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef, useCallback} from 'react'
 import { collection, getDocs, query, orderBy, limit, startAfter } from 'firebase/firestore'
 import { db } from '../../lib/firebase'
 import PostLikes from '../PostActions/Likes'
+import CommentSection from '../PostActions/Comments/CommentSection'
 
 interface Post {
   id: string;
@@ -86,6 +87,7 @@ function GlobalFeed() {
             )
           )}
           <PostLikes docId={post.id} currentLikes={post.likes || []} collectionName="posts" />
+          <CommentSection postId={post.id} />
         </div>
       ))}
     </div>
