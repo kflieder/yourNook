@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Likes from "../PostActions/Likes";
-import CommentSection from "../PostActions/Comments/CommentSection";
+import CommentSection, { CommentCount } from "../PostActions/Comments/CommentSection";
+import SharePost from "../PostActions/SharePost";
 
 function UserPosts({
   posts,
@@ -8,6 +9,12 @@ function UserPosts({
   posts: Array<{ id: string; [key: string]: any }>;
 }) {
   console.log("UserPosts component rendered with posts:", posts);
+
+  const [openPostId, setOpenPostId] = useState<string | null>(null);
+
+  const handleToggleComments = (postId: string) => {
+  setOpenPostId((prev) => (prev === postId ? null : postId));
+};
 
   return (
     <div>
@@ -35,15 +42,21 @@ function UserPosts({
                   Posted on: {new Date(post.createdAt).toLocaleDateString()}
                 </span>
                 <div className="flex items-center">
-                  <CommentSection postId={post.id} />
-                  
                   <Likes
                     docId={post.id}
                     currentLikes={post.likes || []}
                     collectionName="posts"
                   />
-                  
-                </div>
+                  <div onClick={() => handleToggleComments(post.id)} className="ml-2">
+                  <CommentCount postId={post.id} />
+                  </div>
+                  <SharePost  postId={post.id} />
+                 </div>
+                 {openPostId === post.id && (
+                    <CommentSection postId={post.id} />
+                 )}
+                 
+                
               </div>
             )
           )

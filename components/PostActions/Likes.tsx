@@ -41,7 +41,7 @@ function Likes({ docId, currentLikes, collectionName }: LikesProps) {
     }
   }
   return (
-    <button onClick={toggleLike} disabled={loading} className="cursor-pointer border">
+    <button onClick={toggleLike} disabled={loading} className="cursor-pointer">
       {hasLiked ? '❤️' : '🤍'} {likes.length}
     </button>
   )
