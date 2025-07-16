@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Likes from "../PostActions/Likes";
 import CommentSection, { CommentCount } from "../PostActions/Comments/CommentSection";
+import Likes from "../PostActions/Likes";
 import SharePost from "../PostActions/SharePost";
+import PostStyle from "../post/PostStyle";
 
 function UserPosts({
   posts,
@@ -25,22 +26,18 @@ function UserPosts({
           (post) => (
             console.log("Rendering post:", post),
             (
-              <div key={post.id} className="p-4 border rounded-lg w-84">
-                <h3 className='font-bold'>{post.displayName}</h3>
-                <p>{post.content || "No content available."}</p>
-                {post.mediaUrl?.includes("video") ? (
-                  <video controls className="w-full mt-2" src={post.mediaUrl} />
-                ) : post.mediaUrl ? (
-                  <img
-                    src={post.mediaUrl}
-                    alt="Post media"
-                    className="w-84 mt-2"
-                  />
-                ) : null}
+             <div key={post.id}>
+                <PostStyle
+                  displayName={post.displayName}
+                  textContent={post.content}
+                  mediaUrl={post.mediaUrl}
+                  createdAt={post.createdAt}
+                  docId={post.id}
+                  currentLikes={post.likes}
+                  collectionName="posts"
+                   />
 
-                <span className="text-gray-500 text-sm">
-                  Posted on: {new Date(post.createdAt).toLocaleDateString()}
-                </span>
+                
                 <div className="flex items-center">
                   <Likes
                     docId={post.id}
