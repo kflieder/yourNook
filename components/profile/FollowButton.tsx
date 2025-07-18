@@ -1,18 +1,17 @@
 'use client';
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { useUserDoc } from "@/utilities/useUserDoc";
+import { useUserDoc } from "@/utilities/getUserDocHelper";
 import { useLiveUserData } from "@/utilities/useLiveUserData";
 
 interface FollowButtonProps {
   targetUid: string;
-  targetDisplayName: string;
 }
 
-function FollowButton({ targetUid, targetDisplayName }: FollowButtonProps) {
+function FollowButton({ targetUid }: FollowButtonProps) {
   const { username: currentUser }: any = useAuth();
 
-    if (!currentUser || !targetUid) return null;
+    
 
   const currentUserDoc = useUserDoc(currentUser?.uid);
   const targetUserDoc = useUserDoc(targetUid);
@@ -23,7 +22,7 @@ function FollowButton({ targetUid, targetDisplayName }: FollowButtonProps) {
 
   const [isFollowing, setIsFollowing] = useState(false);
 
-
+  if (!currentUser || !targetUid) return null;
   // Check follow status on live data change
   useEffect(() => {
     if (!liveCurrentUser || !targetUid) return;
@@ -39,8 +38,8 @@ function FollowButton({ targetUid, targetDisplayName }: FollowButtonProps) {
         new Set([...(liveTargetUser?.followers || []), currentUser.uid])
       );
 
-      await currentUserDoc.updateUserData({ following: updatedFollowing });
-      await targetUserDoc.updateUserData({ followers: updatedFollowers });
+      await currentUserDoc?.updateUserData({ following: updatedFollowing });
+      await targetUserDoc?.updateUserData({ followers: updatedFollowers });
 
       setIsFollowing(true);
     } catch (error) {
@@ -57,8 +56,8 @@ function FollowButton({ targetUid, targetDisplayName }: FollowButtonProps) {
         (uid: string) => uid !== currentUser.uid
       );
 
-      await currentUserDoc.updateUserData({ following: updatedFollowing });
-      await targetUserDoc.updateUserData({ followers: updatedFollowers });
+      await currentUserDoc?.updateUserData({ following: updatedFollowing });
+      await targetUserDoc?.updateUserData({ followers: updatedFollowers });
 
       setIsFollowing(false);
     } catch (error) {
@@ -78,9 +77,8 @@ function FollowButton({ targetUid, targetDisplayName }: FollowButtonProps) {
         onClick={handleClick}
         className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
       >
-        {isFollowing ? "Unfollow" : `Follow ${targetDisplayName}`}
+        {isFollowing ? "Unfollow" : "follow"}
       </button>
-      <p className="text-sm text-gray-500">{followerCount} follower{followerCount !== 1 && 's'}</p>
     </div>
   );
 }

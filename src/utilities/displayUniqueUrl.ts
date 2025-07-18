@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { useUserDoc } from './useUserDoc';
+import { useUserDoc } from './getUserDocHelper';
 
 
 export function useUniqueUrl() {

@@ -9,10 +9,9 @@ import {
   startAfter,
 } from "firebase/firestore";
 import { db } from "../../lib/firebase";
-import PostLikes from "../PostActions/Likes";
-import CommentSection, {
-  CommentCount,
-} from "../PostActions/Comments/CommentSection";
+import PostStyle from "../post/PostStyle";
+import { useAuth } from "@/context/AuthContext";
+
 
 interface Post {
   id: string;
@@ -24,6 +23,7 @@ interface Post {
 }
 
 function GlobalFeed() {
+  const { username: currentUser } = useAuth();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
   const [lastdoc, setLastDoc] = useState<any>(null);
@@ -95,38 +95,26 @@ function GlobalFeed() {
   useEffect(() => {
     fetchPosts();
   }, [fetchPosts]);
+
+
   return (
-    <div>
+    <div className="space-y-4">
       {posts.map((post) => (
         <div
           key={post.id}
-          className="border p-4 mb-4 rounded-lg shadow-md w-84"
         >
-          <h3>{post.displayName || "uknown"}</h3>
-          <p>{post.content}</p>
-          {post.mediaUrl &&
-            (post.mediaUrl.includes(".mp4") ? (
-              <video controls src={post.mediaUrl} className="w-84 h-auto" />
-            ) : (
-              <img
-                src={post.mediaUrl}
-                alt="Post media"
-                className="w-84 h-auto"
-              />
-            ))}
-          <div className='flex'>
-            <PostLikes
-              docId={post.id}
-              currentLikes={post.likes || []}
-              collectionName="posts"
-            />
-            <div onClick={handleToggleComments} className="ml-2">
-              <CommentCount postId={post.id} />
-            </div>
-          </div>
-          <div className={`${toggleComments ? "block" : "hidden"}`}>
-            <CommentSection postId={post.id} />
-          </div>
+          <PostStyle
+                  displayName={post.displayName}
+                  profilePicture={post.profilePicture}
+                  textContent={post.content}
+                  mediaUrl={post.mediaUrl}
+                  createdAt={post.createdAt?.toDate?.()}
+                  docId={post.id}
+                  currentLikes={post.likes}
+                  collectionName="posts"
+                  targetUid={post.uid}
+                  currentUser={currentUser?.uid || ''}
+                   />
         </div>
       ))}
     </div>

@@ -59,6 +59,7 @@ function CreatePost() {
             alert('Failed to create post. Please try again later.');
         }
     }
+    console.log(username, "Username from Auth Context");
 
     return (
         <div>

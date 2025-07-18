@@ -31,6 +31,9 @@ interface ProfilePageProps {
 function ProfilePage({ userData, posts }: ProfilePageProps) {
     const { username } = useAuth();
     const isOwner = username?.uid === userData.uid;
+    if (!username) {
+        return null;
+    }
   return (
     <div>
         <Bio userData={userData} />

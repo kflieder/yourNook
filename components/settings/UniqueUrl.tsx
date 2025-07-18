@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase'; 
-import { useUserDoc } from '@/utilities/useUserDoc'; 
+import { useUserDoc } from '@/utilities/getUserDocHelper'; 
 import { useAuth } from '@/context/AuthContext'
 import { useUniqueUrl } from '@/utilities/displayUniqueUrl'; 
 

@@ -13,8 +13,8 @@ function LogOutButton() {
     if (!username) return null;
   
 
-  function handleSignOut() {
-    signOut(auth)
+  async function handleSignOut() {
+    await signOut(auth)
     router.push('/'); // Redirect to login page after sign out
   }
 

@@ -21,6 +21,9 @@ interface BioProps {
 }
 
 function Bio({ userData }: BioProps) {
+  if (!userData) {
+    return null;
+  }
   const { username } = useAuth();
   const isOwner = username?.uid === userData.uid;
   const {
@@ -81,7 +84,6 @@ function Bio({ userData }: BioProps) {
          {!isOwner && (
           <FollowButton
             targetUid={userData.uid ?? ""}
-            targetDisplayName={displayName}
           />
         )}
         <div className="border">

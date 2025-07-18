@@ -3,7 +3,9 @@ import { db } from '../../lib/firebase.js';
 
 
 export function useUserDoc(uid: string | undefined) {
-    if (!uid) throw new Error('User ID is required');
+    if (!uid) {
+        return null;
+    }
     const userRef = doc(db, 'users', uid);
     const fetchUserData = async () => {
         const docSnap = await getDoc(userRef);
