@@ -6,6 +6,8 @@ import CommentSection, {
 } from "../PostActions/Comments/CommentSection";
 import SharePost from "../PostActions/SharePost";
 import FollowButton from "../profile/FollowButton";
+import { MdReportGmailerrorred } from "react-icons/md";
+import Report from "../PostActions/Report";
 
 interface PostStyleProps {
   displayName: string;
@@ -33,10 +35,16 @@ function PostStyle({
   currentUser,
 }: PostStyleProps) {
   const [openPostId, setOpenPostId] = useState<string | null>(null);
+  const [showReportForm, setShowReportForm] = useState(false);
 
   const handleToggleComments = (postId: string) => {
     setOpenPostId((prev) => (prev === postId ? null : postId));
   };
+
+  const handleShowReportForm = () => {
+    setShowReportForm((prev) => !prev);
+  }
+
   return (
     <div className="p-4 border rounded-lg w-84">
       <div className="flex border items-center gap-2">
@@ -76,8 +84,15 @@ function PostStyle({
           <CommentCount postId={docId} />
         </div>
         <SharePost postId={docId} />
+        <div onClick={handleShowReportForm} className="ml-2 cursor-pointer">
+          <MdReportGmailerrorred size={22} />
+        </div>
+        
       </div>
       {openPostId === docId && <CommentSection postId={docId} />}
+      {showReportForm && (
+        <Report postId={docId} />
+      )}
     </div>
   );
 }
