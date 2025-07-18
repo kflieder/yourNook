@@ -2,8 +2,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../lib/firebase";
-import { IoSettingsOutline } from "react-icons/io5";
-import Link from 'next/link'
 import { User } from "firebase/auth";
 import { doc,  getDoc } from "firebase/firestore";
 import { db } from "../../lib/firebase";
@@ -81,9 +79,6 @@ export function RenderUsername() {
   return (
     <div className="flex items-center gap-2 mr-2">
       Welcome, {username.displayName}!
-      <Link href="/profile-settings">
-                <IoSettingsOutline />
-       </Link>
     </div>
   );
 }

@@ -5,7 +5,7 @@ import CommentSection, {
   CommentCount,
 } from "../PostActions/Comments/CommentSection";
 import SharePost from "../PostActions/SharePost";
-import FollowButton from "../profile/FollowButton";
+import FollowButton from "../shared/FollowButton";
 import { MdReportGmailerrorred } from "react-icons/md";
 import Report from "../PostActions/Report";
 

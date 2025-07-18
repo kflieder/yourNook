@@ -1,6 +1,6 @@
 import React from "react";
-import FollowButton from "./FollowButton";
-import FollowerCountPopup from "./FollowerCountPopup";
+import FollowButton from "../shared/FollowButton";
+import FollowerCountPopup from "../shared/FollowerCountPopup";
 import { useAuth } from "@/context/AuthContext";
 
 interface BioProps {

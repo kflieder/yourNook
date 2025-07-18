@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useUserDoc } from "@/utilities/getUserDocHelper";
 import { useLiveUserData } from "@/utilities/useLiveUserData";
+import { sendNotification } from "@/utilities/sendNotification";
 
 interface FollowButtonProps {
   targetUid: string;
@@ -40,6 +41,13 @@ function FollowButton({ targetUid }: FollowButtonProps) {
 
       await currentUserDoc?.updateUserData({ following: updatedFollowing });
       await targetUserDoc?.updateUserData({ followers: updatedFollowers });
+
+      await sendNotification({
+        toUserId: targetUid,
+        type: "follow",
+        fromUserId: currentUser.uid,
+        message: `${currentUser.displayName} started following you!`
+      });
 
       setIsFollowing(true);
     } catch (error) {
