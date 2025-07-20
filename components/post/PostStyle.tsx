@@ -8,6 +8,7 @@ import SharePost from "../PostActions/SharePost";
 import FollowButton from "../shared/FollowButton";
 import { MdReportGmailerrorred } from "react-icons/md";
 import Report from "../PostActions/Report";
+import Delete from "../PostActions/Delete";
 
 interface PostStyleProps {
   displayName: string;
@@ -62,6 +63,11 @@ function PostStyle({
         </div>
         {currentUser && targetUid !== currentUser && (
           <FollowButton targetUid={targetUid} />
+        )}
+        {currentUser && targetUid === currentUser && (
+          <div className="flex items-center">
+            <Delete postId={docId} />
+          </div>
         )}
       </div>
       <p>{textContent || ""}</p>

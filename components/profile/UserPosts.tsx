@@ -1,35 +1,60 @@
-import React, { useState, useEffect } from "react";
-import PostStyle from "../post/PostStyle";
+'use client';
+
+import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { useLiveUserData } from "@/utilities/useLiveUserData";
 import LivePost from "components/post/LivePost";
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  orderBy,
+} from "firebase/firestore";
+import { db } from "../../lib/firebase";
 
 function UserPosts({
-  posts,
+  posts: initialPosts,
 }: {
   posts: Array<{ id: string; [key: string]: any }>;
 }) {
   const { username: currentUser } = useAuth();
+  const [livePosts, setLivePosts] = useState(initialPosts);
 
-  console.log(currentUser?.displayName, "Current User Display Name in UserPosts");
+  // Listen for real-time updates
+  useEffect(() => {
+    if (!initialPosts?.[0]?.uid) return; // bail early if no uid available
 
+    const q = query(
+      collection(db, "posts"),
+      where("uid", "==", initialPosts[0].uid),
+      orderBy("createdAt", "desc")
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const updatedPosts = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setLivePosts(updatedPosts);
+    });
+
+    return () => unsubscribe();
+  }, [initialPosts]);
 
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">User Posts</h2>
 
       <div className="space-y-4">
-        {posts.map((post) => (
-        <div
-          key={post.id}
-        >
-          <LivePost
-            post={post}
-            currentUser={currentUser?.uid || ''}
-            currentUserDisplayName={currentUser?.displayName || ''} />
-        </div>
-      )
-      )}
+        {livePosts.map((post) => (
+          <div key={post.id}>
+            <LivePost
+              post={post}
+              currentUser={currentUser?.uid || ""}
+              currentUserDisplayName={currentUser?.displayName || ""}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
