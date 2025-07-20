@@ -3,7 +3,8 @@ import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../../../../lib/firebase'
 import { notFound } from 'next/navigation'
 import PostStyle from '../../../../components/post/PostStyle'
-import { getCurrentUserServer } from '@/utilities/getCurrentUserServer'
+import { getCurrentUserServer, CurrentUser } from '@/utilities/getCurrentUserServer'
+import LivePost from 'components/post/LivePost'
 
 
 interface Props {
@@ -12,8 +13,11 @@ interface Props {
     }
 }
 
+
+
+
 async function Page({ params }: Props) {
-    const { postId } = params
+    const { postId } = await params
     const docRef = doc(db, 'posts', postId)
     const docSnap = await getDoc(docRef)
 
@@ -21,25 +25,21 @@ async function Page({ params }: Props) {
         notFound()
     }
 
-    const post = docSnap.data()
+    const post = {
+        ...docSnap.data(),
+        id: postId,
+        createdAt: docSnap.data().createdAt?.toMillis?.() || null
+    }
     const currentUser = await getCurrentUserServer()
+    
    
-
-    console.log(currentUser, 'current user uid in post page')
   return (
     <div>
-        <PostStyle
-            displayName={post.displayName}
-            profilePicture={post.profilePicture}
-            textContent={post.content}
-            mediaUrl={post.mediaUrl}
-            createdAt={post.createdAt?.toDate?.()}
-            docId={postId}
-            currentLikes={post.likes}
-            collectionName="posts"
-            targetUid={post.uid}
-            currentUser={currentUser || ''}  // Ensure currentUser is defined
-             />
+        <LivePost
+            post={{ ...post, id: postId }}
+            currentUser={currentUser?.uid || ''} 
+            currentUserDisplayName={currentUser?.displayName || ''}/>
+            
     </div>
   )
 }

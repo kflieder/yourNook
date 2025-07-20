@@ -1,6 +1,5 @@
 import { RenderUsername } from "@/context/AuthContext";
 import React from "react";
-import LogOutButton from "../shared/LogOutButton";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
@@ -41,7 +40,6 @@ function Header() {
        <div className="flex items-center gap-2">
           <RenderUsername />
           <NotificationsDropdown userId={username.uid} />
-          <LogOutButton />
           <Link href="/profile-settings">
             <IoSettingsOutline />
           </Link>

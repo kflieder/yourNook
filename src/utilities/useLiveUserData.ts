@@ -6,8 +6,12 @@ export function useLiveUserData(uid: string | undefined) {
   const [liveUserData, setLiveUserData] = useState<Record<string, any> | null>(null);
 
   useEffect(() => {
-    if (!uid) return;
+    if (!uid) {
+    setLiveUserData(null); 
+    return;
+  }
 
+  
     const userRef = doc(db, "users", uid);
     const unsubscribe = onSnapshot(
       userRef,

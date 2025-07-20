@@ -6,9 +6,10 @@ import { LuMessageCircle } from "react-icons/lu";
 
 interface CommentSectionProps {
   postId: string;
+  postAuthorId: string; 
 }
 
-function CommentSection({ postId }: CommentSectionProps) {
+function CommentSection({ postId, postAuthorId }: CommentSectionProps) {
   const { comments } = usePostComments(postId);
  
   return (
@@ -17,11 +18,11 @@ function CommentSection({ postId }: CommentSectionProps) {
         {comments.length === 0 ? (
           <div>
             <p>No Comments yets, be the first!</p>
-            <AddCommentForm postId={postId} />
+            <AddCommentForm postId={postId} postAuthorId={postAuthorId} />
           </div>
         ) : (
           <div>
-            <AddCommentForm postId={postId} />
+            <AddCommentForm postId={postId} postAuthorId={postAuthorId} />
             <ul>
               {comments.map((comment) => (
                 <Comment key={comment.id} comment={comment} />

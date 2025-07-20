@@ -11,6 +11,8 @@ import {
 import { db } from "../../lib/firebase";
 import PostStyle from "../post/PostStyle";
 import { useAuth } from "@/context/AuthContext";
+import { useLiveUserData } from "@/utilities/useLiveUserData";
+import LivePost from "components/post/LivePost";
 
 
 interface Post {
@@ -103,20 +105,12 @@ function GlobalFeed() {
         <div
           key={post.id}
         >
-          <PostStyle
-                  displayName={post.displayName}
-                  profilePicture={post.profilePicture}
-                  textContent={post.content}
-                  mediaUrl={post.mediaUrl}
-                  createdAt={post.createdAt?.toDate?.()}
-                  docId={post.id}
-                  currentLikes={post.likes}
-                  collectionName="posts"
-                  targetUid={post.uid}
-                  currentUser={currentUser?.uid || ''}
-                   />
+          <LivePost
+            post={post}
+            currentUser={currentUser?.uid || ''} />
         </div>
-      ))}
+      )
+      )}
     </div>
   );
 }

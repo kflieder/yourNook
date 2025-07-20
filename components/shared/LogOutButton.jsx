@@ -10,19 +10,23 @@ function LogOutButton() {
     const { username } = useAuth();
     const router = useRouter();
 
-    if (!username) return null;
   
 
   async function handleSignOut() {
-    await signOut(auth)
-    router.push('/'); // Redirect to login page after sign out
-  }
+   await signOut(auth);
+    router.push('/');
+}
 
+if (!username) return null;
   return (
-    <button onClick={() => handleSignOut()} className="cursor-pointer">
+    <div className='flex justify-around items-center p-4 border-2 border-blue-950 rounded-md bg-white mb-5'>
+      <h1>Logout</h1>
+    <button onClick={() => handleSignOut()} className="cursor-pointer flex">
+      
      <LuLogOut />
 
     </button>
+    </div>
   )
 }
 

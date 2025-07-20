@@ -8,6 +8,7 @@ import ProfilePicutre from '../../../components/settings/ProfilePicutre'
 import UniqueUrl from '../../../components/settings/UniqueUrl'
 import ChangePassword from '../../../components/settings/security/ChangePassword'
 import DeleteAccount from '../../../components/settings/security/DeleteAccount'
+import LogOutButton from '../../../components/shared/LogOutButton'
 
 function page() {
   const { username, loading }: any = useAuth();
@@ -53,6 +54,7 @@ function page() {
                 <BlogThreadPosts />
               </div>
               <div>
+                <LogOutButton />
                 <UniqueUrl />
                 <BioAndLinks />
               </div>

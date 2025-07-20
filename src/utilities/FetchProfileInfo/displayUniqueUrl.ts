@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { useUserDoc } from './getUserDocHelper';
+import { useUserDoc } from '../getUserDocHelper';
 
 
 export function useUniqueUrl() {
@@ -11,7 +11,9 @@ export function useUniqueUrl() {
 
      useEffect(() => {
             if (username?.uid) {
-                const { fetchUserData } = useUserDoc(username?.uid);
+                const userDoc = useUserDoc(username?.uid);
+                if (!userDoc) return;
+                const { fetchUserData } = userDoc
                 async function fetchUniqueUrl() {
                     try {
                         const data = await fetchUserData();

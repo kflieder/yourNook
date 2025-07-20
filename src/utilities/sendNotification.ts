@@ -18,6 +18,9 @@ export async function sendNotification({
 
     const notifRef = collection(db , 'users', toUserId, 'notifications');
 
+    // if (toUserId === fromUserId) {
+    //     return; // Prevent sending notification to self
+    // }
     await addDoc (notifRef, {
         type, 
         fromUserId,

@@ -60,7 +60,7 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
         )}
       </div>
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-3/4 bg-white border border-gray-300 rounded-lg shadow-lg p-4">
+        <div className="absolute right-0 mt-2 w-1/2 h-3/5 overflow-scroll bg-white border border-gray-300 rounded-lg shadow-lg p-4">
           <ul>
             {notifications.length === 0 ? (
               <li className="text-black">No notifications</li>
@@ -70,7 +70,7 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
                   <h1>New Notifications</h1>
                   {unreadNotifications.map((notification) => (
                     <li key={notification.id} className="p-2">
-                      <div className="flex justify-end items-center gap-2 border">
+                      <div className="flex justify-between items-center gap-2 border">
                         <span className="text-sm">{notification.message}</span>
                         <span className="text-xs text-gray-500">
                           {notification.createdAt?.toDate?.().toLocaleString()}
@@ -81,32 +81,27 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
                 </div>
                 <h1 className="text-black">No new notifications</h1>
                 {readNotifications.map((notification) => (
-                  <>
-                    <div className="text-gray-500">
-                      <li key={notification.id} className="p-2">
-                        <div className="flex justify-end items-center gap-2 border">
-                          <span className="text-black text-sm">
-                            {notification.message}
-                          </span>
-                          <span className="text-xs text-gray-500">
-                            {notification.createdAt
-                              ?.toDate?.()
-                              .toLocaleString()}
-                          </span>
-                        </div>
-                      </li>
-                    </div>
-                  </>
+                  <div key={notification.id} className="text-gray-500">
+                    <li  className="p-2">
+                      <div className="flex justify-between items-center gap-2 border">
+                        <span className="text-black text-sm">
+                          {notification.message}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          {notification.createdAt?.toDate?.().toLocaleString()}
+                        </span>
+                      </div>
+                    </li>
+                  </div>
                 ))}
               </>
             ) : (
               <>
-              <h1 className="text-black">No New Notifications</h1>
+                <h1 className="text-black">No New Notifications</h1>
                 {readNotifications.map((notification) => (
-                  <div>
-                    <div className="text-gray-500">
-                      <li key={notification.id} className="p-2">
-                        <div className="flex justify-end items-center gap-2 border">
+                   <div key={notification.id} className="text-gray-500">
+                      <li className="p-2">
+                        <div className="flex justify-between items-center gap-2 border">
                           <span className="text-black text-sm">
                             {notification.message}
                           </span>
@@ -118,7 +113,6 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
                         </div>
                       </li>
                     </div>
-                  </div>
                 ))}
               </>
             )}

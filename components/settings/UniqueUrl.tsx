@@ -3,7 +3,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase'; 
 import { useUserDoc } from '@/utilities/getUserDocHelper'; 
 import { useAuth } from '@/context/AuthContext'
-import { useUniqueUrl } from '@/utilities/displayUniqueUrl'; 
+import { useUniqueUrl } from '@/utilities/FetchProfileInfo/displayUniqueUrl'; 
 
 function UniqueUrl() {
     const { username }: any = useAuth();
@@ -20,7 +20,9 @@ function UniqueUrl() {
 
 
     async function handleSave() {
-        const { updateUserData } = useUserDoc(username?.uid);
+        const userDoc = useUserDoc(username?.uid);
+        if (!userDoc) return
+        const { updateUserData } = userDoc
 
         if (uniqueUrl === originalUrl) {
             setIsEditable(false);

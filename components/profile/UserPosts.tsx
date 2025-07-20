@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import PostStyle from "../post/PostStyle";
 import { useAuth } from "@/context/AuthContext";
+import { useLiveUserData } from "@/utilities/useLiveUserData";
+import LivePost from "components/post/LivePost";
 
 function UserPosts({
   posts,
@@ -9,6 +11,7 @@ function UserPosts({
 }) {
   const { username: currentUser } = useAuth();
 
+  console.log(currentUser?.displayName, "Current User Display Name in UserPosts");
 
 
   return (
@@ -16,27 +19,17 @@ function UserPosts({
       <h2 className="text-2xl font-bold mb-4">User Posts</h2>
 
       <div className="space-y-4">
-        {posts.map(
-          (post) => (
-            console.log("Rendering post:", post),
-            (
-             <div key={post.id}>
-                <PostStyle
-                  displayName={post.displayName}
-                  profilePicture={post.profilePicture}
-                  textContent={post.content}
-                  mediaUrl={post.mediaUrl}
-                  createdAt={post.createdAt}
-                  docId={post.id}
-                  currentLikes={post.likes}
-                  collectionName="posts"
-                  targetUid={post.uid}
-                  currentUser={currentUser?.uid || ''}
-                   />
-             </div>
-            )
-          )
-        )}
+        {posts.map((post) => (
+        <div
+          key={post.id}
+        >
+          <LivePost
+            post={post}
+            currentUser={currentUser?.uid || ''}
+            currentUserDisplayName={currentUser?.displayName || ''} />
+        </div>
+      )
+      )}
       </div>
     </div>
   );

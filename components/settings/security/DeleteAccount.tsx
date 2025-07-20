@@ -13,7 +13,9 @@ function DeleteAccount() {
             console.error('No user is logged in')
             return
         }
-        const { setUserData } = useUserDoc(username?.uid)
+        const userDoc = useUserDoc(username?.uid)
+        if (!userDoc) return;
+        const { setUserData } = userDoc
         
         try {
             await setUserData({deleted: true})
