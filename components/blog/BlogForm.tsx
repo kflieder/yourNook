@@ -31,25 +31,29 @@ function BlogForm({ authorId, authorDisplayName }: BlogFormProps) {
     };
 
   return (
-    <div>
+    <div className='flex flex-col space-y-4 p-4 w-1/2'>
       <input
+        className='border p-2 rounded'
         type="text"
         placeholder="Title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         />
         <textarea
+        className='border p-2 rounded'
+        rows={10}
         placeholder="Content"
         value={content}
         onChange={(e) => setContent(e.target.value)}
         />
-        <input 
-        type="text"
+        {/* <input 
+        type="file"
         placeholder="Image URL"
         value={imageUrl}
         onChange={(e) => setImageUrl(e.target.value)}
-        />
-        <button onClick={handleSubmit}>Create Blog</button>
+        /> */}
+        <button className='bg-blue-500 text-white p-2 rounded' type="submit"
+         onClick={handleSubmit}>Create Blog</button>
     </div>
   )
 }
