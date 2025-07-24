@@ -31,7 +31,7 @@ function BlogForm({ authorId, authorDisplayName }: BlogFormProps) {
     };
 
   return (
-    <div className='flex flex-col space-y-4 p-4 w-1/2'>
+    <div className='flex flex-col space-y-4 p-4 w-full'>
       <input
         className='border p-2 rounded'
         type="text"
@@ -41,7 +41,7 @@ function BlogForm({ authorId, authorDisplayName }: BlogFormProps) {
         />
         <textarea
         className='border p-2 rounded'
-        rows={10}
+        rows={15}
         placeholder="Content"
         value={content}
         onChange={(e) => setContent(e.target.value)}

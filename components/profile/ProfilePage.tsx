@@ -5,6 +5,7 @@ import Bio from "./Bio";
 import CreatePost from "./CreatePost";
 import UserPosts from "../post/UserPosts";
 import UserBlogs from "components/blog/UserBlogs";
+import BlogForm from "components/blog/BlogForm";
 
 interface ProfilePageProps {
   userData: {
@@ -80,11 +81,12 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
               <UserPosts posts={posts} />
             </div>
           ) : activeTab === "blogs" ? (
-            <div>
-              <UserBlogs
+            <div className="grid grid-cols-2">
+              {isOwner && <BlogForm
                 authorId={userData.uid || ""}
                 authorDisplayName={userData.displayName || ""}
-              />
+              />}
+              <UserBlogs authorId={userData.uid || ""} authorDisplayName={userData.displayName || ""} profilePicture={userData.profilePicture || ""} />
             </div>
           ) : activeTab === "threads" ? (
             <div>

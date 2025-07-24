@@ -1,5 +1,5 @@
 import { db } from "lib/firebase";
-import { collection, getDocs, doc, setDoc } from "firebase/firestore";
+import { collection, doc, setDoc } from "firebase/firestore";
 
 type Blog = {
   id: string;
