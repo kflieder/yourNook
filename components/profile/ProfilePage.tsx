@@ -86,7 +86,9 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
                 authorId={userData.uid || ""}
                 authorDisplayName={userData.displayName || ""}
               />}
+              <div>
               <UserBlogs authorId={userData.uid || ""} authorDisplayName={userData.displayName || ""} profilePicture={userData.profilePicture || ""} />
+                </div>
             </div>
           ) : activeTab === "threads" ? (
             <div>

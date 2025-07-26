@@ -1,10 +1,10 @@
 import React from 'react'
-import GlobalFeed from './GlobalFeed'
+import GlobalPostFeed from './GlobalPostFeed'
 
 function FeedPage() {
   return (
     <div>
-        <GlobalFeed />
+        <GlobalPostFeed />
     </div>
   )
 }
