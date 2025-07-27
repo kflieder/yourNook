@@ -33,7 +33,7 @@ function UserBlogs({
           }`}
         >
           <h2
-            className={`font-bold text-md capitalize px-4 pt-4 ${
+            className={`font-bold text-md capitalize px-4 pt-4 text-center ${
               expandedBlog === blog.id ? "text-2xl pb-2" : "text-md"
             }`}
           >

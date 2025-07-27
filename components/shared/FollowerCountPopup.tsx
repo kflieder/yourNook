@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useEffect } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../lib/firebase";
@@ -11,8 +12,12 @@ interface FollowerProfile {
 
 function FollowerCountPopup({ userId }: { userId: string }) {
   const liveUserData = useLiveUserData(userId);
-  const [followerProfiles, setFollowerProfiles] = useState<FollowerProfile[]>([]);
+  const [followerProfiles, setFollowerProfiles] = useState<FollowerProfile[]>(
+    []
+  );
   const [loading, setLoading] = useState(false);
+  const [expandedFollowers, setExpandedFollowers] = useState(false);
+
 
   useEffect(() => {
     async function fetchFollowerProfiles() {
@@ -52,17 +57,24 @@ function FollowerCountPopup({ userId }: { userId: string }) {
   if (loading) return <p>Loading followers...</p>;
   if (!followerProfiles.length) return <p>No followers yet.</p>;
 
+  
+  const toggleFollowers = () => {
+    setExpandedFollowers(!expandedFollowers);
+  };
   return (
     <div>
-      <p>Followers: {followerProfiles.length}</p>
-      <ul>
-        {followerProfiles.map((follower) => (
-          <Link href={`/profile/${follower.uid}`} key={follower.uid}>
-            <li key={follower.uid}>{follower.displayName}</li>
-          </Link>
-          
-        ))}
-      </ul>
+      <p className='cursor-pointer relative' onClick={toggleFollowers}>Followers: {followerProfiles.length}</p>
+      {expandedFollowers && (
+        <div className="absolute bg-white border rounded p-4 shadow-lg z-10">
+          <ul>
+            {followerProfiles.map((follower) => (
+              <Link href={`/profile/${follower.uid}`} key={follower.uid}>
+                <li key={follower.uid}>{follower.displayName}</li>
+              </Link>
+            ))}
+          </ul>
+        </div>
+      )}      
     </div>
   );
 }

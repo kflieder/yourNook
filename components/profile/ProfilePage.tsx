@@ -44,17 +44,19 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
     setActiveTab(tab);
   }
 
-  const buttonClass = "p-2 hover:bg-blue-500 hover:text-white rounded cursor-pointer";
+  const activeTabClass = "border-b-2 shadow-xl";
+
+  const buttonClass = "px-2 transition-all duration-200 hover:border-b-2 hover:shadow-xl rounded cursor-pointer";
   return (
     <div>
       <Bio userData={userData} />
 
       <div>
-        <div  className="border flex justify-center space-x-4 p-4">
+        <div  className="flex justify-center space-x-4 p-4">
         <button
           onClick={() => handleTabChange("posts")}
           className={`${buttonClass} ${
-            activeTab === "posts" ? "bg-blue-500 text-white" : ""
+            activeTab === "posts" ? activeTabClass : ""
           }`}
         >
           Posts
@@ -62,14 +64,14 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
         <button
           onClick={() => handleTabChange("blogs")}
           className={`${buttonClass}
-          ${activeTab === "blogs" ? "bg-blue-500 text-white" : ""}`}
+          ${activeTab === "blogs" ? activeTabClass : ""}`}
         >
           Blogs
         </button>
         <button
           onClick={() => handleTabChange("threads")}
           className={`${buttonClass}
-          ${activeTab === "threads" ? "bg-blue-500 text-white" : ""}`}
+          ${activeTab === "threads" ? activeTabClass : ""}`}
         >
           Threads
         </button>
