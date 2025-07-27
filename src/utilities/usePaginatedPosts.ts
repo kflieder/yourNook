@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState, useRef, useCallback } from "react";
 import {
   collection,
@@ -21,19 +22,18 @@ interface Post {
   [key: string]: any;
 }
 
-const [posts, setPosts] = useState<Post[]>([]);
-const [loading, setLoading] = useState(false);
-const [hasMore, setHasMore] = useState(true);
-const [lastdoc, setLastDoc] =
-  useState<QueryDocumentSnapshot<DocumentData> | null>(null);
-
 export function usePaginatedPosts(
   collectionName: string,
   sortField = "createdAt"
 ) {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [lastdoc, setLastDoc] =
+    useState<QueryDocumentSnapshot<DocumentData> | null>(null);
   useEffect(() => {
     const ref = collection(db, collectionName);
-    const q = query(ref, orderBy(sortField, "desc"), limit(10));
+    const q = query(ref, orderBy(sortField, "desc"), limit(5));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const firstPosts = snapshot.docs.map((doc) => ({
