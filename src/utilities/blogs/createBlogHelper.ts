@@ -9,6 +9,7 @@ type Blog = {
   createdAt: Date;
   imageUrl?: string;
   authorDisplayName: string;
+  likes: string[];
 };
 interface CreateBlogData {
   title: string;
@@ -16,6 +17,7 @@ interface CreateBlogData {
   imageUrl?: string;
   authorId: string;
   authorDisplayName: string;
+  likes?: string[];
 }
 
 export async function createBlog(data: CreateBlogData): Promise<void> {

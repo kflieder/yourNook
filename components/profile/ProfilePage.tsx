@@ -76,9 +76,9 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
           Threads
         </button>
         </div>
-        <div className="border relative min-h-screen">
+        <div className="relative min-h-screen">
           {activeTab === "posts" ? (
-            <div>
+            <div className="border flex flex-col justify-center items-center">
               {isOwner && <CreatePost />}
               <UserPosts posts={posts} />
             </div>
@@ -89,7 +89,13 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
                 authorDisplayName={userData.displayName || ""}
               />}
               <div>
-              <UserBlogs authorId={userData.uid || ""} authorDisplayName={userData.displayName || ""} profilePicture={userData.profilePicture || ""} />
+              <UserBlogs
+                authorId={userData.uid || ""}
+                authorDisplayName={userData.displayName || ""}
+                profilePicture={userData.profilePicture || ""}
+                currentUser={username.uid}
+                currentUserDisplayName={username.displayName || ""}
+              />
                 </div>
             </div>
           ) : activeTab === "threads" ? (

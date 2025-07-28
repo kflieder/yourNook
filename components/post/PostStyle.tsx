@@ -85,7 +85,7 @@ function PostStyle({
         <Likes
           docId={docId}
           currentLikes={currentLikes || []}
-          collectionName={collectionName || "posts"}
+          collectionName={"posts"}
           targetUid={targetUid}
           currentUser={currentUser}
           displayName={displayName}

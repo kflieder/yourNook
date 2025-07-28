@@ -73,12 +73,14 @@ export function usePaginatedPosts(
           const unique = newPosts.filter((p) => !existingIds.has(p.id));
           return [...prev, ...unique];
         });
+        
       } else {
         setHasMore(false);
       }
     } catch (error) {
       console.error("Error fetching more posts:", error);
     }
+    setLoading(false);
   }, [loading, hasMore, lastdoc, collectionName, sortField]);
 
   const observer = useRef<IntersectionObserver | null>(null);
@@ -97,5 +99,5 @@ export function usePaginatedPosts(
     return () => observer.current?.disconnect();
   }, [fetchMorePosts]);
 
-  return { posts, loading, hasMore, loadMoreRef, fetchMorePosts };
+  return { posts, loading, hasMore, loadMoreRef };
 }
