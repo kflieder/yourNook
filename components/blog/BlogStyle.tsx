@@ -1,9 +1,11 @@
+'use client';
 import { Timestamp } from "firebase-admin/firestore";
 import React, { useState } from "react";
 import Likes from "components/PostActions/Likes";
 import CommentSection, {
   CommentCount,
 } from "components/PostActions/Comments/CommentSection";
+import SharePost from "components/PostActions/SharePost";
 
 interface BlogStyleProps {
   id: string;
@@ -106,6 +108,7 @@ function BlogStyle({
           className="cursor-pointer flex flex-col"
         >
           <CommentCount postId={id} />
+          <SharePost postId={id} postAuthorId={authorUid} currentUser={currentUser} currentUserDisplayName={currentUserDisplayName} collectionName={"blogs"} />
         </div>
       </div>
       {expandedComments === id && (

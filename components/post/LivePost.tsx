@@ -3,7 +3,7 @@ import React from 'react'
 import { useLiveUserData } from '@/utilities/useLiveUserData';
 import PostStyle from './PostStyle';
 
-function LivePost({ post, currentUser, currentUserDisplayName }: { post: any; currentUser: string; currentUserDisplayName?: string }) {
+function LivePost({ post, currentUser, currentUserDisplayName }: { post: any; currentUser: string; currentUserDisplayName?: string; }) {
   if (!post) return null; 
   
   const liveUser = useLiveUserData(post.uid);

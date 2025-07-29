@@ -97,7 +97,7 @@ function PostStyle({
         >
           <CommentCount postId={docId} />
         </div>
-        <SharePost postId={docId} postAuthorId={targetUid} currentUser={currentUser} currentUserDisplayName={currentUserDisplayName} />
+        <SharePost postId={docId} postAuthorId={targetUid} currentUser={currentUser} currentUserDisplayName={currentUserDisplayName} collectionName={"posts"} />
         <div onClick={handleShowReportForm} className="ml-2 cursor-pointer">
           <MdReportGmailerrorred size={22} />
         </div>

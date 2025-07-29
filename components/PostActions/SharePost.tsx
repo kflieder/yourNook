@@ -6,13 +6,14 @@ interface SharePostProps {
   postId: string;
   postAuthorId: string; 
   currentUser: string; 
-  currentUserDisplayName: string; 
+  currentUserDisplayName: string;
+  collectionName: string; 
 }
 
-function SharePost({ postId, postAuthorId, currentUser, currentUserDisplayName }: SharePostProps) {
+function SharePost({ postId, postAuthorId, currentUser, currentUserDisplayName, collectionName }: SharePostProps) {
     const handleshare = async (postId: string) => {
         try {
-           const url = `${window.location.origin}/feed/${postId}`;
+           const url = `${window.location.origin}/feed/${collectionName}/${postId}`;
               await navigator.clipboard.writeText(url);
               alert('Post link copied to clipboard!'); 
               await sendNotification({
