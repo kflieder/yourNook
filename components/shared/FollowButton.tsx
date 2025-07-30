@@ -5,32 +5,37 @@ import { useUserDoc } from "@/utilities/userDocHelper";
 import { useLiveUserData } from "@/utilities/useLiveUserData";
 import { sendNotification } from "@/utilities/sendNotification";
 
+
 interface FollowButtonProps {
   targetUid: string;
 }
 
 function FollowButton({ targetUid }: FollowButtonProps) {
   const { username: currentUser }: any = useAuth();
-
-    
-
   const currentUserDoc = useUserDoc(currentUser?.uid);
   const targetUserDoc = useUserDoc(targetUid);
-
-  // Live user data
   const liveCurrentUser = useLiveUserData(currentUser?.uid);
   const liveTargetUser = useLiveUserData(targetUid);
-
   const [isFollowing, setIsFollowing] = useState(false);
+ 
+  const needsApproval = liveTargetUser?.autoApproveFollow === false;
+  
+  
 
   if (!currentUser || !targetUid) return null;
-  // Check follow status on live data change
+
+  
+
   useEffect(() => {
     if (!liveCurrentUser || !targetUid) return;
     setIsFollowing(liveCurrentUser.following?.includes(targetUid));
   }, [liveCurrentUser, targetUid]);
+  
+ 
 
+  
   const handleFollow = async () => {
+    
     try {
       const updatedFollowing = Array.from(
         new Set([...(liveCurrentUser?.following || []), targetUid])
@@ -73,8 +78,21 @@ function FollowButton({ targetUid }: FollowButtonProps) {
     }
   };
 
-  const handleClick = () => {
-    isFollowing ? handleUnfollow() : handleFollow();
+ const handleClick = async () => {
+    // isFollowing ? handleUnfollow() : handleFollow();
+    if (isFollowing) {
+      handleUnfollow();
+    } else if (needsApproval) {
+      alert("This user requires approval to follow.");
+      await sendNotification({
+        toUserId: targetUid,
+        type: "followRequest",
+        fromUserId: currentUser.uid,
+        message: `${currentUser.displayName} wants to follow you!`
+      });
+    } else {
+      handleFollow();
+    }
   };
 
   const followerCount = liveTargetUser?.followers?.length || 0;

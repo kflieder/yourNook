@@ -30,7 +30,7 @@ function SignupForm() {
                 links: 'edit profile',
                 profilePicture: '/profileAvatar.png',
                 uid: userCredential.user.uid,
-                autoAproveFollow: true,
+                autoApproveFollow: true,
             });
             router.push('/profile/' + username.toLowerCase().replace(/\s+/g, '-'));
         } catch (error) {
