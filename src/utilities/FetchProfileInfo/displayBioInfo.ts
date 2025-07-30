@@ -1,6 +1,6 @@
 'use client';
 import { useAuth } from '@/context/AuthContext';
-import { useUserDoc } from '../getUserDocHelper';
+import { useUserDoc } from '../userDocHelper';
 import { useEffect, useState } from 'react';
 
 

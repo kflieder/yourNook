@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../../lib/firebase';
 import {useRouter} from 'next/navigation';
-import { useUserDoc } from '@/utilities/getUserDocHelper';
+import { useUserDoc } from '@/utilities/userDocHelper';
 
 function SignupForm() {
     const [email, setEmail] = useState('');
@@ -22,14 +22,15 @@ function SignupForm() {
                 
             });
             const userDoc = useUserDoc(userCredential.user.uid);
-            await userDoc.setUserData({
+            await userDoc?.setUserData({
                 displayName: username,
                 uniqueUrl: username.toLowerCase().replace(/\s+/g, '-'),
                 pronouns: {other: 'other'},
                 bio: 'Please edit your profile ',
                 links: 'edit profile',
                 profilePicture: '/profileAvatar.png',
-                uid: userCredential.user.uid
+                uid: userCredential.user.uid,
+                autoAproveFollow: true,
             });
             router.push('/profile/' + username.toLowerCase().replace(/\s+/g, '-'));
         } catch (error) {

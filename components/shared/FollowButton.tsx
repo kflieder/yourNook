@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { useUserDoc } from "@/utilities/getUserDocHelper";
+import { useUserDoc } from "@/utilities/userDocHelper";
 import { useLiveUserData } from "@/utilities/useLiveUserData";
 import { sendNotification } from "@/utilities/sendNotification";
 

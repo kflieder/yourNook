@@ -1,7 +1,7 @@
 import React from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { deleteUser } from 'firebase/auth'
-import { useUserDoc } from '@/utilities/getUserDocHelper'
+import { useUserDoc } from '@/utilities/userDocHelper'
 
 function DeleteAccount() {
     const { username, firebaseUser } = useAuth()
