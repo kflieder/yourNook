@@ -4,6 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useUserDoc } from "@/utilities/userDocHelper";
 import { useLiveUserData } from "@/utilities/useLiveUserData";
 import { sendNotification } from "@/utilities/sendNotification";
+import { createFollowRequest } from "@/utilities/followRequestHelper";
 
 
 interface FollowButtonProps {
@@ -78,12 +79,15 @@ function FollowButton({ targetUid }: FollowButtonProps) {
     }
   };
 
- const handleClick = async () => {
-    // isFollowing ? handleUnfollow() : handleFollow();
+ const handleFollowButtonClick = async () => {
     if (isFollowing) {
       handleUnfollow();
     } else if (needsApproval) {
       alert("This user requires approval to follow.");
+      await createFollowRequest(targetUid, {
+        uid: currentUser.uid,
+        displayName: currentUser.displayName
+      });
       await sendNotification({
         toUserId: targetUid,
         type: "followRequest",
@@ -91,16 +95,15 @@ function FollowButton({ targetUid }: FollowButtonProps) {
         message: `${currentUser.displayName} wants to follow you!`
       });
     } else {
-      handleFollow();
+      handleFollow();  
     }
   };
-
   const followerCount = liveTargetUser?.followers?.length || 0;
 
   return (
     <div className="flex flex-col items-start gap-2">
       <button
-        onClick={handleClick}
+        onClick={handleFollowButtonClick}
         className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
       >
         {isFollowing ? "Unfollow" : "follow"}

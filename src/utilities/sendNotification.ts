@@ -24,6 +24,7 @@ export async function sendNotification({
     await addDoc (notifRef, {
         type, 
         fromUserId,
+        toUserId,
         postId: postId || null,
         createdAt: serverTimestamp(),
         isRead: false,

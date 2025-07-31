@@ -2,9 +2,9 @@
 import React, { useState, useEffect } from "react";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import getNotifications from "@/utilities/getNotifications";
-import { db } from "../../lib/firebase";
+import { db } from "../../../lib/firebase";
 import { doc, updateDoc } from "firebase/firestore";
-import { read } from "fs";
+import { AcceptFollowRequestButton } from "./AcceptFollowRequest";
 
 type notificationDropDownProps = {
   userId: string;
@@ -15,6 +15,9 @@ type notification = {
   message: string;
   createdAt: any;
   isRead: boolean;
+  type: string;
+  fromUserId: string;
+  toUserId: string;
 };
 
 function NotificationsDropdown({ userId }: notificationDropDownProps) {
@@ -48,6 +51,8 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
     }
   }
 
+  console.log("Notifications:", notifications);
+
   return (
     <div>
       <div className="relative cursor-pointer" onClick={handleOnClick}>
@@ -56,10 +61,10 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
           <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1">
             {unreadNotifications.length}
           </span>
-        )}
+        )} 
       </div>
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-1/2 h-3/5 overflow-scroll bg-white border border-gray-300 rounded-lg shadow-lg p-4">
+        <div className="absolute right-0 mt-2 w-1/2 h-3/5 overflow-scroll bg-white border border-gray-300 rounded-lg shadow-lg p-4 z-99">
           <ul>
             {notifications.length === 0 ? (
               <li className="text-black">No notifications</li>
@@ -75,6 +80,12 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
                           {notification.createdAt?.toDate?.().toLocaleString()}
                         </span>
                       </div>
+                      {notification.type === "followRequest" && (
+                        <AcceptFollowRequestButton
+                          targetUid={notification.fromUserId}
+                          currentUserUid={notification.toUserId}
+                        />
+                      )}
                     </li>
                   ))}
                 </div>

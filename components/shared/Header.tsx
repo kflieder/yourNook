@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
-import NotificationsDropdown from "../profile/NotificationsDropdown";
+import NotificationsDropdown from "../profile/notifications/NotificationsDropdown";
 import { IoSettingsOutline } from "react-icons/io5";
 
 function Header() {
