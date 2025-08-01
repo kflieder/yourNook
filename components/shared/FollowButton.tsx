@@ -5,21 +5,22 @@ import { useUserDoc } from "@/utilities/userDocHelper";
 import { useLiveUserData } from "@/utilities/useLiveUserData";
 import { sendNotification } from "@/utilities/sendNotification";
 import { createFollowRequest, getFollowRequestStatus } from "@/utilities/followRequestHelper";
-import { get } from "http";
+
 
 
 interface FollowButtonProps {
   targetUid: string;
+  currentUserUid?: string; // Optional prop for current user UID
 }
 
-function FollowButton({ targetUid }: FollowButtonProps) {
+function FollowButton({ targetUid, currentUserUid }: FollowButtonProps) {
   const { username: currentUser }: any = useAuth();
   const currentUserDoc = useUserDoc(currentUser?.uid);
   const targetUserDoc = useUserDoc(targetUid);
   const liveCurrentUser = useLiveUserData(currentUser?.uid);
   const liveTargetUser = useLiveUserData(targetUid);
   const [isFollowing, setIsFollowing] = useState(false);
- 
+  const [isFollower, setIsFollower] = useState(false);
   const needsApproval = liveTargetUser?.autoApproveFollow === false;
   const [followRequestStatus, setFollowRequestStatus] = useState<"pending" | "accepted" | "rejected" | null>(null);
   
@@ -31,6 +32,7 @@ function FollowButton({ targetUid }: FollowButtonProps) {
   useEffect(() => {
     if (!liveCurrentUser || !targetUid) return;
     setIsFollowing(liveCurrentUser.following?.includes(targetUid));
+    setIsFollower(liveTargetUser?.followers?.includes(currentUser.uid));
     getFollowRequestStatus(targetUid, currentUser.uid)
       .then((status) => {
         if (status) {
@@ -39,8 +41,7 @@ function FollowButton({ targetUid }: FollowButtonProps) {
       });
   }, [liveCurrentUser, targetUid]);
   
- 
-
+  
   
   const handleFollow = async () => {
     
@@ -118,7 +119,9 @@ function FollowButton({ targetUid }: FollowButtonProps) {
             onClick={handleFollowButtonClick}
             className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
           >
-            {isFollowing ? "Unfollow" : "Follow"}
+            {
+              isFollower && !isFollowing ? 'Follow Back' : isFollowing ? "Unfollow" : "Follow"
+            }
           </button>
         )
       }

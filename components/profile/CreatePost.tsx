@@ -70,6 +70,7 @@ function CreatePost() {
                     placeholder="What's on your mind?"
                     className="p-2 border rounded-lg mb-4"
                     rows={4}
+                    maxLength={500} // Limit to 500 characters
                 />
                 <input
                     type="file"

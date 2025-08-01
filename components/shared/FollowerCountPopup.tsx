@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useState, useEffect } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../lib/firebase";
@@ -17,19 +17,17 @@ function FollowerCountPopup({ userId }: { userId: string }) {
   );
   const [loading, setLoading] = useState(false);
   const [expandedFollowers, setExpandedFollowers] = useState(false);
-
+  const [expandedFollowing, setExpandedFollowing] = useState(false);
+  const [following, setFollowing] = useState<FollowerProfile[]>([]);
 
   useEffect(() => {
     async function fetchFollowerProfiles() {
-      if (!liveUserData?.followers?.length) {
-        setFollowerProfiles([]);
-        return;
-      }
+      if (!liveUserData?.followers || !liveUserData?.following) return;
 
       setLoading(true);
       try {
         const profiles = await Promise.all(
-          liveUserData.followers.map(async (followerUid: string) => {
+          liveUserData?.followers.map(async (followerUid: string) => {
             const docRef = doc(db, "users", followerUid);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
@@ -42,7 +40,25 @@ function FollowerCountPopup({ userId }: { userId: string }) {
             return { uid: followerUid, displayName: "Unknown User" };
           })
         );
+
+        const following = await Promise.all(
+          liveUserData?.following.map(async (followingUid: string) => {
+            const docRef = doc(db, "users", followingUid);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+              const data = docSnap.data();
+              return {
+                uid: followingUid,
+                displayName: data.displayName || "Unknown User",
+              };
+            }
+            return { uid: followingUid, displayName: "Unknown User" };
+          })
+        );
+
         setFollowerProfiles(profiles);
+        setFollowing(following);
+        console.log("fetched people im following:", following);
       } catch (error) {
         console.error("Error fetching follower profiles:", error);
         setFollowerProfiles([]);
@@ -52,29 +68,51 @@ function FollowerCountPopup({ userId }: { userId: string }) {
     }
 
     fetchFollowerProfiles();
-  }, [liveUserData?.followers]);
+  }, [liveUserData?.followers, liveUserData?.following]);
 
   if (loading) return <p>Loading followers...</p>;
-  if (!followerProfiles.length) return <p>No followers yet.</p>;
-
   
+
   const toggleFollowers = () => {
     setExpandedFollowers(!expandedFollowers);
   };
+  const toggleFollowing = () => {
+    setExpandedFollowing(!expandedFollowing);
+  };
   return (
-    <div>
-      <p className='cursor-pointer relative' onClick={toggleFollowers}>Followers: {followerProfiles.length}</p>
-      {expandedFollowers && (
-        <div className="absolute bg-white border rounded p-4 shadow-lg z-10">
-          <ul>
-            {followerProfiles.map((follower) => (
-              <Link href={`/profile/${follower.uid}`} key={follower.uid}>
-                <li key={follower.uid}>{follower.displayName}</li>
-              </Link>
-            ))}
-          </ul>
-        </div>
-      )}      
+    <div className="flex">
+      <div>
+        <p className="cursor-pointer relative" onClick={toggleFollowers}>
+          Followers: {followerProfiles.length}
+        </p>
+        {expandedFollowers && (
+          <div className="absolute bg-white border rounded p-4 shadow-lg z-10">
+            <ul>
+              {followerProfiles.map((follower) => (
+                <Link href={`/profile/${follower.uid}`} key={follower.uid}>
+                  <li key={follower.uid}>{follower.displayName}</li>
+                </Link>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+      <div>
+        <p className="cursor-pointer relative" onClick={toggleFollowing}>
+          Following: {following.length}
+        </p>
+        {expandedFollowing && (
+          <div className="absolute bg-white border rounded p-4 shadow-lg z-10">
+            <ul>
+              {following.map((follow) => (
+                <Link href={`/profile/${follow.uid}`} key={follow.uid}>
+                  <li key={follow.uid}>{follow.displayName}</li>
+                </Link>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
