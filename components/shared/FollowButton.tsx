@@ -4,7 +4,8 @@ import { useAuth } from "@/context/AuthContext";
 import { useUserDoc } from "@/utilities/userDocHelper";
 import { useLiveUserData } from "@/utilities/useLiveUserData";
 import { sendNotification } from "@/utilities/sendNotification";
-import { createFollowRequest } from "@/utilities/followRequestHelper";
+import { createFollowRequest, getFollowRequestStatus } from "@/utilities/followRequestHelper";
+import { get } from "http";
 
 
 interface FollowButtonProps {
@@ -20,7 +21,7 @@ function FollowButton({ targetUid }: FollowButtonProps) {
   const [isFollowing, setIsFollowing] = useState(false);
  
   const needsApproval = liveTargetUser?.autoApproveFollow === false;
-  
+  const [followRequestStatus, setFollowRequestStatus] = useState<"pending" | "accepted" | "rejected" | null>(null);
   
 
   if (!currentUser || !targetUid) return null;
@@ -30,6 +31,12 @@ function FollowButton({ targetUid }: FollowButtonProps) {
   useEffect(() => {
     if (!liveCurrentUser || !targetUid) return;
     setIsFollowing(liveCurrentUser.following?.includes(targetUid));
+    getFollowRequestStatus(targetUid, currentUser.uid)
+      .then((status) => {
+        if (status) {
+          setFollowRequestStatus(status.status);
+        }
+      });
   }, [liveCurrentUser, targetUid]);
   
  
@@ -94,6 +101,7 @@ function FollowButton({ targetUid }: FollowButtonProps) {
         fromUserId: currentUser.uid,
         message: `${currentUser.displayName} wants to follow you!`
       });
+      setFollowRequestStatus("pending");
     } else {
       handleFollow();  
     }
@@ -102,12 +110,19 @@ function FollowButton({ targetUid }: FollowButtonProps) {
 
   return (
     <div className="flex flex-col items-start gap-2">
-      <button
-        onClick={handleFollowButtonClick}
-        className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
-      >
-        {isFollowing ? "Unfollow" : "follow"}
-      </button>
+      {
+        followRequestStatus === "pending" ? (
+          <span>Request Pending</span>
+        ) : (
+          <button
+            onClick={handleFollowButtonClick}
+            className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
+          >
+            {isFollowing ? "Unfollow" : "Follow"}
+          </button>
+        )
+      }
+      
     </div>
   );
 }

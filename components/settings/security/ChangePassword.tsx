@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
-import { reauthenticateWithCredential, EmailAuthProvider, updatePassword } from 'firebase/auth'
+import { reauthenticateWithCredential, EmailAuthProvider, updatePassword, getAuth } from 'firebase/auth'
 
 function ChangePassword() {
     const [currentPassword, setCurrentPassword] = useState('')
@@ -11,20 +11,21 @@ function ChangePassword() {
     const [isEditable, setIsEditable] = useState(false)
 
     async function handleChangePassword() {
-        if (!username) {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        if (!user) {
             console.error('No user is logged in')
             return
         }
-        if (!username.email) {
+        if (!user.email) {
             console.error('User email is missing')
             return
         }
 
-
         try {
-            const credential = EmailAuthProvider.credential(username.email, currentPassword)
-            await reauthenticateWithCredential(username, credential)
-            await updatePassword(username, newPassword)
+            const credential = EmailAuthProvider.credential(user.email, currentPassword)
+            await reauthenticateWithCredential(user, credential)
+            await updatePassword(user, newPassword)
             setIsEditable(false)
             setCurrentPassword('')
             setNewPassword('')

@@ -4,7 +4,7 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import getNotifications from "@/utilities/getNotifications";
 import { db } from "../../../lib/firebase";
 import { doc, updateDoc } from "firebase/firestore";
-import { AcceptFollowRequestButton } from "./AcceptFollowRequest";
+import { AnswerFollowRequestButtons } from "./AnswerFollowRequest";
 
 type notificationDropDownProps = {
   userId: string;
@@ -79,13 +79,14 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
                         <span className="text-xs text-gray-500">
                           {notification.createdAt?.toDate?.().toLocaleString()}
                         </span>
-                      </div>
-                      {notification.type === "followRequest" && (
-                        <AcceptFollowRequestButton
+                        {notification.type === "followRequest" && (
+                        <AnswerFollowRequestButtons
                           targetUid={notification.fromUserId}
                           currentUserUid={notification.toUserId}
                         />
                       )}
+                      </div>
+                      
                     </li>
                   ))}
                 </div>
@@ -100,7 +101,14 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
                         <span className="text-xs text-gray-500">
                           {notification.createdAt?.toDate?.().toLocaleString()}
                         </span>
+                        {notification.type === "followRequest" && (
+                        <AnswerFollowRequestButtons
+                          targetUid={notification.fromUserId}
+                          currentUserUid={notification.toUserId}
+                        />
+                      )}
                       </div>
+                      
                     </li>
                   </div>
                 ))}
@@ -120,7 +128,14 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
                               ?.toDate?.()
                               .toLocaleString()}
                           </span>
+                          {notification.type === "followRequest" && (
+                        <AnswerFollowRequestButtons
+                          targetUid={notification.fromUserId}
+                          currentUserUid={notification.toUserId}
+                        />
+                      )}
                         </div>
+                        
                       </li>
                     </div>
                 ))}

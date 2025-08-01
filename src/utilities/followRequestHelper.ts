@@ -1,4 +1,4 @@
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../../lib/firebase"; 
 
 export async function createFollowRequest(
@@ -17,7 +17,7 @@ export async function createFollowRequest(
 }
 
 export async function updateFollowRequestStatus(
-    targetUid: string, currentUserUid: string, status: "accepted" | "rejected"
+    targetUid: string, currentUserUid: string, status: "pending" | "accepted" | "rejected"
 ) {
     const followRequestRef = doc(db, 'users', currentUserUid, 'followRequests', targetUid);
 
@@ -25,4 +25,12 @@ export async function updateFollowRequestStatus(
         status,
         updatedAt: new Date()
     }, { merge: true });
+}
+
+export async function getFollowRequestStatus(
+    targetUid: string, currentUserUid: string
+) {
+    const followRequestRef = doc(db, 'users', currentUserUid, 'followRequests', targetUid);
+    const followRequestSnap = await getDoc(followRequestRef);
+    return followRequestSnap.data();
 }

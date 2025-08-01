@@ -9,6 +9,7 @@ import UniqueUrl from '../../../components/settings/UniqueUrl'
 import ChangePassword from '../../../components/settings/security/ChangePassword'
 import DeleteAccount from '../../../components/settings/security/DeleteAccount'
 import LogOutButton from '../../../components/shared/LogOutButton'
+import AutoApproveFollowers from 'components/settings/AutoApproveFollowers'
 
 function page() {
   const { username, loading }: any = useAuth();
@@ -66,6 +67,7 @@ function page() {
               <div className='flex flex-col gap-4'>
                 <ChangePassword />
                 <DeleteAccount />
+                <AutoApproveFollowers uid={username?.uid} />
               </div>
             ) : activeTab === 'notifications' ? (
               <div>
