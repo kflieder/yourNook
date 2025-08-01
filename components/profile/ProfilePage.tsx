@@ -6,6 +6,7 @@ import CreatePost from "./CreatePost";
 import UserPosts from "../post/UserPosts";
 import UserBlogs from "components/blog/UserBlogs";
 import BlogForm from "components/blog/BlogForm";
+import FriendsList from "./FriendsList";
 
 interface ProfilePageProps {
   userData: {
@@ -40,63 +41,73 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   >("posts");
 
   function handleTabChange(tab: "posts" | "blogs" | "threads") {
-    
     setActiveTab(tab);
   }
 
   const activeTabClass = "border-b-2 shadow-xl";
 
-  const buttonClass = "px-2 transition-all duration-200 hover:border-b-2 hover:shadow-xl rounded cursor-pointer";
+  const buttonClass =
+    "px-2 transition-all duration-200 hover:border-b-2 hover:shadow-xl rounded cursor-pointer";
   return (
     <div>
       <Bio userData={userData} />
 
       <div>
-        <div  className="flex justify-center space-x-4 p-4">
-        <button
-          onClick={() => handleTabChange("posts")}
-          className={`${buttonClass} ${
-            activeTab === "posts" ? activeTabClass : ""
-          }`}
-        >
-          Posts
-        </button>
-        <button
-          onClick={() => handleTabChange("blogs")}
-          className={`${buttonClass}
+        <div className="flex justify-center space-x-4 p-4">
+          <button
+            onClick={() => handleTabChange("posts")}
+            className={`${buttonClass} ${
+              activeTab === "posts" ? activeTabClass : ""
+            }`}
+          >
+            Posts
+          </button>
+          <button
+            onClick={() => handleTabChange("blogs")}
+            className={`${buttonClass}
           ${activeTab === "blogs" ? activeTabClass : ""}`}
-        >
-          Blogs
-        </button>
-        <button
-          onClick={() => handleTabChange("threads")}
-          className={`${buttonClass}
+          >
+            Blogs
+          </button>
+          <button
+            onClick={() => handleTabChange("threads")}
+            className={`${buttonClass}
           ${activeTab === "threads" ? activeTabClass : ""}`}
-        >
-          Threads
-        </button>
+          >
+            Threads
+          </button>
         </div>
-        <div className="relative min-h-screen">
+        <div className="relative min-h-screen grid grid-cols-3">
+          {isOwner && (
+            <div>
+              <FriendsList currentUserUid={username.uid} />
+            </div>
+          )}
+
           {activeTab === "posts" ? (
             <div className="border flex flex-col justify-center items-center">
               {isOwner && <CreatePost />}
               <UserPosts posts={posts} />
             </div>
           ) : activeTab === "blogs" ? (
+            <div className='col-span-2'>
             <div className="grid grid-cols-2">
-              {isOwner && <BlogForm
-                authorId={userData.uid || ""}
-                authorDisplayName={userData.displayName || ""}
-              />}
-              <div>
-              <UserBlogs
-                authorId={userData.uid || ""}
-                authorDisplayName={userData.displayName || ""}
-                profilePicture={userData.profilePicture || ""}
-                currentUser={username.uid}
-                currentUserDisplayName={username.displayName || ""}
-              />
-                </div>
+              {isOwner && (
+                <BlogForm
+                  authorId={userData.uid || ""}
+                  authorDisplayName={userData.displayName || ""}
+                />
+              )}
+              <div className="">
+                <UserBlogs
+                  authorId={userData.uid || ""}
+                  authorDisplayName={userData.displayName || ""}
+                  profilePicture={userData.profilePicture || ""}
+                  currentUser={username.uid}
+                  currentUserDisplayName={username.displayName || ""}
+                />
+              </div>
+            </div>
             </div>
           ) : activeTab === "threads" ? (
             <div>
