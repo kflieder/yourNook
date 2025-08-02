@@ -5,6 +5,7 @@ import getNotifications from "@/utilities/getNotifications";
 import { db } from "../../../lib/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import { AnswerFollowRequestButtons } from "./AnswerFollowRequest";
+import FollowButton from "components/shared/FollowButton";
 
 type notificationDropDownProps = {
   userId: string;
@@ -134,10 +135,15 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
                           currentUserUid={notification.toUserId}
                         />
                       )}
-                        </div>
-                        
-                      </li>
-                    </div>
+                      {
+                        notification.type === "follow" && (
+                          <span className="text-xs text-gray-500">
+                            <FollowButton targetUid={notification.fromUserId} currentUserUid={notification.toUserId} />
+                          </span>
+                        )}
+                      </div>
+                    </li>
+                  </div>
                 ))}
               </>
             )}

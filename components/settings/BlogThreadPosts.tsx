@@ -4,6 +4,12 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { useAuth } from '@/context/AuthContext';
 
+const contentTypeLabels: { [key: string]: string } = {
+  posts: "Posts",
+  blog: "Blogs",
+  thread: "Threads",
+};
+
 function BlogThreadPosts() {
     const [contentType, setContentType] = useState<string[]>([]);
     const [defaultContentType, setDefaultContentType] = useState<string>('posts');
@@ -48,8 +54,7 @@ function BlogThreadPosts() {
             prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
         )
     }
-    console.log(defaultContentType);
-    console.log(contentType);
+   
 
     const editButton = (
         <div>
@@ -88,7 +93,7 @@ function BlogThreadPosts() {
                         contentType.map((type) => (
                             <div key={type} className="flex text-lg capitalize">
                                 <input className='mr-1' type="radio" id={`radio-${type}`} name="contentType" onChange={() => setDefaultContentType(type)} disabled={!isEditable} checked={defaultContentType === type} />
-                                <label className='mr-4' key={type} htmlFor={type}>{type}</label>
+                                <label className='mr-4' key={type} htmlFor={type}>{contentTypeLabels[type]}</label>
                             </div>
                         ))
                     }

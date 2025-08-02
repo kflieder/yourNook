@@ -7,6 +7,7 @@ import UserPosts from "../post/UserPosts";
 import UserBlogs from "components/blog/UserBlogs";
 import BlogForm from "components/blog/BlogForm";
 import FriendsList from "./FriendsList";
+import { useUserDoc } from "@/utilities/userDocHelper";
 
 interface ProfilePageProps {
   userData: {
@@ -22,6 +23,8 @@ interface ProfilePageProps {
     uniqueUrl?: string;
     profilePicture?: string;
     uid?: string;
+    contentType?: string[];
+    defaultContentType?: string;
   };
   posts: Array<{
     id: string;
@@ -35,12 +38,37 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   if (!username) {
     return null;
   }
-
+  const currentUsersPostBlogThreadSetting = useUserDoc(username.uid);
+  const targetUsersPostBlogThreadSetting = useUserDoc(userData.uid);
   const [activeTab, setActiveTab] = React.useState<
-    "posts" | "blogs" | "threads"
+    "posts" | "blog" | "thread"
   >("posts");
 
-  function handleTabChange(tab: "posts" | "blogs" | "threads") {
+  async function fetchCurrentUsersPostBlogThreadSettings() {
+   const userData = await currentUsersPostBlogThreadSetting?.fetchUserData();
+    if (userData) {
+      setActiveTab(userData.defaultContentType || "posts");
+    }
+  }
+
+  async function fetchTargetUsersPostBlogThreadSettings() {
+    const userData = await targetUsersPostBlogThreadSetting?.fetchUserData();
+    if (userData) {
+      setActiveTab(userData.defaultContentType || "posts");
+    }
+  }
+  React.useEffect(() => {
+    if (isOwner && currentUsersPostBlogThreadSetting) {
+      fetchCurrentUsersPostBlogThreadSettings();
+    } else if (targetUsersPostBlogThreadSetting) {
+      fetchTargetUsersPostBlogThreadSettings();
+    }
+  }, [username]);
+
+
+
+
+  function handleTabChange(tab: "posts" | "blog" | "thread") {
     setActiveTab(tab);
   }
 
@@ -63,16 +91,16 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
             Posts
           </button>
           <button
-            onClick={() => handleTabChange("blogs")}
+            onClick={() => handleTabChange("blog")}
             className={`${buttonClass}
-          ${activeTab === "blogs" ? activeTabClass : ""}`}
+          ${activeTab === "blog" ? activeTabClass : ""}`}
           >
             Blogs
           </button>
           <button
-            onClick={() => handleTabChange("threads")}
+            onClick={() => handleTabChange("thread")}
             className={`${buttonClass}
-          ${activeTab === "threads" ? activeTabClass : ""}`}
+          ${activeTab === "thread" ? activeTabClass : ""}`}
           >
             Threads
           </button>
@@ -89,7 +117,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
               {isOwner && <CreatePost />}
               <UserPosts posts={posts} />
             </div>
-          ) : activeTab === "blogs" ? (
+          ) : activeTab === "blog" ? (
             <div className='col-span-2'>
             <div className="grid grid-cols-2">
               {isOwner && (
@@ -109,7 +137,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
               </div>
             </div>
             </div>
-          ) : activeTab === "threads" ? (
+          ) : activeTab === "thread" ? (
             <div>
               <h2>Threads will be implemented soon!</h2>
             </div>
