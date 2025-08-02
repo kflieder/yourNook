@@ -19,8 +19,9 @@ export function useLiveUserData(uid: string | undefined) {
         if (docSnap.exists()) {
           setLiveUserData(docSnap.data());
         } else {
-          console.warn("No such document!");
+          console.log(`No user data found for UID: ${uid}`);
           setLiveUserData(null);
+          
         }
       },
       (error) => {

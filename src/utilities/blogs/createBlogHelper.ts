@@ -1,5 +1,5 @@
 import { db } from "lib/firebase";
-import { collection, doc, setDoc } from "firebase/firestore";
+import { collection, doc, setDoc, Timestamp } from "firebase/firestore";
 
 type Blog = {
   id: string;
@@ -18,6 +18,7 @@ interface CreateBlogData {
   authorId: string;
   authorDisplayName: string;
   likes?: string[];
+  createdAt?: Date;
 }
 
 export async function createBlog(data: CreateBlogData): Promise<void> {
@@ -28,8 +29,8 @@ export async function createBlog(data: CreateBlogData): Promise<void> {
     await setDoc(newBlogRef, {
       ...data,
       id: newBlogRef.id,
-      createdAt: new Date(),
-    } as Blog);
+      createdAt: Timestamp.now(),
+    });
   } catch (error) {
     console.error("Error creating blog:", error);
     throw error;

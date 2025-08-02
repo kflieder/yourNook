@@ -8,6 +8,8 @@ import UserBlogs from "components/blog/UserBlogs";
 import BlogForm from "components/blog/BlogForm";
 import FriendsList from "./FriendsList";
 import { useUserDoc } from "@/utilities/userDocHelper";
+import BlockButton from "components/shared/BlockButton";
+import { isBlockedBy } from "@/utilities/blockUserHelper";
 
 interface ProfilePageProps {
   userData: {
@@ -43,6 +45,15 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   const [activeTab, setActiveTab] = React.useState<
     "posts" | "blog" | "thread"
   >("posts");
+  const [isBlocked, setIsBlocked] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    if (username && userData.uid) {
+      isBlockedBy(userData.uid, username.uid).then(setIsBlocked);
+    }
+  }, [username, userData.uid]);
+
+  console.log("isBlocked", isBlocked);
 
   async function fetchCurrentUsersPostBlogThreadSettings() {
    const userData = await currentUsersPostBlogThreadSetting?.fetchUserData();
@@ -65,19 +76,31 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
     }
   }, [username]);
 
-
-
-
   function handleTabChange(tab: "posts" | "blog" | "thread") {
     setActiveTab(tab);
   }
 
   const activeTabClass = "border-b-2 shadow-xl";
+  const buttonClass = "px-2 transition-all duration-200 hover:border-b-2 hover:shadow-xl rounded cursor-pointer";
 
-  const buttonClass =
-    "px-2 transition-all duration-200 hover:border-b-2 hover:shadow-xl rounded cursor-pointer";
+  if (isBlocked) {
+    return (
+      <div className="flex flex-col items-center justify-center">
+        <h2>you're blocked bitch</h2>
+        <p>You cannot view their profile.</p>
+      </div>
+    );
+  }
+
+
   return (
     <div>
+      {
+        !isOwner && (
+          <BlockButton blockerUid={username.uid || ""} blockedUid={userData.uid || ""} />
+        )
+      }
+      
       <Bio userData={userData} />
 
       <div>

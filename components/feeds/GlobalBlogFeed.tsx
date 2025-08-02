@@ -10,7 +10,8 @@ interface GlobalBlogFeedProps {
 
 
 function GlobalBlogFeed({ currentUser, currentUserDisplayName }: GlobalBlogFeedProps) {
-  const { posts, loading, hasMore, loadMoreRef } = usePaginatedPosts("blogs");
+  const { posts, loading, hasMore, loadMoreRef } = usePaginatedPosts("blogs", "createdAt", currentUser, "authorId");
+  console.log(currentUser)
   return (
     <div className='flex flex-col items-center justify-center'>
       {loading && <p>Loading...</p>}

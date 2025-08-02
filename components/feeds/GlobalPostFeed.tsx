@@ -9,8 +9,8 @@ interface GlobalPostFeedProps {
 
 function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
   const { posts, loading, hasMore, loadMoreRef } =
-    usePaginatedPosts("posts");
-
+    usePaginatedPosts("posts", "createdAt", currentUser.uid, "uid");
+ 
   return (
     <div className='flex flex-col items-center gap-y-4'>
       {posts.map((post) => (
