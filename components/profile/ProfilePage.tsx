@@ -1,5 +1,5 @@
 "use client";
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import Bio from "./Bio";
 import CreatePost from "./CreatePost";
@@ -45,71 +45,76 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   }
   const currentUsersDoc = useUserDoc(username.uid);
   const targetUsersDoc = useUserDoc(userData.uid);
-  const [activeTab, setActiveTab] = useState<
-    "posts" | "blog" | "thread"
-  >("posts");
+  const [activeTab, setActiveTab] = useState<"posts" | "blog" | "thread">(
+    "posts"
+  );
   const [isBlocked, setIsBlocked] = useState<boolean>(false);
-  const [isPrivate, setIsPrivate] = useState<boolean>(userData.private || false);
-  const [currentUserIsFollowing, setCurrentUserIsFollowing] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (username && userData.uid) {
-      isBlockedBy(userData.uid, username.uid).then(setIsBlocked);
-    }
-  }, [username, userData.uid]);
-
-  async function fetchIfPrivate() {
-    const userData = await targetUsersDoc?.fetchUserData();
-    if (userData) {
-      setIsPrivate(userData.private || false);
-      console.log("Current User Privacy Setting:", userData.private);
-    }
-  }
-
-  async function checkIfCurrentUserIsFollowing() {
-    if (!username || !userData.uid) return;
-    const currentUserData = await currentUsersDoc?.fetchUserData();
-    if (currentUserData && currentUserData.following) {
-      setCurrentUserIsFollowing(currentUserData.following.includes(userData.uid));
-    }
-  }
+  const [isPrivate, setIsPrivate] = useState<boolean>(
+    userData.private || false
+  );
+  const [currentUserIsFollowing, setCurrentUserIsFollowing] =
+    useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   
   useEffect(() => {
-    fetchIfPrivate();
-    if (isPrivate) {
-      checkIfCurrentUserIsFollowing();
+    async function checkAllTheThings() {
+      try {
+        if (!username || !userData.uid) return;
+        const blocked = await isBlockedBy(userData.uid, username.uid);
+        setIsBlocked(blocked); 
+
+        const targetUserData = await targetUsersDoc?.fetchUserData();
+        const currentUserData = await currentUsersDoc?.fetchUserData();
+
+        const settingUser = isOwner ? await currentUsersDoc?.fetchUserData() : targetUserData;
+        if (settingUser) {
+          setActiveTab(settingUser.defaultContentType || "posts");
+        }
+
+        if (targetUserData?.private) {
+          setIsPrivate(targetUserData.private);
+          if(currentUserData?.following) {
+            setCurrentUserIsFollowing(
+              currentUserData.following.includes(userData.uid)
+            );
+          }
+        }
+
+      } catch (error) {
+        console.error("Error checking profile settings:", error);
+      } finally {
+        setIsLoading(false);
+      }
     }
+    checkAllTheThings();
   }, [username, userData.uid]);
-
-  async function fetchCurrentUsersPostBlogThreadSettings() {
-   const userData = await currentUsersDoc?.fetchUserData();
-    if (userData) {
-      setActiveTab(userData.defaultContentType || "posts");
-    }
-  }
-
-  async function fetchTargetUsersPostBlogThreadSettings() {
-    const userData = await targetUsersDoc?.fetchUserData();
-    if (userData) {
-      setActiveTab(userData.defaultContentType || "posts");
-    }
-  }
-useEffect(() => {
-    if (isOwner && currentUsersDoc) {
-      fetchCurrentUsersPostBlogThreadSettings();
-    } else if (targetUsersDoc) {
-      fetchTargetUsersPostBlogThreadSettings();
-    }
-  }, [username]);
 
   function handleTabChange(tab: "posts" | "blog" | "thread") {
     setActiveTab(tab);
   }
 
   const activeTabClass = "border-b-2 shadow-xl";
-  const buttonClass = "px-2 transition-all duration-200 hover:border-b-2 hover:shadow-xl rounded cursor-pointer";
+  const buttonClass =
+    "px-2 transition-all duration-200 hover:border-b-2 hover:shadow-xl rounded cursor-pointer";
 
-  if (isBlocked) {
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center">
+        <h2>Loading...</h2>
+      </div>
+    );
+  } else if (isPrivate && !currentUserIsFollowing && !isOwner) {
+    return (
+      <div className="flex flex-col items-center justify-center">
+        <h2>This profile is private.</h2>
+        <p>You must follow them to view their content.</p>
+        <FollowButton
+          currentUserUid={username.uid || ""}
+          targetUid={userData.uid || ""}
+        />
+      </div>
+    );
+  } else if (isBlocked) {
     return (
       <div className="flex flex-col items-center justify-center">
         <h2>you're blocked bitch</h2>
@@ -118,25 +123,15 @@ useEffect(() => {
     );
   }
 
-  if (isPrivate && !currentUserIsFollowing && !isOwner) {
-      return (
-        <div className="flex flex-col items-center justify-center">
-          <h2>This profile is private.</h2>
-          <p>You must follow them to view their content.</p>
-          <FollowButton currentUserUid={username.uid || ""} targetUid={userData.uid || ""} />
-        </div>
-      )
-    }
-
-
   return (
     <div>
-      {
-        !isOwner && (
-          <BlockButton blockerUid={username.uid || ""} blockedUid={userData.uid || ""} />
-        )
-      }
-      
+      {!isOwner && (
+        <BlockButton
+          blockerUid={username.uid || ""}
+          blockedUid={userData.uid || ""}
+        />
+      )}
+
       <Bio userData={userData} />
 
       <div>
@@ -177,24 +172,24 @@ useEffect(() => {
               <UserPosts posts={posts} />
             </div>
           ) : activeTab === "blog" ? (
-            <div className='col-span-2'>
-            <div className="grid grid-cols-2">
-              {isOwner && (
-                <BlogForm
-                  authorId={userData.uid || ""}
-                  authorDisplayName={userData.displayName || ""}
-                />
-              )}
-              <div className="">
-                <UserBlogs
-                  authorId={userData.uid || ""}
-                  authorDisplayName={userData.displayName || ""}
-                  profilePicture={userData.profilePicture || ""}
-                  currentUser={username.uid}
-                  currentUserDisplayName={username.displayName || ""}
-                />
+            <div className="col-span-2">
+              <div className="grid grid-cols-2">
+                {isOwner && (
+                  <BlogForm
+                    authorId={userData.uid || ""}
+                    authorDisplayName={userData.displayName || ""}
+                  />
+                )}
+                <div className="">
+                  <UserBlogs
+                    authorId={userData.uid || ""}
+                    authorDisplayName={userData.displayName || ""}
+                    profilePicture={userData.profilePicture || ""}
+                    currentUser={username.uid}
+                    currentUserDisplayName={username.displayName || ""}
+                  />
+                </div>
               </div>
-            </div>
             </div>
           ) : activeTab === "thread" ? (
             <div>
