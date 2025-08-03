@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { useAuth } from "@/context/AuthContext";
 import Bio from "./Bio";
 import CreatePost from "./CreatePost";
@@ -10,6 +10,7 @@ import FriendsList from "./FriendsList";
 import { useUserDoc } from "@/utilities/userDocHelper";
 import BlockButton from "components/shared/BlockButton";
 import { isBlockedBy } from "@/utilities/blockUserHelper";
+import FollowButton from "components/shared/FollowButton";
 
 interface ProfilePageProps {
   userData: {
@@ -27,6 +28,8 @@ interface ProfilePageProps {
     uid?: string;
     contentType?: string[];
     defaultContentType?: string;
+    private?: boolean;
+    autoApproveFollow?: boolean;
   };
   posts: Array<{
     id: string;
@@ -40,38 +43,61 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   if (!username) {
     return null;
   }
-  const currentUsersPostBlogThreadSetting = useUserDoc(username.uid);
-  const targetUsersPostBlogThreadSetting = useUserDoc(userData.uid);
-  const [activeTab, setActiveTab] = React.useState<
+  const currentUsersDoc = useUserDoc(username.uid);
+  const targetUsersDoc = useUserDoc(userData.uid);
+  const [activeTab, setActiveTab] = useState<
     "posts" | "blog" | "thread"
   >("posts");
-  const [isBlocked, setIsBlocked] = React.useState<boolean>(false);
+  const [isBlocked, setIsBlocked] = useState<boolean>(false);
+  const [isPrivate, setIsPrivate] = useState<boolean>(userData.private || false);
+  const [currentUserIsFollowing, setCurrentUserIsFollowing] = useState<boolean>(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (username && userData.uid) {
       isBlockedBy(userData.uid, username.uid).then(setIsBlocked);
     }
   }, [username, userData.uid]);
 
-  console.log("isBlocked", isBlocked);
+  async function fetchIfPrivate() {
+    const userData = await targetUsersDoc?.fetchUserData();
+    if (userData) {
+      setIsPrivate(userData.private || false);
+      console.log("Current User Privacy Setting:", userData.private);
+    }
+  }
+
+  async function checkIfCurrentUserIsFollowing() {
+    if (!username || !userData.uid) return;
+    const currentUserData = await currentUsersDoc?.fetchUserData();
+    if (currentUserData && currentUserData.following) {
+      setCurrentUserIsFollowing(currentUserData.following.includes(userData.uid));
+    }
+  }
+  
+  useEffect(() => {
+    fetchIfPrivate();
+    if (isPrivate) {
+      checkIfCurrentUserIsFollowing();
+    }
+  }, [username, userData.uid]);
 
   async function fetchCurrentUsersPostBlogThreadSettings() {
-   const userData = await currentUsersPostBlogThreadSetting?.fetchUserData();
+   const userData = await currentUsersDoc?.fetchUserData();
     if (userData) {
       setActiveTab(userData.defaultContentType || "posts");
     }
   }
 
   async function fetchTargetUsersPostBlogThreadSettings() {
-    const userData = await targetUsersPostBlogThreadSetting?.fetchUserData();
+    const userData = await targetUsersDoc?.fetchUserData();
     if (userData) {
       setActiveTab(userData.defaultContentType || "posts");
     }
   }
-  React.useEffect(() => {
-    if (isOwner && currentUsersPostBlogThreadSetting) {
+useEffect(() => {
+    if (isOwner && currentUsersDoc) {
       fetchCurrentUsersPostBlogThreadSettings();
-    } else if (targetUsersPostBlogThreadSetting) {
+    } else if (targetUsersDoc) {
       fetchTargetUsersPostBlogThreadSettings();
     }
   }, [username]);
@@ -91,6 +117,16 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
       </div>
     );
   }
+
+  if (isPrivate && !currentUserIsFollowing && !isOwner) {
+      return (
+        <div className="flex flex-col items-center justify-center">
+          <h2>This profile is private.</h2>
+          <p>You must follow them to view their content.</p>
+          <FollowButton currentUserUid={username.uid || ""} targetUid={userData.uid || ""} />
+        </div>
+      )
+    }
 
 
   return (

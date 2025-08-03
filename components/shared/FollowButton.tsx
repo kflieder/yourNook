@@ -107,7 +107,7 @@ function FollowButton({ targetUid, currentUserUid }: FollowButtonProps) {
       handleFollow();  
     }
   };
-  const followerCount = liveTargetUser?.followers?.length || 0;
+  
 
   return (
     <div className="flex flex-col items-start gap-2">

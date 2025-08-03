@@ -58,7 +58,6 @@ function FollowerCountPopup({ userId }: { userId: string }) {
 
         setFollowerProfiles(profiles);
         setFollowing(following);
-        console.log("fetched people im following:", following);
       } catch (error) {
         console.error("Error fetching follower profiles:", error);
         setFollowerProfiles([]);

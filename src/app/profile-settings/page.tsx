@@ -9,7 +9,8 @@ import UniqueUrl from '../../../components/settings/UniqueUrl'
 import ChangePassword from '../../../components/settings/security/ChangePassword'
 import DeleteAccount from '../../../components/settings/security/DeleteAccount'
 import LogOutButton from '../../../components/shared/LogOutButton'
-import AutoApproveFollowers from 'components/settings/AutoApproveFollowers'
+import AutoApproveFollowers from 'components/settings/security/AutoApproveFollowers'
+import PublicOrPrivate from 'components/settings/security/PublicOrPrivate'
 
 function page() {
   const { username, loading }: any = useAuth();
@@ -68,6 +69,7 @@ function page() {
                 <ChangePassword />
                 <DeleteAccount />
                 <AutoApproveFollowers uid={username?.uid} />
+                <PublicOrPrivate currentUserUid={username?.uid} />
               </div>
             ) : activeTab === 'notifications' ? (
               <div>

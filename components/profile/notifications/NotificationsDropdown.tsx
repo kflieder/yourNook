@@ -52,8 +52,6 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
     }
   }
 
-  console.log("Notifications:", notifications);
-
   return (
     <div>
       <div className="relative cursor-pointer" onClick={handleOnClick}>
