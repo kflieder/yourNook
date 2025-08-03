@@ -11,6 +11,7 @@ import { useUserDoc } from "@/utilities/userDocHelper";
 import BlockButton from "components/shared/BlockButton";
 import { isBlockedBy } from "@/utilities/blockUserHelper";
 import FollowButton from "components/shared/FollowButton";
+import DMComponent from "./notifications/DMs/DMComponent";
 
 interface ProfilePageProps {
   userData: {
@@ -163,9 +164,10 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
           {isOwner && (
             <div>
               <FriendsList currentUserUid={username.uid} />
+              
             </div>
           )}
-
+          <DMComponent currentUser={username.uid} targetUser={userData.uid || ""} />
           {activeTab === "posts" ? (
             <div className="border flex flex-col justify-center items-center">
               {isOwner && <CreatePost />}
