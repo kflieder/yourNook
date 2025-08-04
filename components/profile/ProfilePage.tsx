@@ -11,7 +11,7 @@ import { useUserDoc } from "@/utilities/userDocHelper";
 import BlockButton from "components/shared/BlockButton";
 import { isBlockedBy } from "@/utilities/blockUserHelper";
 import FollowButton from "components/shared/FollowButton";
-import DMComponent from "./notifications/DMs/DMComponent";
+import DMComponent from "./DMs/DMComponent";
 
 interface ProfilePageProps {
   userData: {

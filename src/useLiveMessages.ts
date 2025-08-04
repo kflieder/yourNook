@@ -10,6 +10,13 @@ export function useLiveMessages(threadId: string | undefined) {
         if (!threadId) return;
         const messagesRef = collection(db, 'dmThreads', threadId, 'messages');
         const q = query(messagesRef);
-        
+        const unsubscribe = onSnapshot(
+            q, (docSnap) => {
+                const messages = docSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                setLiveMessages(messages);
+            }
+        )
+        return () => unsubscribe();
     }, [threadId]);
+    return liveMessages;
 }

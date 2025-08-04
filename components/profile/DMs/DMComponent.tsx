@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useLiveUserData } from '@/utilities/useLiveUserData';
 import {getOrCreateDmThread} from '@/utilities/dmThreadHelper';
 import SendMessageForm from './SendMessageForm';
+import Messages from './Messages';
 
 
 function DMComponent({currentUser, targetUser} : {currentUser: string, targetUser: string}) {
@@ -29,6 +30,11 @@ function DMComponent({currentUser, targetUser} : {currentUser: string, targetUse
         </div>
         <div>
         {/* conditionally render map of all messages, create new message input, and existing message*/}
+        {dmThreadId ? (
+          <Messages threadId={dmThreadId} />
+        ) : (
+          <p>Loading messages...</p>
+        )}
         <SendMessageForm threadId={dmThreadId || ''} currentUserUid={currentUser} />
         <p>This is where the direct messages will be displayed.</p>
         </div>
