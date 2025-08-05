@@ -4,10 +4,14 @@ import { sendMessage } from "@/utilities/dmThreadHelper";
 
 function SendMessageForm({
   threadId,
-  currentUserUid
+  currentUserUid,
+  senderDisplayName,
+  senderProfilePicture,
 }: {
   threadId: string;
   currentUserUid: string;
+  senderDisplayName: string;
+  senderProfilePicture?: string;
 }) {
   const [messageContent, setMessageContent] = useState("");
 
@@ -19,6 +23,9 @@ function SendMessageForm({
       senderUid: currentUserUid,
       content: messageContent,
       timestamp: new Date(),
+      clientTimestamp: new Date(),
+      senderDisplayName: senderDisplayName,
+      senderProfilePicture: senderProfilePicture
     };
 
     try {
