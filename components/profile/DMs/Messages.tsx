@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLiveMessages } from "@/utilities/useLiveMessages";
 import { useUserDmThreads } from "@/utilities/useUserDmThreads";
 import SendMessageForm from "./SendMessageForm";
@@ -14,6 +14,7 @@ function Messages({
   currentUserUid?: string;
   senderDisplayName?: string;
   senderProfilePicture?: string;
+  setDmThreadFromSendMessageForm?: (threadId: string | null) => void; 
 }) {
   
   const userDmThreads = useUserDmThreads(currentUserUid);
@@ -21,6 +22,7 @@ function Messages({
   const messages = useLiveMessages(selectedThread || threadId);
   const [selectedUsersDisplayName, setSelectedUsersDisplayName] = useState<string | null>(null);
   const [selectedUsersProfilePicture, setSelectedUsersProfilePicture] = useState<string | null>(null);
+  const [selectedUsersUid, setSelectedUsersUid] = useState<string | null>(null);
 
  
 
@@ -32,12 +34,20 @@ function Messages({
       
     }
   }
- console.log(currentUserUid, 'currentUserUid', selectedUsersDisplayName, 'selectedUsersDisplayName', selectedUsersProfilePicture, 'selectedUsersProfilePicture');
+
+  useEffect(() => {
+    if (threadId) {
+      setSelectedThread(threadId);
+    }
+    console.log("Messages component useEffect triggered with threadId:", threadId);
+  },[threadId]);
+
+
 
   return (
     <div>
       {selectedThread === null && (userDmThreads.map((thread) => (
-        <div onClick={() => {handleSelectedThread(thread.threadId); setSelectedUsersDisplayName(thread.otherUserDisplayName); setSelectedUsersProfilePicture(thread.otherUserProfilePicture);}} className="flex items-center space-x-4 p-2 border-b" key={thread.threadId}>
+        <div onClick={() => {handleSelectedThread(thread.threadId); setSelectedUsersDisplayName(thread.otherUserDisplayName); setSelectedUsersProfilePicture(thread.otherUserProfilePicture); setSelectedUsersUid(thread.otherUserUid);}} className="flex items-center space-x-4 p-2 border-b" key={thread.threadId}>
           <div className='border-b flex items-center space-x-4 cursor-pointer hover:bg-gray-100 p-2'>
           <strong>
             <img
@@ -60,7 +70,7 @@ function Messages({
               src={selectedUsersProfilePicture || senderProfilePicture || ""}
               alt={`${selectedUsersDisplayName || senderDisplayName}'s profile`}
             />
-          <h1>{selectedUsersDisplayName}</h1>
+          <h1>{selectedUsersDisplayName}HI HI</h1>
           <button onClick={() => setSelectedThread(null)} className="ml-auto cursor-pointer">
             <IoIosCloseCircleOutline size={24} />
           </button>
@@ -75,7 +85,9 @@ function Messages({
               <strong>{message.senderDisplayName}</strong>: {message.content}
             </div>
           ))}
-          <SendMessageForm threadId={selectedThread} currentUserUid={currentUserUid ?? ""} senderDisplayName={senderDisplayName ?? ""} senderProfilePicture={senderProfilePicture ?? ""} />
+          <SendMessageForm threadId={selectedThread} currentUserUid={currentUserUid ?? ""} senderDisplayName={senderDisplayName ?? ""} senderProfilePicture={senderProfilePicture ?? ""}
+          selectedTargetUserUid={selectedUsersUid ?? ""}
+          />
         </div>
       )}
     </div>

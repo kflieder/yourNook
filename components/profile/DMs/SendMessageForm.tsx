@@ -3,13 +3,14 @@ import React, { useState } from "react";
 import { sendMessage, getOrCreateDmThread } from "@/utilities/dmThreadHelper";
 
 function SendMessageForm({
-  threadId,
   currentUserUid,
   senderDisplayName,
   senderProfilePicture,
   selectedTargetUserUid,
   targetUserDisplayName,
-  targetUserProfilePicture
+  targetUserProfilePicture,
+  setDmThreadFromSendMessageForm,
+  toggleNewMessageStateFromSendMessageForm
 }: {
   threadId?: string;
   currentUserUid: string;
@@ -18,9 +19,10 @@ function SendMessageForm({
   selectedTargetUserUid?: string;
   targetUserDisplayName?: string;
   targetUserProfilePicture?: string;
+  setDmThreadFromSendMessageForm?: (threadId: string | null) => void;
+  toggleNewMessageStateFromSendMessageForm?: (state: boolean) => void;
 }) {
   const [messageContent, setMessageContent] = useState("");
-  const [dmThread, setDmThread] = useState<string | null>(threadId || null);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!messageContent.trim()) return;
@@ -42,19 +44,27 @@ function SendMessageForm({
         clientTimestamp: new Date(),
         senderDisplayName: senderDisplayName,
         senderProfilePicture: senderProfilePicture,
+        targetUserDisplayName: targetUserDisplayName,
+        targetUserProfilePicture: targetUserProfilePicture
       };
 
-      setDmThread(newMessageThreadId);
-
+      
+      if (setDmThreadFromSendMessageForm) {
+        setDmThreadFromSendMessageForm(newMessageThreadId);
+      }
+      if (toggleNewMessageStateFromSendMessageForm) {
+        toggleNewMessageStateFromSendMessageForm(false);
+      }
       await sendMessage(newMessageThreadId, message);
       setMessageContent(""); // Clear input after sending
-      
+     
+      console.log(senderDisplayName, 'senderDisplayName')
     } catch (error) {
       console.error("Error sending message:", error);
     }
   };
 
-  console.log('ahahhhhhah', selectedTargetUserUid, targetUserDisplayName, targetUserProfilePicture);
+  
   return (
     <div>
       <form onSubmit={handleSubmit} className="flex flex-col">

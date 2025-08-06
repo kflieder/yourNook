@@ -7,6 +7,8 @@ interface NewMessageProps {
   senderDisplayName: string;
   senderProfilePicture: string;
   selectedTargetUserUid?: string;
+  toggleNewMessageStateFromSendMessageForm?: (state: boolean) => void;
+  setDmThreadFromSendMessageForm?: (threadId: string | null) => void;
 }
 
 interface Friend {
@@ -21,6 +23,8 @@ function NewMessage({
   senderDisplayName,
   senderProfilePicture,
   selectedTargetUserUid,
+  toggleNewMessageStateFromSendMessageForm,
+  setDmThreadFromSendMessageForm
 }: NewMessageProps) {
   const [mutualUserData, setMutualUserData] = useState<Friend[]
   >([]);
@@ -34,7 +38,6 @@ function NewMessage({
       if (mutualFriends) {
         const resolvedFriends = await mutualFriends;
         setMutualUserData(resolvedFriends);
-        console.log("resolved Friends:", resolvedFriends);
       }
     }
     fetchMutualFriends();
@@ -51,7 +54,6 @@ function NewMessage({
     }
   }, [searchText, mutualUserData]);
 
-  console.log(selectedFriend, 'selectedFriend');
   return (
     <div className="flex flex-col items-center p-4 border space-y-4">
       <input
@@ -93,6 +95,8 @@ function NewMessage({
         selectedTargetUserUid={selectedFriend?.uid || selectedTargetUserUid}
         targetUserDisplayName={selectedFriend?.displayName || ""}
         targetUserProfilePicture={selectedFriend?.profilePicture || ""}
+        toggleNewMessageStateFromSendMessageForm={toggleNewMessageStateFromSendMessageForm}
+        setDmThreadFromSendMessageForm={setDmThreadFromSendMessageForm}
       />
     </div>
   );
