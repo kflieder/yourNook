@@ -1,57 +1,77 @@
 "use client";
 import React, { useState } from "react";
-import { sendMessage } from "@/utilities/dmThreadHelper";
+import { sendMessage, getOrCreateDmThread } from "@/utilities/dmThreadHelper";
 
 function SendMessageForm({
   threadId,
   currentUserUid,
   senderDisplayName,
   senderProfilePicture,
+  selectedTargetUserUid,
+  targetUserDisplayName,
+  targetUserProfilePicture
 }: {
-  threadId: string;
+  threadId?: string;
   currentUserUid: string;
   senderDisplayName: string;
   senderProfilePicture?: string;
+  selectedTargetUserUid?: string;
+  targetUserDisplayName?: string;
+  targetUserProfilePicture?: string;
 }) {
   const [messageContent, setMessageContent] = useState("");
-
+  const [dmThread, setDmThread] = useState<string | null>(threadId || null);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!messageContent.trim()) return; // Prevent sending empty messages
-
-    const message = {
-      senderUid: currentUserUid,
-      content: messageContent,
-      timestamp: new Date(),
-      clientTimestamp: new Date(),
-      senderDisplayName: senderDisplayName,
-      senderProfilePicture: senderProfilePicture
-    };
+    if (!messageContent.trim()) return;
 
     try {
-      await sendMessage(threadId, message);
+      const newMessageThreadId = await getOrCreateDmThread(
+        currentUserUid,
+        selectedTargetUserUid || "",
+        targetUserDisplayName,
+        targetUserProfilePicture,
+        senderDisplayName,
+        senderProfilePicture,
+      );
+
+      const message = {
+        senderUid: currentUserUid,
+        content: messageContent,
+        timestamp: new Date(),
+        clientTimestamp: new Date(),
+        senderDisplayName: senderDisplayName,
+        senderProfilePicture: senderProfilePicture,
+      };
+
+      setDmThread(newMessageThreadId);
+
+      await sendMessage(newMessageThreadId, message);
       setMessageContent(""); // Clear input after sending
+      
     } catch (error) {
       console.error("Error sending message:", error);
     }
   };
+
+  console.log('ahahhhhhah', selectedTargetUserUid, targetUserDisplayName, targetUserProfilePicture);
   return (
     <div>
-        <form onSubmit={handleSubmit} className="flex flex-col">
-      <input
-        type="textarea"
-        placeholder="Type your message here..."
-        className="w-full p-2 border rounded"
-        value={messageContent}
-        onChange={(e) => setMessageContent(e.target.value)}
-      />
-      <button
-        type="submit"
-        className="mt-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-      >
-        Send
-      </button>
-    </form>
+      <form onSubmit={handleSubmit} className="flex flex-col">
+        <input
+          type="textarea"
+          placeholder="Type your message here..."
+          className="w-full p-2 border rounded"
+          value={messageContent}
+          onChange={(e) => setMessageContent(e.target.value)}
+        />
+        <button
+          type="submit"
+          className="mt-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+        >
+          Send
+        </button>
+      </form>
     </div>
   );
 }

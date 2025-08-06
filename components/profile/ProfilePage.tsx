@@ -164,10 +164,10 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
           {isOwner && (
             <div>
               <FriendsList currentUserUid={username.uid} />
-              
+              <DMComponent currentUser={username.uid} targetUser={userData.uid || ""} />
             </div>
           )}
-          <DMComponent currentUser={username.uid} targetUser={userData.uid || ""} />
+          
           {activeTab === "posts" ? (
             <div className="border flex flex-col justify-center items-center">
               {isOwner && <CreatePost />}

@@ -1,7 +1,15 @@
 import { getDoc, doc, setDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../lib/firebase.js';
 
-export async function getOrCreateDmThread(currentUserUid: string, targetUserUid: string, targetUserDisplayName?: string, targetUserProfilePicture?: string, currentUserDisplayName?: string, currentUserProfilePicture?: string) {
+export async function getOrCreateDmThread(
+    currentUserUid: string, 
+    targetUserUid: string, 
+    targetUserDisplayName?: string, 
+    targetUserProfilePicture?: string,
+     currentUserDisplayName?: string, 
+     currentUserProfilePicture?: string) {
+
+        
     const sortedUids = [currentUserUid, targetUserUid].sort();
     const threadId = sortedUids.join('_'); 
 

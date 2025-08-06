@@ -1,43 +1,27 @@
 import React, { useEffect } from "react";
-import { useLiveUserData } from "@/utilities/useLiveUserData";
-import { useUserDoc } from "@/utilities/userDocHelper";
 import Link from "next/link";
+import { useMutualFriends } from "@/utilities/useMutualFriends";
 
 interface FriendsListProps {
   currentUserUid: string;
 }
 
 function FriendsList({ currentUserUid }: FriendsListProps) {
-  const liveUserData = useLiveUserData(currentUserUid);
   const [mutualUserData, setMutualUserData] = React.useState<
     { displayName: string; uniqueUrl: string; profilePicture: string }[]
   >([]);
 
+  const mutualFriends = useMutualFriends(currentUserUid);
   useEffect(() => {
-    if (!liveUserData) return;
-
-    const followers = liveUserData?.followers || [];
-    const following = liveUserData?.following || [];
-    const mutuals: string[] = followers.filter((follower: string) =>
-      following.includes(follower)
-    );
-
-    async function fetchMutualUserData() {
-      const mutualUserData = await Promise.all(
-        mutuals.map(async (uid: string) => {
-          const userData = await useUserDoc(uid)?.fetchUserData();
-          return {
-            displayName: userData?.displayName || "Unknown User",
-            uniqueUrl: userData?.uniqueUrl || "",
-            profilePicture: userData?.profilePicture || "",
-          };
-        })
-      );
-      setMutualUserData(mutualUserData);
+    async function fetchMutualFriends() {
+      if (mutualFriends) {
+        const resolvedFriends = await mutualFriends;
+        setMutualUserData(resolvedFriends);
+      }
     }
+    fetchMutualFriends();
+  }, [mutualFriends]);
 
-    fetchMutualUserData();
-  }, [liveUserData]);
 
   return (
     <div className="flex flex-col border p-4 mr-4 text-center">
