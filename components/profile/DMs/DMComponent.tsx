@@ -19,7 +19,7 @@ function DMComponent({currentUser, targetUser} : {currentUser: string, targetUse
       setDmThreadId(dmThreadIdFromSendMessageForm);
       setDmThreadIdFromSendMessageForm(null);
     }
-    console.log("DMComponent useEffect triggered with dmThreadIdFromSendMessageForm:", dmThreadId);
+    console.log("DMComponent useEffect triggered with dmThreadIdFromSendMessageForm:", dmThreadIdFromSendMessageForm);
   }, [dmThreadIdFromSendMessageForm]);
 
    useEffect(() => {
@@ -28,7 +28,7 @@ function DMComponent({currentUser, targetUser} : {currentUser: string, targetUse
        const fetchDmThread = async () => {
         try {
            const threadId = await getOrCreateDmThread(currentUser, targetUser, liveTargetUserData?.displayName, liveTargetUserData?.profilePicture, liveCurrentUserData?.displayName, liveCurrentUserData?.profilePicture);
-           setDmThreadId(threadId);
+           setDmThreadId(threadId || null);
        } catch (error) {
            console.error("Error fetching or creating DM thread:", error);
        }

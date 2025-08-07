@@ -44,21 +44,19 @@ function SendMessageForm({
         clientTimestamp: new Date(),
         senderDisplayName: senderDisplayName,
         senderProfilePicture: senderProfilePicture,
-        targetUserDisplayName: targetUserDisplayName,
-        targetUserProfilePicture: targetUserProfilePicture
       };
 
       
       if (setDmThreadFromSendMessageForm) {
-        setDmThreadFromSendMessageForm(newMessageThreadId);
+        setDmThreadFromSendMessageForm(newMessageThreadId || null);
       }
       if (toggleNewMessageStateFromSendMessageForm) {
         toggleNewMessageStateFromSendMessageForm(false);
       }
-      await sendMessage(newMessageThreadId, message);
+      await sendMessage(newMessageThreadId || "", message);
       setMessageContent(""); // Clear input after sending
-     
-      console.log(senderDisplayName, 'senderDisplayName')
+      console.log(newMessageThreadId, 'newMessageThreadId');
+      console.log('just text')
     } catch (error) {
       console.error("Error sending message:", error);
     }

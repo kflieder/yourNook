@@ -6,8 +6,8 @@ export async function getOrCreateDmThread(
     targetUserUid: string, 
     targetUserDisplayName?: string, 
     targetUserProfilePicture?: string,
-     currentUserDisplayName?: string, 
-     currentUserProfilePicture?: string) {
+    currentUserDisplayName?: string, 
+    currentUserProfilePicture?: string) {
 
         
     const sortedUids = [currentUserUid, targetUserUid].sort();
@@ -18,7 +18,7 @@ export async function getOrCreateDmThread(
     const targetUserThreadRef = doc(db, 'users', targetUserUid, 'dmThreads', threadId);
     const threadSnap = await getDoc(threadRef);
 
-
+    if (currentUserUid === targetUserUid) return;
     if (threadSnap.exists()) return threadId;
     await setDoc(threadRef, {
         users: [currentUserUid, targetUserUid],
