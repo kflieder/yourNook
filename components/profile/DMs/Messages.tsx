@@ -38,11 +38,17 @@ function Messages({
   useEffect(() => {
     if (threadId) {
       setSelectedThread(threadId);
+      const selectedThreadData = userDmThreads.find(thread => thread.threadId === threadId);
+      if (selectedThreadData) {
+        setSelectedUsersDisplayName(selectedThreadData.otherUserDisplayName);
+        setSelectedUsersProfilePicture(selectedThreadData.otherUserProfilePicture);
+        setSelectedUsersUid(selectedThreadData.otherUserUid);
+      }
     }
     console.log("Messages component useEffect triggered with threadId:", threadId);
-  },[threadId]);
+  },[threadId, userDmThreads]);
 
-
+  console.log(selectedUsersDisplayName, 'selectedUsersDisplayName');
 
   return (
     <div>
@@ -70,7 +76,7 @@ function Messages({
               src={selectedUsersProfilePicture || senderProfilePicture || ""}
               alt={`${selectedUsersDisplayName || senderDisplayName}'s profile`}
             />
-          <h1>{selectedUsersDisplayName}HI HI</h1>
+          <h1>{selectedUsersDisplayName}</h1>
           <button onClick={() => setSelectedThread(null)} className="ml-auto cursor-pointer">
             <IoIosCloseCircleOutline size={24} />
           </button>
@@ -87,6 +93,8 @@ function Messages({
           ))}
           <SendMessageForm threadId={selectedThread} currentUserUid={currentUserUid ?? ""} senderDisplayName={senderDisplayName ?? ""} senderProfilePicture={senderProfilePicture ?? ""}
           selectedTargetUserUid={selectedUsersUid ?? ""}
+          targetUserDisplayName={selectedUsersDisplayName || ""}
+          targetUserProfilePicture={selectedUsersProfilePicture || ""}
           />
         </div>
       )}

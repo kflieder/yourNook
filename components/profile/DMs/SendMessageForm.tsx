@@ -44,6 +44,8 @@ function SendMessageForm({
         clientTimestamp: new Date(),
         senderDisplayName: senderDisplayName,
         senderProfilePicture: senderProfilePicture,
+        targetUserDisplayName: targetUserDisplayName,
+        targetUserProfilePicture: targetUserProfilePicture
       };
 
       
