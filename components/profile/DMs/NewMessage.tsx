@@ -65,6 +65,15 @@ function NewMessage({
           setSearchText(e.target.value);
           setSelectedFriend(null);
         }}
+        onKeyDown={(e) => {
+          if (e.key === "Tab" || e.key === "Enter") {
+            const friend = filteredFriends[0];
+            if (friend) {
+              setSelectedFriend(friend);
+              setSearchText(friend.displayName);
+            }
+          }
+        }}
       />
       {searchText && !selectedFriend && (
         <ul className="w-full border bg-white max-h-40 overflow-y-auto">
