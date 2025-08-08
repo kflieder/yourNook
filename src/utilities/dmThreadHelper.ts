@@ -1,5 +1,6 @@
-import { getDoc, doc, setDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { getDoc, doc, setDoc, collection, addDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { db } from '../../lib/firebase.js';
+import { sendNotification } from './sendNotification';
 
 export async function getOrCreateDmThread(
     currentUserUid: string, 
@@ -23,6 +24,10 @@ export async function getOrCreateDmThread(
     await setDoc(threadRef, {
         users: [currentUserUid, targetUserUid],
         createdAt:serverTimestamp(),
+        lastMessageSenderUid: currentUserUid,
+        lastMessageText: "",
+        lastMessageTimestamp: serverTimestamp(),
+        isRead: false,
     });
     await setDoc(currentUserThreadRef, {
         otherUserUid: targetUserUid,
@@ -30,6 +35,9 @@ export async function getOrCreateDmThread(
         otherUserProfilePicture: targetUserProfilePicture,
         threadId: threadId,
         createdAt: serverTimestamp(),
+        lastMessageSenderUid: currentUserUid,
+        lastMessageText: "",
+        lastMessageTimestamp: serverTimestamp(),
     });
     await setDoc(targetUserThreadRef, {
         otherUserUid: currentUserUid,
@@ -37,6 +45,9 @@ export async function getOrCreateDmThread(
         otherUserProfilePicture: currentUserProfilePicture,
         threadId: threadId,
         createdAt: serverTimestamp(),
+        lastMessageSenderUid: currentUserUid,
+        lastMessageText: "",
+        lastMessageTimestamp: serverTimestamp(),
     });
     return threadId;
 }
@@ -47,4 +58,36 @@ export async function sendMessage(threadId: string, message: { senderUid: string
         ...message,
         createdAt: serverTimestamp(),
     });
+    await updateDoc(doc(db, 'dmThreads', threadId), {
+        lastMessageSenderUid: message.senderUid,
+        lastMessageText: message.content,
+        lastMessageTimestamp: serverTimestamp(),
+        isRead: false,
+    });
+    const senderThreadRef = doc(db, 'users', message.senderUid, 'dmThreads', threadId);
+    await updateDoc(senderThreadRef, {
+        lastMessageSenderUid: message.senderUid,
+        lastMessageText: message.content,
+        lastMessageTimestamp: serverTimestamp(),
+    });
+    const receiverThreadRef = doc(db, 'users', threadId.split('_').find(uid => uid !== message.senderUid) || '', 'dmThreads', threadId);
+    await updateDoc(receiverThreadRef, {
+        lastMessageSenderUid: message.senderUid,
+        lastMessageText: message.content,
+        lastMessageTimestamp: serverTimestamp(),
+        isRead: false
+    });
+    try {
+      await sendNotification({
+        toUserId: threadId.split('_').find(uid => uid !== message.senderUid) || '',
+        type: 'dm',
+        fromUserId: message.senderUid,
+        postId: threadId,
+        message: `New message from ${message.senderDisplayName || 'a user'}: ${message.content}`
+    });  
+    } catch (error) {
+        console.error("Error sending message:", error);
+        
+    }
+    
 }

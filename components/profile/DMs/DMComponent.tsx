@@ -21,6 +21,7 @@ function DMComponent({
   const [dmThreadIdFromSendMessageForm, setDmThreadIdFromSendMessageForm] =
     useState<string | null>(null);
   const [toggleMessages, setToggleMessages] = useState(false);
+  const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
 
   useEffect(() => {
     if (dmThreadIdFromSendMessageForm) {
@@ -73,14 +74,23 @@ function DMComponent({
     if (!toggleNewMessage) {
       setToggleMessages(!toggleMessages);
     }
+    setDmThreadId(null);
+    setDmThreadIdFromSendMessageForm(null);
   }
+ 
 
+  console.log("HAS UNREAD MESSAGE FROM PARENT:", hasUnreadMessages);
   return (
     <div className="border-2 mt-5 p-5 rounded-lg shadow-lg bg-white">
       <div className="flex justify-between items-center p-4 bg-gray-100">
         <h1 onClick={handleToggleMessages} className="font-bold cursor-pointer">
           Messages
         </h1>
+        {
+          hasUnreadMessages && (
+            <span className="text-red-500 font-bold">Unread Messages</span>
+          )
+        }
         <div className="flex flex-col items-end space-x-2 cursor-pointer">
           <div>
             {toggleMessages ? (
@@ -119,6 +129,7 @@ function DMComponent({
                 currentUserUid={currentUser}
                 senderDisplayName={liveCurrentUserData?.displayName || ""}
                 senderProfilePicture={liveCurrentUserData?.profilePicture || ""}
+                setHasUnreadMessages={setHasUnreadMessages}
               />
             )}
           </div>

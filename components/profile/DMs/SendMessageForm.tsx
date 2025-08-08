@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { sendMessage, getOrCreateDmThread } from "@/utilities/dmThreadHelper";
+import { read } from "fs";
 
 function SendMessageForm({
   currentUserUid,
@@ -45,7 +46,8 @@ function SendMessageForm({
         senderDisplayName: senderDisplayName,
         senderProfilePicture: senderProfilePicture,
         targetUserDisplayName: targetUserDisplayName,
-        targetUserProfilePicture: targetUserProfilePicture
+        targetUserProfilePicture: targetUserProfilePicture,
+        read: false
       };
 
       
