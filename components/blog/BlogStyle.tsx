@@ -6,6 +6,10 @@ import CommentSection, {
   CommentCount,
 } from "components/PostActions/Comments/CommentSection";
 import SharePost from "components/PostActions/SharePost";
+import Report from "components/PostActions/Report";
+import { MdReportGmailerrorred } from "react-icons/md";
+import { useLiveUserData } from "@/utilities/useLiveUserData";
+import Link from "next/link";
 
 interface BlogStyleProps {
   id: string;
@@ -36,6 +40,10 @@ function BlogStyle({
 }: BlogStyleProps) {
   const [expandedBlog, setExpandedBlog] = useState<string | null>(null);
   const [expandedComments, setExpandedComments] = useState<string | null>(null);
+  const [showReportForm, setShowReportForm] = useState(false);
+  const authorData = useLiveUserData(authorUid);
+
+  console.log(authorData?.profilePicture, "Author Data in BlogStyle");
 
   const handleExpandBlog = (blogId: string) => {
     setExpandedBlog((prev) => (prev === blogId ? null : blogId));
@@ -44,7 +52,11 @@ function BlogStyle({
   const handleExpandedComments = (blogId: string) => {
     setExpandedComments((prev) => (prev === blogId ? null : blogId));
   };
+  function handleExpandedReportForm() {
+    setShowReportForm((prev) => !prev);
+  }
 
+  
   return (
     <div
       className={`flex flex-col border-2 rounded overflow-hidden shadow-2xl p-2 ${
@@ -78,15 +90,18 @@ function BlogStyle({
         {imageUrl && <img src={imageUrl} alt={title} />}
       </div>
       <div className="flex items-center space-x-2 border-t p-2 bg-gray-300 w-full">
-        {profilePicture && (
+        <Link href={`/profile/${authorUid}`}>
           <img
             className="w-12 h-12 rounded-full border-2"
-            src={profilePicture}
+            src={authorData?.profilePicture || profilePicture}
             alt={`${authorDisplayName}'s profile`}
           />
-        )}
+        </Link>
+        
         <div className="flex flex-col">
-          <p>By: {authorDisplayName}</p>
+          <Link href={`/profile/${authorUid}`} className="font-bold hover:underline">
+            <p>By: {authorData?.displayName || authorDisplayName}</p>
+          </Link>
           <p>
             Created at:{" "}
             {createdAt instanceof Date
@@ -94,6 +109,7 @@ function BlogStyle({
               : createdAt?.toDate?.().toLocaleDateString?.() ?? "Unknown"}
           </p>
         </div>
+        <div className="flex space-x-2 ml-auto">
         <Likes
           docId={id}
           currentLikes={currentLikes || []}
@@ -108,12 +124,18 @@ function BlogStyle({
           className="cursor-pointer flex flex-col"
         >
           <CommentCount postId={id} />
+          </div>
           <SharePost postId={id} postAuthorId={authorUid} currentUser={currentUser} currentUserDisplayName={currentUserDisplayName} collectionName={"blogs"} />
+          <MdReportGmailerrorred onClick={() => handleExpandedReportForm()} className="cursor-pointer" size={24}/>
         </div>
       </div>
       {expandedComments === id && (
         <CommentSection postId={id} postAuthorId={authorUid} />
       )}
+      {showReportForm && (
+        <Report postId={id} />
+      )}
+
     </div>
   );
 }

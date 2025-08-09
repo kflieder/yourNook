@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useLiveUserData } from "@/utilities/useLiveUserData";
 import { getOrCreateDmThread } from "@/utilities/dmThreadHelper";
 import Messages from "./Messages";
 import { BiMessageAltEdit } from "react-icons/bi";
 import NewMessage from "./NewMessage";
 import { IoIosCloseCircleOutline } from "react-icons/io";
-import "@/app/animations.css";
 
 function DMComponent({
   currentUser,
@@ -22,16 +21,13 @@ function DMComponent({
     useState<string | null>(null);
   const [toggleMessages, setToggleMessages] = useState(false);
   const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
+  
 
   useEffect(() => {
     if (dmThreadIdFromSendMessageForm) {
       setDmThreadId(dmThreadIdFromSendMessageForm);
       setDmThreadIdFromSendMessageForm(null);
     }
-    console.log(
-      "DMComponent useEffect triggered with dmThreadIdFromSendMessageForm:",
-      dmThreadIdFromSendMessageForm
-    );
   }, [dmThreadIdFromSendMessageForm]);
 
   useEffect(() => {
@@ -53,12 +49,7 @@ function DMComponent({
       }
     };
     fetchDmThread();
-    console.log(
-      "DMComponent mounted with currentUser:",
-      currentUser,
-      "and targetUser:",
-      targetUser
-    );
+    
   }, [currentUser, targetUser, liveCurrentUserData, liveTargetUserData]);
 
   function handleToggleNewMessage() {
@@ -77,15 +68,16 @@ function DMComponent({
     setDmThreadId(null);
     setDmThreadIdFromSendMessageForm(null);
   }
- 
-
-  console.log("HAS UNREAD MESSAGE FROM PARENT:", hasUnreadMessages);
+  
   return (
     <div className="border-2 mt-5 p-5 rounded-lg shadow-lg bg-white">
-      <div className="flex justify-between items-center p-4 bg-gray-100">
-        <h1 onClick={handleToggleMessages} className="font-bold cursor-pointer">
+      <div className="flex justify-between items-center p-4 bg-gray-100 cursor-pointer rounded">
+        <div onClick={handleToggleMessages} 
+        className="border w-1/2 cursor-pointer">
+        <h1 className="font-bold">
           Messages
         </h1>
+        </div>
         {
           hasUnreadMessages && (
             <span className="text-red-500 font-bold">Unread Messages</span>
@@ -107,12 +99,9 @@ function DMComponent({
           </div>
         </div>
       </div>
-<div  className={`overflow-hidden transition-[max-height] duration-500 ease-in-out ${
-    toggleMessages ? "max-h-[1000px]" : "max-h-0"
-  }`}>
-      <div >
-        {toggleMessages && (
-          <div>
+<div className="overflow-y-auto transition-max-height duration-500 ease-in-out" style={{height: toggleMessages ? "300px" : "0px"}} >
+      <div>
+        <div>
             {toggleNewMessage ? (
               <NewMessage
                 currentUserUid={currentUser}
@@ -122,6 +111,7 @@ function DMComponent({
                 setDmThreadFromSendMessageForm={
                   setDmThreadIdFromSendMessageForm
                 }
+                
               />
             ) : (
               <Messages
@@ -130,10 +120,10 @@ function DMComponent({
                 senderDisplayName={liveCurrentUserData?.displayName || ""}
                 senderProfilePicture={liveCurrentUserData?.profilePicture || ""}
                 setHasUnreadMessages={setHasUnreadMessages}
+                messagesOpen={toggleMessages}
               />
             )}
           </div>
-        )}
       </div>
     </div>
     </div>

@@ -11,7 +11,8 @@ function Messages({
   currentUserUid,
   senderDisplayName,
   senderProfilePicture,
-  setHasUnreadMessages
+  setHasUnreadMessages,
+  messagesOpen
 }: {
   threadId: string;
   currentUserUid?: string;
@@ -19,6 +20,7 @@ function Messages({
   senderProfilePicture?: string;
   setDmThreadFromSendMessageForm?: (threadId: string | null) => void;
   setHasUnreadMessages?: (hasUnread: boolean) => void;
+  messagesOpen?: boolean;
 }) {
   const userDmThreads = useUserDmThreads(currentUserUid);
   const [selectedThread, setSelectedThread] = useState<string | null>(null);
@@ -58,9 +60,15 @@ function Messages({
      if (setHasUnreadMessages) {
       setHasUnreadMessages(unreadMessages);
     }
-  }, [threadId, userDmThreads, selectedThread, currentUserUid, unreadMessages, setHasUnreadMessages]);
 
-  console.log("UNREAD MESSAGES:", unreadMessages);
+    if (!messagesOpen) {
+      setSelectedThread(null);
+    }
+
+
+  }, [threadId, userDmThreads, selectedThread, currentUserUid, unreadMessages, setHasUnreadMessages, messagesOpen]);
+
+
  
   async function markThreadAsRead(threadId: string, currentUserUid: string) {
     const threadDocRef = doc(db, 'dmThreads', threadId);
