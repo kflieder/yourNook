@@ -3,6 +3,7 @@ import React from 'react'
 import GlobalPostFeed from './GlobalPostFeed'
 import { useAuth } from '@/context/AuthContext'
 import GlobalBlogFeed from './GlobalBlogFeed'
+import GlobalDiscussionThreadFeed from './GlobalDiscussionThreadFeed'
 
 
 
@@ -31,7 +32,7 @@ function FeedPage() {
       {activeTab === 'posts' && <GlobalPostFeed currentUser={{ ...currentUser, displayName: currentUser.displayName ?? '' }} />}
       {activeTab === 'blogs' && <GlobalBlogFeed currentUser={currentUser.uid} currentUserDisplayName={currentUser.displayName ?? ''} />}
      
-      {activeTab === 'threads' && <div>Threads content will go here</div>}
+      {activeTab === 'threads' && <GlobalDiscussionThreadFeed currentUser={currentUser.uid} />}
     </div>
   )
 }

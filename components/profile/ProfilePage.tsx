@@ -12,6 +12,9 @@ import BlockButton from "components/shared/BlockButton";
 import { isBlockedBy } from "@/utilities/blockUserHelper";
 import FollowButton from "components/shared/FollowButton";
 import DMComponent from "./DMs/DMComponent";
+import DiscussionThreadStyle from "components/discussionThreads/DiscussionThreadStyle";
+import DiscussionThreadForm from "components/discussionThreads/DiscussionThreadForm";
+import UserDiscussionThreads from "components/discussionThreads/UserDiscussionThreads";
 
 interface ProfilePageProps {
   userData: {
@@ -160,7 +163,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
             Threads
           </button>
         </div>
-        <div className="relative min-h-screen grid grid-cols-3">
+        <div className="relative min-h-screen grid grid-cols-3 border">
           {isOwner && (
             <div>
               <FriendsList currentUserUid={username.uid} />
@@ -194,8 +197,18 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
               </div>
             </div>
           ) : activeTab === "thread" ? (
-            <div>
-              <h2>Threads will be implemented soon!</h2>
+            <div className='col-span-2'>
+              <div>
+                {isOwner && (
+                  <DiscussionThreadForm
+                    currentUserUid={username.uid || ""}
+                    currentUserDisplayName={username.displayName || ""}
+                  />
+                ) }
+              </div>
+              <div className="border">
+                <UserDiscussionThreads currentUser={username} targetUser={userData.uid || ""} />
+              </div>
             </div>
           ) : null}
         </div>

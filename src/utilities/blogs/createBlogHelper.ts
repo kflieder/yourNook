@@ -1,16 +1,7 @@
 import { db } from "lib/firebase";
 import { collection, doc, setDoc, Timestamp } from "firebase/firestore";
 
-type Blog = {
-  id: string;
-  title: string;
-  content: string;
-  authorId: string;
-  createdAt: Date;
-  imageUrl?: string;
-  authorDisplayName: string;
-  likes: string[];
-};
+
 interface CreateBlogData {
   title: string;
   content: string;

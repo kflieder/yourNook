@@ -21,7 +21,6 @@ function BlogForm({ authorId, authorDisplayName }: BlogFormProps) {
                 authorId,
                 authorDisplayName
             });
-            // Reset form fields after successful submission
             setTitle('');
             setContent('');
             setImageUrl('');
