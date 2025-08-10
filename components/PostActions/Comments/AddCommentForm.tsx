@@ -6,9 +6,10 @@ import { sendNotification } from "@/utilities/sendNotification";
 interface AddCommentFormProps {
   postId: string;
   postAuthorId: string;
+  maxChar?: number; 
 }
 
-function AddCommentForm({ postId, postAuthorId }: AddCommentFormProps) {
+function AddCommentForm({ postId, postAuthorId, maxChar }: AddCommentFormProps) {
   const { username: currentUser } = useAuth();
   const { addComment } = usePostComments(postId);
   const [commentText, setCommentText] = useState("");
@@ -50,7 +51,10 @@ function AddCommentForm({ postId, postAuthorId }: AddCommentFormProps) {
         className="w-full p-2 border rounded mb-2"
         rows={3}
         disabled={isSubmitting}
+        maxLength={maxChar}
+        style={{ resize: "none" }}
       />
+      <small>{commentText.length}/{maxChar ? maxChar : 'unlimited'}</small>
       <button
         type="submit"
         className={`bg-blue-500 text-white px-4 py-2 rounded ${

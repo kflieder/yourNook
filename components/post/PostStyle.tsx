@@ -103,7 +103,7 @@ function PostStyle({
         </div>
         
       </div>
-      {openPostId === docId && <CommentSection postId={docId} postAuthorId={targetUid} />}
+      {openPostId === docId && <CommentSection maxChar={300} postId={docId} postAuthorId={targetUid} />}
       {showReportForm && (
         <Report postId={docId} />
       )}

@@ -130,7 +130,7 @@ function BlogStyle({
         </div>
       </div>
       {expandedComments === id && (
-        <CommentSection postId={id} postAuthorId={authorUid} />
+        <CommentSection maxChar={300} postId={id} postAuthorId={authorUid} />
       )}
       {showReportForm && (
         <Report postId={id} />

@@ -12,7 +12,7 @@ interface LikesProps {
     targetUid: string;
     currentUser: string;
     displayName: string;
-    currentUserDisplayName: string;
+    currentUserDisplayName?: string;
 }
 
 function Likes({ docId, currentLikes, collectionName, targetUid, currentUser, currentUserDisplayName }: LikesProps) {

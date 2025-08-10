@@ -8,6 +8,7 @@ import {
 } from "@/utilities/getCurrentUserServer";
 import LivePost from "components/post/LivePost";
 import BlogStyle from "components/blog/BlogStyle";
+import DiscussionThreadStyle from "components/discussionThreads/DiscussionThreadStyle";
 
 interface Props {
   params: {
@@ -84,6 +85,19 @@ console.log(blog)
           currentUser={currentUser?.uid || ""}
           currentUserDisplayName={currentUser?.displayName || ""}
           authorUid={blog.authorId || ""}
+        />
+      )}
+
+      {collectionName === "discussionThreads" && (
+        <DiscussionThreadStyle
+          currentUser={currentUser}
+          authorUid={blog.authorId}
+          title={blog.title}
+          content={blog.content}
+          createdAt={blog.createdAt}
+          currentLikes={blog.likes || []}
+          postId={postId}
+          currentUserDisplayName={currentUser?.displayName}
         />
       )}
     </div>

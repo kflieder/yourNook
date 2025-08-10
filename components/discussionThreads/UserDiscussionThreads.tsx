@@ -10,7 +10,7 @@ function UserDiscussionThreads({ currentUser, targetUser }: { currentUser: any; 
       {loading && <p>Loading discussion threads...</p>}
       {!loading && discussionThreads.length === 0 && <p>No discussion threads found.</p>}
       {discussionThreads.map((thread) => (
-        <DiscussionThreadStyle key={thread.id} currentUser={currentUser} title={thread.title} content={thread.content} createdAt={thread.createdAt} />
+        <DiscussionThreadStyle key={thread.id} currentUser={currentUser} title={thread.title} content={thread.content} createdAt={thread.createdAt} authorUid={thread.authorId} currentLikes={thread.likes} postId={thread.id} />
       ))}
     </div>
   )
