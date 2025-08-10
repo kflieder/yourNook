@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { sendMessage, getOrCreateDmThread } from "@/utilities/dmThreadHelper";
-import { read } from "fs";
 
 function SendMessageForm({
   currentUserUid,

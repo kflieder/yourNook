@@ -7,9 +7,11 @@ interface AddCommentFormProps {
   postId: string;
   postAuthorId: string;
   maxChar?: number; 
+  parentId?: string | null;
+  setShowReplyForm?: (show: boolean) => void;
 }
 
-function AddCommentForm({ postId, postAuthorId, maxChar }: AddCommentFormProps) {
+function AddCommentForm({ postId, postAuthorId, maxChar, parentId, setShowReplyForm }: AddCommentFormProps) {
   const { username: currentUser } = useAuth();
   const { addComment } = usePostComments(postId);
   const [commentText, setCommentText] = useState("");
@@ -25,6 +27,7 @@ function AddCommentForm({ postId, postAuthorId, maxChar }: AddCommentFormProps) 
         uid: currentUser.uid,
         displayName: currentUser?.displayName || "Anonymous",
         text: commentText.trim(),
+        parentId: parentId || null,
       });
       await sendNotification({
         toUserId: postAuthorId,
@@ -39,6 +42,9 @@ function AddCommentForm({ postId, postAuthorId, maxChar }: AddCommentFormProps) 
     } finally {
       setIsSubmitting(false);
       setCommentText("");
+      if (setShowReplyForm){
+        setShowReplyForm(false);
+      }
     }
   };
 

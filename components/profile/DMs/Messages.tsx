@@ -12,13 +12,14 @@ function Messages({
   senderDisplayName,
   senderProfilePicture,
   setHasUnreadMessages,
-  messagesOpen
+  messagesOpen,
+  setDmThreadFromSendMessageForm
 }: {
   threadId: string;
   currentUserUid?: string;
   senderDisplayName?: string;
   senderProfilePicture?: string;
-  setDmThreadFromSendMessageForm?: (threadId: string | null) => void;
+  setDmThreadFromSendMessageForm: (threadId: string | null) => void;
   setHasUnreadMessages?: (hasUnread: boolean) => void;
   messagesOpen?: boolean;
 }) {
@@ -32,6 +33,7 @@ function Messages({
     useState<string | null>(null);
   const [selectedUsersUid, setSelectedUsersUid] = useState<string | null>(null);
   const [unreadMessages, setUnreadMessages] = useState(false);
+  const [clearDmThread, setClearDmThread] = useState(false);
 
   function handleSelectedThread(threadId: string) {
     if (selectedThread === threadId) {
@@ -42,6 +44,7 @@ function Messages({
   }
 
   useEffect(() => {
+    if (clearDmThread) return;
     if (threadId) {
       setSelectedThread(threadId);
       const selectedThreadData = userDmThreads.find(
@@ -80,7 +83,12 @@ function Messages({
       isRead: true,
     });
   }
-
+ 
+  function handleCloseThread() {
+    setSelectedThread(null);
+    setDmThreadFromSendMessageForm(null);
+    setClearDmThread(true);
+  }
  
 
   return (
@@ -135,8 +143,8 @@ function Messages({
             />
             <h1>{selectedUsersDisplayName}</h1>
             <button
-              onClick={() => setSelectedThread(null)}
-              className="ml-auto cursor-pointer"
+              onClick={handleCloseThread}
+              className="ml-auto cursor-pointer border"
             >
               <IoIosCloseCircleOutline size={24} />
             </button>

@@ -121,6 +121,7 @@ function DMComponent({
                 senderProfilePicture={liveCurrentUserData?.profilePicture || ""}
                 setHasUnreadMessages={setHasUnreadMessages}
                 messagesOpen={toggleMessages}
+                setDmThreadFromSendMessageForm={setDmThreadIdFromSendMessageForm}
               />
             )}
           </div>

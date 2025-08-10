@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { collection, query, onSnapshot, addDoc, orderBy, serverTimestamp } from 'firebase/firestore';
+import { collection, query, onSnapshot, addDoc, orderBy, serverTimestamp, where } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 
 type Comment = {
@@ -8,20 +8,23 @@ type Comment = {
   displayName: string;
   text: string;
   createdAt: number;
+  parentId?: string | null;
+  postId: string;
 };
 
-export function usePostComments(postId: string): { comments: Comment[], addComment: (data: { text: string; uid: string; displayName: string }) => Promise<void> } {
+export function usePostComments(postId: string): { comments: Comment[], addComment: (data: { text: string; uid: string; displayName: string; parentId?: string | null }) => Promise<void> } {
   const [comments, setComments] = useState<Comment[]>([]);
 
   useEffect(() => {
     if (!postId) return;
 
-    const commentsRef = collection(db, 'posts', postId, 'comments');
-    const q = query(commentsRef, orderBy('createdAt', 'asc'));
+    const commentsRef = collection(db, 'comments');
+    const q = query(commentsRef, where('postId', '==', postId), orderBy('createdAt', 'asc'));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const commentsData = snapshot.docs.map((doc) => ({
         id: doc.id,
+        postId: postId,
         ...doc.data(),
       })) as Comment[];
       setComments(commentsData);
@@ -30,10 +33,12 @@ export function usePostComments(postId: string): { comments: Comment[], addComme
     return () => unsubscribe();
   }, [postId]);
 
-  const addComment = async (commentData: { text: string; uid: string; displayName: string }) => {
+  const addComment = async (commentData: { text: string; uid: string; displayName: string; parentId?: string | null }) => {
     try {
-      const commentsRef = collection(db, 'posts', postId, 'comments');
+      const commentsRef = collection(db, 'comments');
       await addDoc(commentsRef, {
+        postId,
+        parentId: commentData.parentId ?? null,
         ...commentData,
         createdAt: serverTimestamp(),
       });
