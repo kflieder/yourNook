@@ -2,6 +2,8 @@
 import React from "react";
 import { usePaginatedPosts } from "@/utilities/usePaginatedPosts";
 import LivePost from "components/post/LivePost";
+import CreatePost from "components/profile/CreatePost";
+import DMComponent from "components/profile/DMs/DMComponent";
 
 interface GlobalPostFeedProps {
   currentUser: { uid: string, displayName: string, profilePicture?: string };
@@ -12,12 +14,19 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
     usePaginatedPosts("posts", "createdAt", currentUser.uid, "uid");
  
   return (
-    <div className='flex flex-col items-center gap-y-4'>
+    <div className='flex w-full justify-between border h-screen pt-30'>
+      <div className='flex flex-col gap-y-4 ml-10 overflow-scroll'>
+        <h1>Latest Posts</h1>
       {posts.map((post) => (
         <LivePost key={post.id} post={post} currentUser={currentUser.uid} currentUserDisplayName={currentUser.displayName} />
       ))}
       {loading && <p>Loading...</p>}
       {hasMore && <div ref={loadMoreRef} />}
+      </div>
+      <div className="">
+        <CreatePost />
+        <DMComponent currentUser={currentUser.uid} targetUser={currentUser.uid} />
+      </div>
     </div>
   );
 }

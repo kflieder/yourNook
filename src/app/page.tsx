@@ -9,7 +9,7 @@ export default function Home() {
   const router = useRouter();
   useEffect(() => {
     if (username?.uid) {
-      router.push(`/profile/${username.uid}`);
+      router.push(`/feed`);
     }
   }, [username, router]);
 

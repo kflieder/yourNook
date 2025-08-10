@@ -1,11 +1,9 @@
-'use client';
+"use client";
 // import type { Metadata } from "next";
 // import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "../context/AuthContext";
 import Header from "../../components/shared/Header";
-
-
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",
@@ -22,8 +20,8 @@ export default function RootLayout({
       <body>
         <AuthProvider>
           <Header />
-        {children}
-        </ AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

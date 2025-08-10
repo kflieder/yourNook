@@ -55,7 +55,7 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
   return (
     <div>
       <div className="relative cursor-pointer" onClick={handleOnClick}>
-        <IoMdNotificationsOutline />
+        <IoMdNotificationsOutline size={20} />
         {unreadNotifications.length > 0 && (
           <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1">
             {unreadNotifications.length}
@@ -63,7 +63,7 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
         )} 
       </div>
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-1/2 h-3/5 overflow-scroll bg-white border border-gray-300 rounded-lg shadow-lg p-4 z-99">
+        <div className="absolute right-0 mt-2 w-1/2 h-84 overflow-scroll bg-white border border-gray-300 rounded-lg shadow-lg p-4 z-99">
           <ul>
             {notifications.length === 0 ? (
               <li className="text-black">No notifications</li>

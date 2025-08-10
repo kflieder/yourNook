@@ -30,7 +30,7 @@ function SharePost({ postId, postAuthorId, currentUser, currentUserDisplayName, 
   return (
     <div>
       <FaShare size={20}
-        className="cursor-pointer text-gray-500 hover:text-gray-700 transition-colors ml-1"
+        className="cursor-pointer"
         onClick={() => handleshare(postId)} 
         title="Share Post" />
     </div>
