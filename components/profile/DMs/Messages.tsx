@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useLiveMessages } from "@/utilities/useLiveMessages";
 import { useUserDmThreads } from "@/utilities/useUserDmThreads";
 import SendMessageForm from "./SendMessageForm";
@@ -13,7 +13,7 @@ function Messages({
   senderProfilePicture,
   setHasUnreadMessages,
   messagesOpen,
-  setDmThreadFromSendMessageForm
+  setDmThreadFromSendMessageForm,
 }: {
   threadId: string;
   currentUserUid?: string;
@@ -34,6 +34,14 @@ function Messages({
   const [selectedUsersUid, setSelectedUsersUid] = useState<string | null>(null);
   const [unreadMessages, setUnreadMessages] = useState(false);
   const [clearDmThread, setClearDmThread] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const messageContainer = messagesEndRef.current;
+    if (messageContainer) {
+      messageContainer.scrollTop = messageContainer.scrollHeight;
+    }
+  }, [messages, selectedThread]);
 
   function handleSelectedThread(threadId: string) {
     if (selectedThread === threadId) {
@@ -42,6 +50,8 @@ function Messages({
       setSelectedThread(threadId);
     }
   }
+
+  
 
   useEffect(() => {
     if (clearDmThread) return;
@@ -59,37 +69,52 @@ function Messages({
       }
     }
 
-     setUnreadMessages(userDmThreads.some(thread => thread.isRead === false && thread.lastMessageSenderUid !== currentUserUid));
-     if (setHasUnreadMessages) {
+    setUnreadMessages(
+      userDmThreads.some(
+        (thread) =>
+          thread.isRead === false &&
+          thread.lastMessageSenderUid !== currentUserUid
+      )
+    );
+    if (setHasUnreadMessages) {
       setHasUnreadMessages(unreadMessages);
     }
 
     if (!messagesOpen) {
       setSelectedThread(null);
     }
+  }, [
+    threadId,
+    userDmThreads,
+    selectedThread,
+    currentUserUid,
+    unreadMessages,
+    setHasUnreadMessages,
+    messagesOpen,
+  ]);
 
-
-  }, [threadId, userDmThreads, selectedThread, currentUserUid, unreadMessages, setHasUnreadMessages, messagesOpen]);
-
-
- 
   async function markThreadAsRead(threadId: string, currentUserUid: string) {
-    const threadDocRef = doc(db, 'dmThreads', threadId);
-    const userThreadDocRef = doc(db, 'users', currentUserUid, 'dmThreads', threadId);
+    const threadDocRef = doc(db, "dmThreads", threadId);
+    const userThreadDocRef = doc(
+      db,
+      "users",
+      currentUserUid,
+      "dmThreads",
+      threadId
+    );
     await updateDoc(threadDocRef, {
-        isRead: true,
-      });
+      isRead: true,
+    });
     await updateDoc(userThreadDocRef, {
       isRead: true,
     });
   }
- 
+
   function handleCloseThread() {
     setSelectedThread(null);
     setDmThreadFromSendMessageForm(null);
     setClearDmThread(true);
   }
- 
 
   return (
     <div>
@@ -97,7 +122,7 @@ function Messages({
         userDmThreads.map((thread) => {
           const isUnread =
             !thread.isRead && thread.lastMessageSenderUid !== currentUserUid;
-          
+
           return (
             <div
               onClick={() => {
@@ -107,44 +132,48 @@ function Messages({
                 setSelectedUsersUid(thread.otherUserUid);
                 if (currentUserUid) {
                   markThreadAsRead(thread.threadId, currentUserUid);
-
                 }
               }}
-              className="flex items-center space-x-4 p-2 border-b"
+              className="flex items-center space-x-4 border-b hover:bg-gray-100"
               key={thread.threadId}
             >
-              <div className="border-b flex items-center space-x-4 cursor-pointer hover:bg-gray-100 p-2">
-                <strong>
+              <div className="flex items-center space-x-4 cursor-pointer p-2">
+                <div className="w-14 h-14 rounded-full overflow-hidden flex-shrink-0 border">
                   <img
-                    className="h-12 w-12 border rounded-full"
+                    className="w-14 h-14 object-cover border rounded-full mr-2"
                     src={thread.otherUserProfilePicture}
                     alt={`${thread.otherUserDisplayName}'s profile`}
                   />
-                </strong>
+                </div>
+
+                <div className='flex flex-col w-full items-start overflow-hidden'>
+                
                 <strong style={{ fontWeight: isUnread ? "700" : "100" }}>
                   {thread.otherUserDisplayName}
                 </strong>
-                <span>{thread.lastMessageText}</span>
-                <span className="text-gray-500 text-sm">
-                  {thread.lastMessageTimestamp?.toDate().toLocaleString()}
-                </span>
-                
+                <span className="text-nowrap overflow-hidden flex">
+                    {thread.lastMessageText}
+                  </span>
+                  <span className="text-gray-500 text-xs">
+                    {thread.lastMessageTimestamp?.toDate().toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex flex-col">
+                  
+                  
+                </div>
               </div>
             </div>
           );
         })}
       {selectedThread && (
-        <div className="p-4">
-          <div className="flex items-center space-x-4 mb-4 border-b pb-4">
-            <img
-              className="h-12 w-12 border rounded-full"
-              src={selectedUsersProfilePicture || senderProfilePicture || ""}
-              alt={`${selectedUsersDisplayName || senderDisplayName}'s profile`}
-            />
+        <div ref={messagesEndRef} className="overflow-y-auto h-72 p-2">
+          <div className="sticky top-[-10] left-100 w-1/2 bg-gray-200 flex items-center space-x-4 rounded p-2">
+
             <h1>{selectedUsersDisplayName}</h1>
             <button
               onClick={handleCloseThread}
-              className="ml-auto cursor-pointer border"
+              className="ml-auto cursor-pointer"
             >
               <IoIosCloseCircleOutline size={24} />
             </button>

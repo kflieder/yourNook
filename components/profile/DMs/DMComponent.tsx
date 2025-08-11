@@ -49,7 +49,6 @@ function DMComponent({
       }
     };
     fetchDmThread();
-    
   }, [currentUser, targetUser, liveCurrentUserData, liveTargetUserData]);
 
   function handleToggleNewMessage() {
@@ -68,21 +67,18 @@ function DMComponent({
     setDmThreadId(null);
     setDmThreadIdFromSendMessageForm(null);
   }
-  
+
   return (
-    <div className="border-2 mt-5 p-5 rounded-lg shadow-lg bg-white">
+    <div className="border border-gray-300 mt-5 p-5 rounded-lg shadow-lg bg-white w-96">
       <div className="flex justify-between items-center p-4 bg-gray-100 cursor-pointer rounded">
-        <div onClick={handleToggleMessages} 
-        className="border w-1/2 cursor-pointer">
-        <h1 className="font-bold">
-          Messages
-        </h1>
-        </div>
-        {
-          hasUnreadMessages && (
+        <div onClick={handleToggleMessages} className="w-1/2 cursor-pointer">
+          {hasUnreadMessages ? (
             <span className="text-red-500 font-bold">Unread Messages</span>
-          )
-        }
+          ) : (
+            <h1 className="font-bold">Messages</h1>
+          )}
+        </div>
+
         <div className="flex flex-col items-end space-x-2 cursor-pointer">
           <div>
             {toggleMessages ? (
@@ -99,9 +95,12 @@ function DMComponent({
           </div>
         </div>
       </div>
-<div className="overflow-y-auto transition-max-height duration-500 ease-in-out" style={{height: toggleMessages ? "300px" : "0px"}} >
-      <div>
+      <div
+        className="overflow-hidden transition-max-height duration-500 ease-in-out"
+        style={{ height: toggleMessages ? "300px" : "0px" }}
+      >
         <div>
+          <div>
             {toggleNewMessage ? (
               <NewMessage
                 currentUserUid={currentUser}
@@ -111,7 +110,6 @@ function DMComponent({
                 setDmThreadFromSendMessageForm={
                   setDmThreadIdFromSendMessageForm
                 }
-                
               />
             ) : (
               <Messages
@@ -121,12 +119,14 @@ function DMComponent({
                 senderProfilePicture={liveCurrentUserData?.profilePicture || ""}
                 setHasUnreadMessages={setHasUnreadMessages}
                 messagesOpen={toggleMessages}
-                setDmThreadFromSendMessageForm={setDmThreadIdFromSendMessageForm}
+                setDmThreadFromSendMessageForm={
+                  setDmThreadIdFromSendMessageForm
+                }
               />
             )}
           </div>
+        </div>
       </div>
-    </div>
     </div>
   );
 }

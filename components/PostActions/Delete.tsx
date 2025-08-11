@@ -13,7 +13,7 @@ function Delete({postId}: { postId: string }) {
   }
 
   return (
-    <div onClick={handleDelete} className="flex items-center justify-center w-8 h-8 rounded-full bg-red-500 text-white cursor-pointer hover:bg-red-600 transition-colors duration-200">
+    <div onClick={handleDelete} className="">
       <FaRegTrashCan />
       
     </div>
