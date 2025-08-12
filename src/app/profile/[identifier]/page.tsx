@@ -84,7 +84,7 @@ export default async function UserProfile({ params }: Props) {
 }
 
   return (
-    <div className="p-4">
+    <div>
       <ProfilePage
         userData={userData as ProfilePageProps["userData"]}
         posts={posts}

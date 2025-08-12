@@ -69,7 +69,7 @@ function DMComponent({
   }
 
   return (
-    <div className="border border-gray-300 mt-5 p-5 rounded-lg shadow-lg bg-white w-96">
+    <div className="border border-gray-300 mt-5 p-5 rounded-lg shadow-lg bg-white">
       <div className="flex justify-between items-center p-4 bg-gray-100 cursor-pointer rounded">
         <div onClick={handleToggleMessages} className="w-1/2 cursor-pointer">
           {hasUnreadMessages ? (

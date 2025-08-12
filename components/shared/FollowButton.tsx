@@ -117,7 +117,7 @@ function FollowButton({ targetUid, currentUserUid }: FollowButtonProps) {
         ) : (
           <button
             onClick={handleFollowButtonClick}
-            className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
+            className="border-b cursor-pointer"
           >
             {
               isFollower && !isFollowing ? 'Follow Back' : isFollowing ? "Unfollow" : "Follow"

@@ -14,8 +14,8 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
     usePaginatedPosts("posts", "createdAt", currentUser.uid, "uid");
  
   return (
-    <div className='flex w-full justify-between border h-screen pt-30 pr-0'>
-      <div className='flex flex-col gap-y-4 px-10 overflow-scroll w-164'>
+    <div className='grid grid-cols-5 justify-between border h-screen pt-30 pr-0'>
+      <div className='col-span-3 flex flex-col gap-y-4 px-10 overflow-scroll overflow-x-hidden'>
         <h1>Latest Posts</h1>
       {posts.map((post) => (
         <LivePost key={post.id} post={post} currentUser={currentUser.uid} currentUserDisplayName={currentUser.displayName} />
@@ -23,7 +23,7 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
       {loading && <p>Loading...</p>}
       {hasMore && <div ref={loadMoreRef} />}
       </div>
-      <div className="flex flex-col gap-y-4 px-10 pt-10 overflow-scroll">
+      <div className="flex flex-col col-span-2 gap-y-4 px-10 pt-10 overflow-scroll overflow-x-hidden">
         <DMComponent currentUser={currentUser.uid} targetUser={currentUser.uid} />
         <CreatePost />
       </div>

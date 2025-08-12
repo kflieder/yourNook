@@ -147,14 +147,13 @@ function Messages({
                 </div>
 
                 <div className='flex flex-col w-full items-start overflow-hidden'>
-                
-                <strong style={{ fontWeight: isUnread ? "700" : "100" }}>
-                  {thread.otherUserDisplayName}
-                </strong>
-                <span className="text-nowrap overflow-hidden flex">
+                  <div className="border-b border-gray-400 capitalize" style={{ fontWeight: isUnread ? "700" : "100" }}>
+                    {thread.otherUserDisplayName}
+                  </div>
+                  <span className="text-nowrap overflow-hidden flex text-gray-500">
                     {thread.lastMessageText}
                   </span>
-                  <span className="text-gray-500 text-xs">
+                  <span className="text-gray-400 text-xs">
                     {thread.lastMessageTimestamp?.toDate().toLocaleString()}
                   </span>
                 </div>

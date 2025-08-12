@@ -91,10 +91,11 @@ function BioAndLinks() {
             <div className=''>
                 <label htmlFor="bio">Bio:</label>
                 <br />
-                <textarea className='border w-full h-36 rounded p-1' id='bio' name="bio" placeholder='Write a short bio about yourself'
+                <textarea className='border resize-none w-full h-36 rounded p-1' id='bio' name="bio" placeholder='Write a short bio about yourself'
                     onChange={(e) => setBio(e.target.value)}
                     value={bio}
                     disabled={!isEditable}
+                    maxLength={500}
                 ></textarea>
             </div>
             <div className='flex flex-col'>

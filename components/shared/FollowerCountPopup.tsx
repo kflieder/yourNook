@@ -4,6 +4,8 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 import { useLiveUserData } from "@/utilities/useLiveUserData";
 import Link from "next/link";
+import { IoPeopleOutline } from "react-icons/io5";
+import { CiStar } from "react-icons/ci";
 
 interface FollowerProfile {
   uid: string;
@@ -79,11 +81,15 @@ function FollowerCountPopup({ userId }: { userId: string }) {
     setExpandedFollowing(!expandedFollowing);
   };
   return (
-    <div className="flex">
+    <div className="flex justify-center items-center gap-12">
       <div>
-        <p className="cursor-pointer relative" onClick={toggleFollowers}>
-          Followers: {followerProfiles.length}
+        <div onClick={toggleFollowers}>
+        <p className="cursor-pointer relative flex justify-center items-center font-bold" >
+          <IoPeopleOutline className="mr-1" size={20} />
+           {followerProfiles.length}
         </p>
+        <p className="text-sm">Followers</p>
+        </div>
         {expandedFollowers && (
           <div className="absolute bg-white border rounded p-4 shadow-lg z-10">
             <ul>
@@ -97,9 +103,15 @@ function FollowerCountPopup({ userId }: { userId: string }) {
         )}
       </div>
       <div>
-        <p className="cursor-pointer relative" onClick={toggleFollowing}>
-          Following: {following.length}
-        </p>
+        <div onClick={toggleFollowing}>
+          <p className="cursor-pointer relative flex justify-center items-center font-bold" >
+            <CiStar className="mr-1" size={22}/>
+            {following.length}
+          </p>
+          <p className="text-sm">Following</p>
+        </div>
+        
+        
         {expandedFollowing && (
           <div className="absolute bg-white border rounded p-4 shadow-lg z-10">
             <ul>

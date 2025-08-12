@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
@@ -42,20 +42,16 @@ function UserPosts({
   }, [initialPosts]);
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">User Posts</h2>
-
-      <div className="space-y-4">
-        {livePosts.map((post) => (
-          <div key={post.id}>
-            <LivePost
-              post={post}
-              currentUser={currentUser?.uid || ""}
-              currentUserDisplayName={currentUser?.displayName || ""}
-            />
-          </div>
-        ))}
-      </div>
+    <div className="space-y-4">
+      {livePosts.map((post) => (
+        <div key={post.id}>
+          <LivePost
+            post={post}
+            currentUser={currentUser?.uid || ""}
+            currentUserDisplayName={currentUser?.displayName || ""}
+          />
+        </div>
+      ))}
     </div>
   );
 }

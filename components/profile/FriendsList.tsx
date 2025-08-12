@@ -24,21 +24,21 @@ function FriendsList({ currentUserUid }: FriendsListProps) {
 
 
   return (
-    <div className="flex flex-col border p-4 mr-4 text-center">
-      <h1>This will be the friends list yayayayay</h1>
-      <ul className="border flex flex-col items-center space-y-2 py-4">
+    <div className="flex flex-col border border-gray-300 rounded-lg shadow-2xl p-4 text-center mt-5">
+      <h1>All your friends betch</h1>
+      <ul className="border border-gray-300 rounded flex flex-wrap justify-around items-center py-4 space-x-2 space-y-4 bg-gray-100">
         {mutualUserData.map((user, index) => (
-          <div key={index} className="flex items-center space-x-2 border w-1/2">
+          <div key={index} className="flex justify-center items-center p-5 w-28 h-28 bg-white  rounded-lg shadow-lg">
             <Link
-              className="flex items-center space-x-2"
+              className="flex flex-col justify-center items-center"
               href={`/profile/${user.uniqueUrl}`}
             >
               <img
                 src={user.profilePicture}
                 alt={`${user.displayName}'s profile`}
-                className="w-10 h-10 rounded-full"
+                className="w-16 h-16 rounded-full"
               />
-              <li className="cursor-pointer hover:underline">
+              <li className="cursor-pointer text-sm hover:underline">
                 {user.displayName}
               </li>
             </Link>

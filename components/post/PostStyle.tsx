@@ -120,7 +120,7 @@ function PostStyle({
         </div>
       ) : mediaUrl ? (
         <div>
-          <div className="rounded overflow-hidden border w-3/4 mx-auto bg-white p-2">
+          <div className="rounded overflow-hidden border w-96 mx-auto bg-white p-2">
             <img
               src={mediaUrl}
               alt="Post media"
@@ -130,8 +130,10 @@ function PostStyle({
           <p className="p-5">{textContent}</p>
         </div>
       ) : (
-        <div className="flex rounded justify-center items-center text-black bg-white h-36 w-3/4 mx-auto mb-6">
-          <p className="text-xl text-center">{textContent}</p>
+        <div className="flex rounded justify-center items-center text-black bg-white h-36 w-96 mx-auto mb-6 p-3">
+          <div className="flex justify-center rounded items-center border border-gray-400 w-full h-full">
+            <p className="text-xl text-center">{textContent}</p>
+          </div>
         </div>
       )}
 

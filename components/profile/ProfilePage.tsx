@@ -59,31 +59,32 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   const [currentUserIsFollowing, setCurrentUserIsFollowing] =
     useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  
+
   useEffect(() => {
     async function checkAllTheThings() {
       try {
         if (!username || !userData.uid) return;
         const blocked = await isBlockedBy(userData.uid, username.uid);
-        setIsBlocked(blocked); 
+        setIsBlocked(blocked);
 
         const targetUserData = await targetUsersDoc?.fetchUserData();
         const currentUserData = await currentUsersDoc?.fetchUserData();
 
-        const settingUser = isOwner ? await currentUsersDoc?.fetchUserData() : targetUserData;
+        const settingUser = isOwner
+          ? await currentUsersDoc?.fetchUserData()
+          : targetUserData;
         if (settingUser) {
           setActiveTab(settingUser.defaultContentType || "posts");
         }
 
         if (targetUserData?.private) {
           setIsPrivate(targetUserData.private);
-          if(currentUserData?.following) {
+          if (currentUserData?.following) {
             setCurrentUserIsFollowing(
               currentUserData.following.includes(userData.uid)
             );
           }
         }
-
       } catch (error) {
         console.error("Error checking profile settings:", error);
       } finally {
@@ -128,89 +129,101 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   }
 
   return (
-    <div>
+    <div className="pt-15">
       {!isOwner && (
         <BlockButton
           blockerUid={username.uid || ""}
           blockedUid={userData.uid || ""}
         />
       )}
+      <div className="mx-10">
+        <Bio userData={userData} />
+      </div>
 
-      <Bio userData={userData} />
-
-      <div>
-        <div className="flex justify-center space-x-4 p-4">
-          <button
-            onClick={() => handleTabChange("posts")}
-            className={`${buttonClass} ${
-              activeTab === "posts" ? activeTabClass : ""
-            }`}
-          >
-            Posts
-          </button>
-          <button
-            onClick={() => handleTabChange("blog")}
-            className={`${buttonClass}
+      <div className="p-5 grid grid-cols-5 ">
+        <div className="border col-span-3">
+          <div className="flex justify-center space-x-4 p-4">
+            <button
+              onClick={() => handleTabChange("posts")}
+              className={`${buttonClass} ${
+                activeTab === "posts" ? activeTabClass : ""
+              }`}
+            >
+              Posts
+            </button>
+            <button
+              onClick={() => handleTabChange("blog")}
+              className={`${buttonClass}
           ${activeTab === "blog" ? activeTabClass : ""}`}
-          >
-            Blogs
-          </button>
-          <button
-            onClick={() => handleTabChange("thread")}
-            className={`${buttonClass}
+            >
+              Blogs
+            </button>
+            <button
+              onClick={() => handleTabChange("thread")}
+              className={`${buttonClass}
           ${activeTab === "thread" ? activeTabClass : ""}`}
-          >
-            Threads
-          </button>
-        </div>
-        <div className="relative min-h-screen grid grid-cols-3 border">
-          {isOwner && (
-            <div>
-              <FriendsList currentUserUid={username.uid} />
-              <DMComponent currentUser={username.uid} targetUser={userData.uid || ""} />
-            </div>
-          )}
-          
-          {activeTab === "posts" ? (
-            <div className="border flex flex-col justify-center items-center">
-              {isOwner && <CreatePost />}
-              <UserPosts posts={posts} />
-            </div>
-          ) : activeTab === "blog" ? (
-            <div className="col-span-2">
-              <div className="grid grid-cols-2">
-                {isOwner && (
-                  <BlogForm
-                    authorId={userData.uid || ""}
-                    authorDisplayName={userData.displayName || ""}
-                  />
-                )}
-                <div className="">
-                  <UserBlogs
-                    authorId={userData.uid || ""}
-                    authorDisplayName={userData.displayName || ""}
-                    profilePicture={userData.profilePicture || ""}
-                    currentUser={username.uid}
-                    currentUserDisplayName={username.displayName || ""}
+            >
+              Threads
+            </button>
+          </div>
+
+          <div className="flex justify-center items-center">
+            {activeTab === "posts" ? (
+              <div className="border flex justify-center items-center">
+                <UserPosts posts={posts} />
+              </div>
+            ) : activeTab === "blog" ? (
+              <div className="col-span-2">
+                <div className="grid grid-cols-2">
+                  {isOwner && (
+                    <BlogForm
+                      authorId={userData.uid || ""}
+                      authorDisplayName={userData.displayName || ""}
+                    />
+                  )}
+                  <div className="">
+                    <UserBlogs
+                      authorId={userData.uid || ""}
+                      authorDisplayName={userData.displayName || ""}
+                      profilePicture={userData.profilePicture || ""}
+                      currentUser={username.uid}
+                      currentUserDisplayName={username.displayName || ""}
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : activeTab === "thread" ? (
+              <div className="col-span-2">
+                <div>
+                  {isOwner && (
+                    <DiscussionThreadForm
+                      currentUserUid={username.uid || ""}
+                      currentUserDisplayName={username.displayName || ""}
+                    />
+                  )}
+                </div>
+                <div className="border">
+                  <UserDiscussionThreads
+                    currentUser={username}
+                    targetUser={userData.uid || ""}
                   />
                 </div>
               </div>
+            ) : null}
+          </div>
+        </div>
+
+        <div className="col-span-2 border p-5">
+          {isOwner && (
+            <div>
+              <CreatePost />
+              <DMComponent
+                currentUser={username.uid}
+                targetUser={userData.uid || ""}
+              />
+              <FriendsList currentUserUid={username.uid} />
             </div>
-          ) : activeTab === "thread" ? (
-            <div className='col-span-2'>
-              <div>
-                {isOwner && (
-                  <DiscussionThreadForm
-                    currentUserUid={username.uid || ""}
-                    currentUserDisplayName={username.displayName || ""}
-                  />
-                ) }
-              </div>
-              <div className="border">
-                <UserDiscussionThreads currentUser={username} targetUser={userData.uid || ""} />
-              </div>
-            </div>
-          ) : null}
+          )}
         </div>
       </div>
     </div>
