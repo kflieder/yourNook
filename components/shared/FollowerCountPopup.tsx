@@ -82,8 +82,8 @@ function FollowerCountPopup({ userId }: { userId: string }) {
   };
   return (
     <div className="flex justify-center items-center gap-12">
-      <div>
-        <div onClick={toggleFollowers}>
+      <div >
+        <div onClick={toggleFollowers} className="cursor-pointer">
         <p className="cursor-pointer relative flex justify-center items-center font-bold" >
           <IoPeopleOutline className="mr-1" size={20} />
            {followerProfiles.length}
@@ -103,8 +103,8 @@ function FollowerCountPopup({ userId }: { userId: string }) {
         )}
       </div>
       <div>
-        <div onClick={toggleFollowing}>
-          <p className="cursor-pointer relative flex justify-center items-center font-bold" >
+        <div onClick={toggleFollowing} className="cursor-pointer">
+          <p className="relative flex justify-center items-center font-bold" >
             <CiStar className="mr-1" size={22}/>
             {following.length}
           </p>
