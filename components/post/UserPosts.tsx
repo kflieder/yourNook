@@ -42,10 +42,13 @@ function UserPosts({
   }, [initialPosts]);
 
   return (
-    <div className="space-y-4">
-      {livePosts.map((post) => (
+    <div className="grid grid-cols-2 gap-4">
+      {livePosts
+      .filter(post => !post.mediaUrl?.includes("video")) // Filter out video posts
+      .map((post) => (
         <div key={post.id}>
           <LivePost
+            width="w-64"
             post={post}
             currentUser={currentUser?.uid || ""}
             currentUserDisplayName={currentUser?.displayName || ""}

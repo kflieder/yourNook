@@ -23,9 +23,11 @@ interface PostStyleProps {
   targetUid: string;
   currentUser: string;
   currentUserDisplayName: string;
+  width?: string;
 }
 
 function PostStyle({
+  width,
   displayName,
   profilePicture,
   textContent,
@@ -54,8 +56,8 @@ function PostStyle({
   };
 
   return (
-    <div className="p-4 rounded-lg w-full bg-gradient-to-t from-blue-950 via-gray-400 to-gray-300 text-white min-h-84">
-      <div className="flex justify-between items-end gap-2 p-5">
+    <div className={`flex flex-col justify-between py-2 rounded-lg bg-gradient-to-t from-blue-950 via-gray-400 to-gray-300 text-white min-h-84 ${width} mx-auto my-4 shadow-lg`}>
+      <div className="flex justify-between items-end gap-2 mb-2">
         <div className="flex justify-between items-start w-full gap-2">
           <div className="flex items-center gap-2">
             {profilePicture ? (
@@ -85,14 +87,13 @@ function PostStyle({
                 <div className="absolute right-0 w-36 p-1 bg-white border rounded shadow-lg z-10 text-black">
                   <ul className="">
                     {currentUser && targetUid === currentUser && (
-                      <li className="flex hover:bg-gray-200 cursor-pointer justify-around items-center">
+                      <li>
                         <Delete postId={docId} />
-                        <p>Delete post</p>
                       </li>
                     )}
                     <li
                       onClick={handleShowReportForm}
-                      className="flex hover:bg-gray-200 cursor-pointer justify-around items-center"
+                      className="flex hover:bg-gray-200 cursor-pointer justify-start items-center ml-2 space-x-2"
                     >
                       <MdReportGmailerrorred size={22} />
                       <p>Report post</p>
@@ -109,33 +110,15 @@ function PostStyle({
         )}
       </div>
 
-      {mediaUrl?.includes("video") ? (
-        <div>
-          <video
-            controls
-            className="w-full max-h-[300px] object-contain"
-            src={mediaUrl}
-          />
-          <p>{textContent || ""}</p>
-        </div>
-      ) : mediaUrl ? (
-        <div>
-          <div className="rounded overflow-hidden border w-96 mx-auto bg-white p-2">
-            <img
-              src={mediaUrl}
-              alt="Post media"
-              className="w-full max-h-[300px] object-contain"
-            />
-          </div>
-          <p className="p-5">{textContent}</p>
-        </div>
-      ) : (
-        <div className="flex rounded justify-center items-center text-black bg-white h-36 w-96 mx-auto mb-6 p-3">
-          <div className="flex justify-center rounded items-center border border-gray-400 w-full h-full">
-            <p className="text-xl text-center">{textContent}</p>
-          </div>
-        </div>
-      )}
+      <div className="w-full bg-white border mx-auto p-4">
+  {mediaUrl?.includes("video") ? (
+    <video controls className="w-full max-h-72 object-contain" src={mediaUrl} />
+  ) : mediaUrl ? (
+    <img src={mediaUrl} alt="Post media" className="w-full max-h-72 object-contain" />
+  ) : (
+    <p className="text-lg text-black text-center">{textContent}</p>
+  )}
+</div>
 
       <div className="flex justify-around items-center border-t pt-5">
         <Likes

@@ -1,17 +1,20 @@
 "use client";
 import { useAuth } from "@/context/AuthContext";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { db } from "../../lib/firebase";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../../lib/firebase";
 import { TbPhotoPlus } from "react-icons/tb";
 import { GoDeviceCameraVideo } from "react-icons/go";
+import { IoIosCloseCircleOutline } from "react-icons/io";
 
 function CreatePost() {
   const { username } = useAuth();
   const [content, setContent] = useState("");
   const [mediaFile, setMediaFile] = useState<File | null>(null);
+  const [picPreview, setPicPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   async function handleCreatePost(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -82,33 +85,80 @@ function CreatePost() {
           onChange={(e) => setContent(e.target.value)}
           placeholder="What's on your mind?"
           className="p-4 rounded-lg mb-4 resize-none bg-gray-200"
-          rows={2}
-          maxLength={500}
+          rows={4}
+          maxLength={300}
         />
+        <small
+          className={`${
+            content.length === 300 ? "text-red-500" : "text-gray-500"
+          }`}
+        >
+          {content.length}/300
+          {content.length === 300 && (
+            <span className="ml-2">Betch go write a blog :D</span>
+          )}
+        </small>
         <input
-        id="file-upload"
+          ref={fileInputRef}
+          id="file-upload"
           type="file"
           accept="image/*,video/*"
           multiple
           onChange={(e) => {
             if (e.target.files) {
-              setMediaFile(e.target.files?.[0] || null); // Use the first file if multiple files are selected
+              setMediaFile(e.target.files?.[0] || null);
+              setPicPreview(URL.createObjectURL(e.target.files[0]));
             }
           }}
           className="hidden"
         />
         <div className="flex justify-between items-center">
-        <label htmlFor="file-upload" className="cursor-pointer flex items-center">
-          <TbPhotoPlus size={22} className="mr-2" />
-          <GoDeviceCameraVideo size={25} className="mr-2" />
-        </label>
+          {picPreview && (
+            <div className="relative">
+              <div
+                className="absolute top-[-6] right-[-6] cursor-pointer bg-gray-200 rounded-full"
+                onClick={() => {
+                  setMediaFile(null);
+                  setPicPreview(null);
+                  if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                  }
+                }}
+              >
+                <IoIosCloseCircleOutline size={18} />
+              </div>
+              {
+                mediaFile?.type.startsWith("video") ? (
+                  <video
+                    src={picPreview}
+                    className="w-24 h-24 object-cover rounded"
+                    controls
+                  />
+                ) : (
+                  <img
+                    src={picPreview}
+                    alt="Preview"
+                    className="w-24 h-24 object-cover rounded"
+                  />
+                )
+              }
+            </div>
+          )}
 
-        <button
-          type="submit"
-          className="bg-blue-950 text-white px-2 py-1 text-sm rounded-lg hover:bg-blue-600 transition-colors"
-        >
-          Post
-        </button>
+          <label
+            htmlFor="file-upload"
+            className="cursor-pointer flex items-center"
+          >
+            <TbPhotoPlus size={22} className="mr-2" />
+            <GoDeviceCameraVideo size={25} className="mr-2" />
+          </label>
+
+          <button
+            type="submit"
+            className="bg-blue-950 text-white px-2 py-1 text-sm rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            Post
+          </button>
         </div>
       </form>
     </div>
