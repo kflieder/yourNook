@@ -216,7 +216,9 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
         <div className="col-span-2 border p-5">
           {isOwner && (
             <div>
-              <CreatePost />
+              {
+                activeTab === "posts" && <CreatePost />
+              }
               <DMComponent
                 currentUser={username.uid}
                 targetUser={userData.uid || ""}

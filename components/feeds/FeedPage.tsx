@@ -23,12 +23,16 @@ function FeedPage() {
   const activeButtonStyle = `${buttonStyle} bg-blue-950 text-white`;
 
   return (
-    <div className='flex flex-col items-center justify-center h-full'>
-      <div className="grid grid-cols-3 justify-around mb-4 bg-gray-300 w-3/4 rounded-3xl fixed top-15">
+    <div className='flex flex-col items-center justify-center h-full '>
+      <div className="fixed top-12 flex w-full justify-center items-center bg-white shadow-md">
+      <div className="grid grid-cols-3 justify-around bg-gray-300 w-3/4 rounded-3xl">
         <button onClick={() => handleTabChange('posts')} className={activeTab === 'posts' ? activeButtonStyle : buttonStyle}>Posts</button>
         <button onClick={() => handleTabChange('blogs')} className={activeTab === 'blogs' ? activeButtonStyle : buttonStyle}>Blogs</button>
         <button onClick={() => handleTabChange('threads')} className={activeTab === 'threads' ? activeButtonStyle : buttonStyle}>Threads</button>
       </div>
+      </div>
+
+      <div className=''></div>
       {activeTab === 'posts' && <GlobalPostFeed currentUser={{ ...currentUser, displayName: currentUser.displayName ?? '' }} />}
       {activeTab === 'blogs' && <GlobalBlogFeed currentUser={currentUser.uid} currentUserDisplayName={currentUser.displayName ?? ''} />}
      

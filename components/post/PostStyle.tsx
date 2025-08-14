@@ -56,7 +56,9 @@ function PostStyle({
   };
 
   return (
-    <div className={`flex flex-col justify-between py-2 rounded-lg bg-gradient-to-t from-blue-950 via-gray-400 to-gray-300 text-white min-h-84 ${width} mx-auto my-4 shadow-lg`}>
+    <div
+      className={`flex flex-col justify-between py-2 rounded-lg bg-gradient-to-t from-blue-950 via-gray-400 to-gray-300 text-white min-h-84 ${width} mx-auto my-4 shadow-xl`}
+    >
       <div className="flex justify-between items-end gap-2 mb-2">
         <div className="flex justify-between items-start w-full gap-2">
           <div className="flex items-center gap-2">
@@ -110,15 +112,31 @@ function PostStyle({
         )}
       </div>
 
-      <div className="w-full bg-white border mx-auto p-4">
-  {mediaUrl?.includes("video") ? (
-    <video controls className="w-full max-h-72 object-contain" src={mediaUrl} />
-  ) : mediaUrl ? (
-    <img src={mediaUrl} alt="Post media" className="w-full max-h-72 object-contain" />
-  ) : (
-    <p className="text-lg text-black text-center">{textContent}</p>
-  )}
-</div>
+      <div className="w-full mx-auto p-4 h-60">
+        {mediaUrl?.includes("video") ? (
+          <div>
+            <video
+              controls
+              className="w-full max-h-62 object-contain"
+              src={mediaUrl}
+            />
+            <p>{textContent}</p>
+          </div>
+        ) : mediaUrl ? (
+          <div>
+            <img
+              src={mediaUrl}
+              alt="Post media"
+              className="w-full max-h-56 object-contain border"
+            />
+            <p>{textContent}</p>
+          </div>
+        ) : (
+          <p className="bg-white flex justify-center items-center h-46 text-lg text-black text-center">
+            {textContent}
+          </p>
+        )}
+      </div>
 
       <div className="flex justify-around items-center border-t pt-5">
         <Likes

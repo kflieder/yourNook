@@ -68,7 +68,7 @@ function CreatePost() {
     <div>
       <form
         onSubmit={handleCreatePost}
-        className="flex flex-col p-4 border border-gray-300 rounded-lg shadow-lg"
+        className="flex flex-col p-4 bg-white border border-gray-300 rounded-lg shadow-lg"
       >
         <div className="flex items-center mb-2">
           <div className="w-12 h-12 overflow-hidden rounded-full border">
