@@ -31,14 +31,15 @@ body {
 }
 
 .rainbow-bg {
-  background: linear-gradient(145deg,
-    #ff9999 0%,
-    #ffbf80 14%,
-    #ffff99 28%,
-    #99ff99 42%,
-    #99ffff 56%,
-    #9999ff 70%,
-    #b399ff 85%,
+  background: linear-gradient(155deg,
+    #cef2fa 50%,
+    #ff9999 68%,
+    #ffbf80 70%,
+    #ffff99 75%,
+    #99ff99 80%,
+    #99ffff 85%,
+    #9999ff 90%,
+    #b399ff 95%,
     #e699ff 100%);
     filter: blur(40px);
     position: absolute;

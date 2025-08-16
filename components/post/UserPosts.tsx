@@ -41,17 +41,19 @@ function UserPosts({
     return () => unsubscribe();
   }, [initialPosts]);
 
+
   return (
     <div className="grid grid-cols-2 gap-4">
       {livePosts
-      .filter(post => !post.mediaUrl?.includes("video")) // Filter out video posts
+      // .filter(post => !post.mediaUrl?.includes("video")) // Filter out video posts
       .map((post) => (
         <div key={post.id}>
           <LivePost
-            width="w-64"
+            thumbnail={true}
             post={post}
             currentUser={currentUser?.uid || ""}
             currentUserDisplayName={currentUser?.displayName || ""}
+            styleSelector="profile"
           />
         </div>
       ))}

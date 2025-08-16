@@ -117,7 +117,7 @@ function FollowButton({ targetUid, currentUserUid }: FollowButtonProps) {
         ) : (
           <button
             onClick={handleFollowButtonClick}
-            className="border-b cursor-pointer"
+            className="text-gray-600 hover:text-black cursor-pointer"
           >
             {
               isFollower && !isFollowing ? 'Follow Back' : isFollowing ? "Unfollow" : "Follow"

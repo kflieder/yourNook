@@ -18,7 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AuthProvider>
+        <div className="rainbow-bg"></div>
+       <AuthProvider>
           <Header />
           {children}
         </AuthProvider>

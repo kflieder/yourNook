@@ -56,6 +56,7 @@ function CreatePost() {
       });
       setContent("");
       setMediaFile(null);
+      setPicPreview(null);
       console.log("Post was added to Firestore!");
       alert("Post created successfully!");
     } catch (error) {

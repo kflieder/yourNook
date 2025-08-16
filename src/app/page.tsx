@@ -15,6 +15,7 @@ export default function Home() {
 
   return (
     <div className="flex justify-around items-center h-150 border">
+      <div></div>
       <div>
       <h1 className="text-3xl font-bold underline text-center mt-4">
         This will be the main feed

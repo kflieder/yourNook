@@ -63,9 +63,10 @@ async function Page({ params }: Props) {
   }
 console.log(blog)
   return (
-    <div>
+    <div className="border pt-10 h-screen flex justify-center items-center">
       {collectionName === "posts" && (
         <LivePost
+          styleSelector="feed"
           post={{ ...post, id: postId }}
           currentUser={currentUser?.uid || ""}
           currentUserDisplayName={currentUser?.displayName || ""}
