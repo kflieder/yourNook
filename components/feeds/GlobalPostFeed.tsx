@@ -46,7 +46,7 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
         {loading && <p>Loading...</p>}
         {hasMore && <div ref={loadMoreRef} />}
       </div>
-      <div className="hidden sm:flex flex-col col-span-2 gap-y-4 pr-5 pt-20 overflow-scroll overflow-x-hidden hide-scrollbar">
+      <div className="hidden sm:flex flex-col col-span-2 gap-y-4 pr-5 pt-20 overflow-hidden overflow-x-hidden hide-scrollbar">
         <DMComponent
           currentUser={currentUser.uid}
           targetUser={currentUser.uid}
@@ -54,7 +54,10 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
         <CreatePost />
       </div>
       <div className="sm:hidden flex justify-around p-2">
-        <h2>MOBILE DMS</h2>
+        <DMComponent
+          currentUser={currentUser.uid}
+          targetUser={currentUser.uid}
+        />
         <h2>Create post</h2>
       </div>
     </div>

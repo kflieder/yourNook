@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { sendMessage, getOrCreateDmThread } from "@/utilities/dmThreadHelper";
 
 function SendMessageForm({
@@ -10,7 +10,7 @@ function SendMessageForm({
   targetUserDisplayName,
   targetUserProfilePicture,
   setDmThreadFromSendMessageForm,
-  toggleNewMessageStateFromSendMessageForm
+  toggleNewMessageStateFromSendMessageForm,
 }: {
   threadId?: string;
   currentUserUid: string;
@@ -23,18 +23,23 @@ function SendMessageForm({
   toggleNewMessageStateFromSendMessageForm?: (state: boolean) => void;
 }) {
   const [messageContent, setMessageContent] = useState("");
+  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
+  const [isSending, setIsSending] = useState(false);
+
+
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!messageContent.trim()) return;
 
     try {
+      setIsSending(true);
       const newMessageThreadId = await getOrCreateDmThread(
         currentUserUid,
         selectedTargetUserUid || "",
         targetUserDisplayName,
         targetUserProfilePicture,
         senderDisplayName,
-        senderProfilePicture,
+        senderProfilePicture
       );
 
       const message = {
@@ -46,41 +51,62 @@ function SendMessageForm({
         senderProfilePicture: senderProfilePicture,
         targetUserDisplayName: targetUserDisplayName,
         targetUserProfilePicture: targetUserProfilePicture,
-        read: false
+        read: false,
       };
 
-      
       if (setDmThreadFromSendMessageForm) {
         setDmThreadFromSendMessageForm(newMessageThreadId || null);
       }
       if (toggleNewMessageStateFromSendMessageForm) {
         toggleNewMessageStateFromSendMessageForm(false);
       }
+      setMessageContent("");
       await sendMessage(newMessageThreadId || "", message);
-      setMessageContent(""); // Clear input after sending
-      console.log(newMessageThreadId, 'newMessageThreadId');
-      console.log('just text')
+      
+      if (textAreaRef.current) {
+        textAreaRef.current.style.height = "40px"; // Reset to default height
+      }
     } catch (error) {
       console.error("Error sending message:", error);
+    } finally {
+      setIsSending(false);
     }
   };
 
-  
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setMessageContent(e.target.value);
+    if (e.target.scrollHeight > e.target.clientHeight) {
+      e.target.style.height = "auto";
+      e.target.style.height = `${e.target.scrollHeight}px`;
+    }
+    if (e.target.value.trim() === "") {
+      e.target.style.height = "40px"; // Reset to default height
+    }
+  };
+
   return (
     <div>
-      <form onSubmit={handleSubmit} className="flex flex-col">
-        <input
-          type="textarea"
+      <form
+        onSubmit={handleSubmit}
+        className="flex items-center border rounded-3xl"
+      >
+        <textarea
+          ref={textAreaRef}
           placeholder="Type your message here..."
-          className="w-full p-2 border rounded"
+          className="w-full px-4 pt-2 h-10 focus:outline-none focus:bg-gray-100 rounded-3xl resize-none overflow-hidden"
           value={messageContent}
-          onChange={(e) => setMessageContent(e.target.value)}
+          onChange={handleInputChange}
         />
         <button
           type="submit"
-          className="mt-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          className={`text-white p-2.5  rounded-4xl text-sm ${
+            messageContent.trim()
+              ? "bg-blue-950 cursor-pointer"
+              : "bg-blue-950/50 cursor-not-allowed"
+          }`}
+          disabled={!messageContent.trim()}
         >
-          Send
+          {isSending ? "Sending..." : "Send"}
         </button>
       </form>
     </div>

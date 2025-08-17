@@ -51,8 +51,6 @@ function Messages({
     }
   }
 
-  
-
   useEffect(() => {
     if (clearDmThread) return;
     if (threadId) {
@@ -146,8 +144,11 @@ function Messages({
                   />
                 </div>
 
-                <div className='flex flex-col w-full items-start overflow-hidden'>
-                  <div className="border-b border-gray-400 capitalize" style={{ fontWeight: isUnread ? "700" : "100" }}>
+                <div className="flex flex-col w-full items-start overflow-hidden">
+                  <div
+                    className="border-b border-gray-400 capitalize"
+                    style={{ fontWeight: isUnread ? "700" : "100" }}
+                  >
                     {thread.otherUserDisplayName}
                   </div>
                   <span className="text-nowrap overflow-hidden flex text-gray-500">
@@ -157,18 +158,19 @@ function Messages({
                     {thread.lastMessageTimestamp?.toDate().toLocaleString()}
                   </span>
                 </div>
-                <div className="flex flex-col">
-                  
-                  
-                </div>
+                <div className="flex flex-col"></div>
               </div>
             </div>
           );
         })}
       {selectedThread && (
-        <div ref={messagesEndRef} className="overflow-y-auto h-72 p-2">
-          <div className="sticky top-[-10] left-100 w-1/2 bg-gray-200 flex items-center space-x-4 rounded p-2">
-
+        <div ref={messagesEndRef} className="overflow-y-auto h-[60vh] p-2">
+          <div className="sticky top-[-10] left-100 w-full bg-blue-950/70 text-white flex items-center space-x-4 rounded p-1 px-2">
+            <img
+              className="h-8 w-8 rounded-full inline-block mr-2"
+              src={selectedUsersProfilePicture || ""}
+              alt={`${selectedUsersDisplayName}'s profile`}
+            />
             <h1>{selectedUsersDisplayName}</h1>
             <button
               onClick={handleCloseThread}
@@ -178,13 +180,34 @@ function Messages({
             </button>
           </div>
           {messages.map((message) => (
-            <div key={message.id} className="mb-2">
-              <img
-                className="h-8 w-8 rounded-full inline-block mr-2"
-                src={message.senderProfilePicture}
-                alt={`${message.senderDisplayName}'s profile`}
-              />
-              <strong>{message.senderDisplayName}</strong>: {message.content}
+            <div key={message.id}>
+              {message.senderUid === currentUserUid ? (
+                <div className="flex flex-col justify-end items-end space-x-2">
+                  <div className="rounded-2xl p-3 bg-gradient-to-t from-purple-300 via-blue-800 to-blue-400 text-white text-sm my-1 w-2/3">
+                    {message.content}
+                  </div>
+                  {/* <div className="h-8 w-8 rounded-full mb-2">
+                    <img
+                      className="h-8 w-8 rounded-full inline-block mr-2"
+                      src={message.senderProfilePicture}
+                      alt={`${message.senderDisplayName}'s profile`}
+                    />
+                  </div> */}
+                </div>
+              ) : (
+                <div className='flex justify-start items-end space-x-2'>
+                  <div className='h-8 w-8 rounded-full mb-2'>
+                  <img
+                    className="h-8 w-8 rounded-full inline-block mr-2"
+                    src={message.senderProfilePicture}
+                    alt={`${message.senderDisplayName}'s profile`}
+                  />
+                  </div>
+                  <div className="rounded-2xl p-3 bg-gradient-to-t from-gray-300 via-gray-100 to-gray-300 text-sm my-1 w-2/3">
+                    {message.content}
+                  </div>
+                </div>
+              )}
             </div>
           ))}
           <SendMessageForm

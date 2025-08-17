@@ -63,7 +63,7 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
         )} 
       </div>
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-1/2 h-84 overflow-scroll bg-white border border-gray-300 rounded-lg shadow-lg p-4 z-99">
+        <div className="fixed right-0 mt-2 w-1/2 h-84 overflow-scroll bg-white border border-gray-300 rounded-lg shadow-lg p-4 z-50">
           <ul>
             {notifications.length === 0 ? (
               <li className="text-black">No notifications</li>

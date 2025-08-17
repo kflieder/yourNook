@@ -28,8 +28,6 @@ function DMComponent({
     console.log("User is on a mobile device");
   }
 
-
-
   useEffect(() => {
     if (dmThreadIdFromSendMessageForm) {
       setDmThreadId(dmThreadIdFromSendMessageForm);
@@ -76,9 +74,9 @@ function DMComponent({
   }
 
   return (
-    <div className="border border-gray-300 mt-5 p-5 rounded-lg shadow-lg bg-white">
-      <div className="flex justify-between items-center p-4 bg-gray-100 cursor-pointer rounded">
-        <div onClick={handleToggleMessages} className="w-1/2 cursor-pointer">
+    <div className="border border-gray-300 mt-5 p-2 rounded-lg shadow-lg bg-white">
+      <div className="flex justify-between items-center p-1 px-2 bg-gray-100 cursor-pointer rounded">
+        <div onClick={handleToggleMessages} className="sm:w-1/2 cursor-pointer">
           {hasUnreadMessages ? (
             <span className="text-red-500 font-bold">Unread Messages</span>
           ) : (
@@ -102,38 +100,36 @@ function DMComponent({
           </div>
         </div>
       </div>
-      <div
+      {
+        isMobile ? (
+          <div>mobile dm</div>
+        ) : (
+          <div
         className="overflow-hidden transition-max-height duration-500 ease-in-out"
-        style={{ height: toggleMessages ? "300px" : "0px" }}
+        style={{ height: toggleMessages ? "60vh" : "0px" }}
       >
-        <div>
-          <div>
-            {toggleNewMessage ? (
-              <NewMessage
-                currentUserUid={currentUser}
-                senderDisplayName={liveCurrentUserData?.displayName || ""}
-                senderProfilePicture={liveCurrentUserData?.profilePicture || ""}
-                toggleNewMessageStateFromSendMessageForm={setToggleNewMessage}
-                setDmThreadFromSendMessageForm={
-                  setDmThreadIdFromSendMessageForm
-                }
-              />
-            ) : (
-              <Messages
-                threadId={dmThreadId || ""}
-                currentUserUid={currentUser}
-                senderDisplayName={liveCurrentUserData?.displayName || ""}
-                senderProfilePicture={liveCurrentUserData?.profilePicture || ""}
-                setHasUnreadMessages={setHasUnreadMessages}
-                messagesOpen={toggleMessages}
-                setDmThreadFromSendMessageForm={
-                  setDmThreadIdFromSendMessageForm
-                }
-              />
-            )}
-          </div>
-        </div>
+        {toggleNewMessage ? (
+          <NewMessage
+            currentUserUid={currentUser}
+            senderDisplayName={liveCurrentUserData?.displayName || ""}
+            senderProfilePicture={liveCurrentUserData?.profilePicture || ""}
+            toggleNewMessageStateFromSendMessageForm={setToggleNewMessage}
+            setDmThreadFromSendMessageForm={setDmThreadIdFromSendMessageForm}
+          />
+        ) : (
+          <Messages
+            threadId={dmThreadId || ""}
+            currentUserUid={currentUser}
+            senderDisplayName={liveCurrentUserData?.displayName || ""}
+            senderProfilePicture={liveCurrentUserData?.profilePicture || ""}
+            setHasUnreadMessages={setHasUnreadMessages}
+            messagesOpen={toggleMessages}
+            setDmThreadFromSendMessageForm={setDmThreadIdFromSendMessageForm}
+          />
+        )}
       </div>
+        )
+      }
     </div>
   );
 }
