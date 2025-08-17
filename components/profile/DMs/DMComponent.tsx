@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, use } from "react";
 import { useLiveUserData } from "@/utilities/useLiveUserData";
 import { getOrCreateDmThread } from "@/utilities/dmThreadHelper";
 import Messages from "./Messages";
 import { BiMessageAltEdit } from "react-icons/bi";
 import NewMessage from "./NewMessage";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import useIsMobile from "@/utilities/useIsMobile";
 
 function DMComponent({
   currentUser,
@@ -21,7 +22,13 @@ function DMComponent({
     useState<string | null>(null);
   const [toggleMessages, setToggleMessages] = useState(false);
   const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
-  
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    console.log("User is on a mobile device");
+  }
+
+
 
   useEffect(() => {
     if (dmThreadIdFromSendMessageForm) {

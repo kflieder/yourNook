@@ -62,7 +62,7 @@ function PostStyle({
     setOpenThumbnail((prev) => !prev);
   };
 
-  console.log(thumbnail);
+
 
   if (thumbnail && !openThumbnail)
     return (

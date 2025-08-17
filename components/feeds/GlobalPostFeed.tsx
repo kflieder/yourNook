@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { usePaginatedPosts } from "@/utilities/usePaginatedPosts";
 import LivePost from "components/post/LivePost";
 import CreatePost from "components/profile/CreatePost";
@@ -16,11 +16,23 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
     currentUser.uid,
     "uid"
   );
+  const [activePostTab, setActivePostTab] = useState<'latest' | 'trending' | 'friends'>('latest');
+
+  function handleTabChange(tab: 'latest' | 'trending' | 'friends') {
+    if (activePostTab === tab) return;
+    setActivePostTab(tab);
+    console.log(`Active post tab changed to: ${tab}`);
+  }
+
 
   return (
     <div className="w-full grid grid-cols-1 sm:grid-cols-5 justify-between h-screen pt-20">
       <div className="col-span-3 flex flex-col gap-y-4 overflow-scroll overflow-x-hidden hide-scrollbar">
-        <h1 className='pt-10'>Latest Posts</h1>
+        <div className="flex items-start justify-around w-full mt-10">
+          <h1 onClick={() => handleTabChange('latest')} className={`cursor-pointer ${activePostTab === 'latest' ? 'font-bold' : ''}`}>Latest</h1>
+          <h1 onClick={() => handleTabChange('trending')} className={`cursor-pointer ${activePostTab === 'trending' ? 'font-bold' : ''}`}>Trending</h1>
+          <h1 onClick={() => handleTabChange('friends')} className={`cursor-pointer ${activePostTab === 'friends' ? 'font-bold' : ''}`}>Friends</h1>
+        </div>
         {posts.map((post) => (
           <div key={post.id} className="w-full rounded flex justify-center">
             <LivePost
@@ -40,6 +52,10 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
           targetUser={currentUser.uid}
         />
         <CreatePost />
+      </div>
+      <div className="sm:hidden flex justify-around p-2">
+        <h2>MOBILE DMS</h2>
+        <h2>Create post</h2>
       </div>
     </div>
   );
