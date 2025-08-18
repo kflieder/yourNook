@@ -88,7 +88,7 @@ function PostStyle({
 
   const feedStyleClasses = {
     outterMostDivContainer:
-      "pb-4 rounded-lg bg-gradient-to-t from-blue-950 via-gray-400 to-gray-300 text-white min-h-84 w-full sm:w-120 h-110 mx-auto my-4 shadow-xl",
+      "rounded-lg bg-gradient-to-t from-blue-950 via-gray-400 to-gray-300 text-white max-h-[60vh] sm:min-h-84 sm:max-h-84 w-[100vw] sm:w-120 h-110 mx-auto my-4 shadow-xl",
     littleHeaderThing: "flex justify-between items-end gap-2 mb-2 px-2",
   };
 
@@ -185,14 +185,14 @@ function PostStyle({
             <p>{textContent}</p>
           </div>
         ) : mediaUrl ? (
-          <div className="flex absolute w-full max-h-96 top-0 inset-0">
+          <div className="flex absolute w-full max-h-[60vh] sm:max-h-96 top-0 inset-0">
             <img
               src={mediaUrl}
               alt="Post media"
               className="w-full h-full object-contain"
             />
             {textContent && (
-              <p className="absolute bottom-0 left-0 p-2 w-full text-center bg-gray-400/80 rounded">
+              <p className="absolute bottom-20 sm:bottom-0 left-0 p-2 w-full text-center bg-gray-400/80 rounded">
                 {textContent}
               </p>
             )}
@@ -204,7 +204,7 @@ function PostStyle({
         )}
       </div>
 
-      <div className="relative z-98 flex justify-around items-center h-10 border-t pt-4">
+      <div className="relative rounded-b-lg bg-blue-950 flex justify-around items-center border-t p-4">
         <Likes
           docId={docId}
           currentLikes={currentLikes || []}

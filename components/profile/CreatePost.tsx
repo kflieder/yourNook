@@ -156,7 +156,7 @@ function CreatePost() {
 
           <button
             type="submit"
-            className="bg-blue-950 text-white px-2 py-1 text-sm rounded-lg hover:bg-blue-600 transition-colors"
+            className="bg-blue-950 text-white px-2 py-1 text-sm rounded-lg hover:bg-gray-500 transition-colors cursor-pointer"
           >
             Post
           </button>

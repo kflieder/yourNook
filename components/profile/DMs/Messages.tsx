@@ -132,10 +132,10 @@ function Messages({
                   markThreadAsRead(thread.threadId, currentUserUid);
                 }
               }}
-              className="flex items-center space-x-4 border-b hover:bg-gray-100"
+              className="flex items-center space-x-4 border-b py-1 hover:bg-gray-100"
               key={thread.threadId}
             >
-              <div className="flex items-center space-x-4 cursor-pointer p-2">
+              <div className="flex w-full items-center space-x-4 cursor-pointer">
                 <div className="w-14 h-14 rounded-full overflow-hidden flex-shrink-0 border">
                   <img
                     className="w-14 h-14 object-cover border rounded-full mr-2"
@@ -144,28 +144,32 @@ function Messages({
                   />
                 </div>
 
-                <div className="flex flex-col w-full items-start overflow-hidden">
-                  <div
-                    className="border-b border-gray-400 capitalize"
-                    style={{ fontWeight: isUnread ? "700" : "100" }}
-                  >
+                <div className="flex flex-col w-full  overflow-hidden">
+                  <div className="flex items-end w-full capitalize">
+                    <div className="font-bold">
                     {thread.otherUserDisplayName}
-                  </div>
-                  <span className="text-nowrap overflow-hidden flex text-gray-500">
-                    {thread.lastMessageText}
+                    {
+                      isUnread && (
+                        <span className="text-red-500 text-xs ml-1">New</span>
+                      )
+                    }
+                    </div>
+                    <span className="w-full ml-2 text-nowrap overflow-hidden flex text-gray-500 text-sm">
+                    - {thread.lastMessageText}
                   </span>
+                  </div>
+                  
                   <span className="text-gray-400 text-xs">
                     {thread.lastMessageTimestamp?.toDate().toLocaleString()}
                   </span>
                 </div>
-                <div className="flex flex-col"></div>
               </div>
             </div>
           );
         })}
       {selectedThread && (
-        <div ref={messagesEndRef} className="overflow-y-auto h-[60vh] p-2">
-          <div className="sticky top-[-10] left-100 w-full bg-blue-950/70 text-white flex items-center space-x-4 rounded p-1 px-2">
+        <div ref={messagesEndRef} className="overflow-y-auto max-h-[60vh] p-2">
+          <div className="sticky top-[-8] left-100 w-full bg-blue-950 text-white flex items-center space-x-4 rounded p-1 px-2">
             <img
               className="h-8 w-8 rounded-full inline-block mr-2"
               src={selectedUsersProfilePicture || ""}

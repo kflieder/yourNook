@@ -84,6 +84,13 @@ function SendMessageForm({
     }
   };
 
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e as any);
+    }
+  }
+
   return (
     <div>
       <form
@@ -96,6 +103,7 @@ function SendMessageForm({
           className="w-full px-4 pt-2 h-10 focus:outline-none focus:bg-gray-100 rounded-3xl resize-none overflow-hidden"
           value={messageContent}
           onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
         />
         <button
           type="submit"
