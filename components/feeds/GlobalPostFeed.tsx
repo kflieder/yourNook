@@ -6,6 +6,7 @@ import CreatePost from "components/profile/CreatePost";
 import DMComponent from "components/profile/DMs/DMComponent";
 import { TbPhotoPlus } from "react-icons/tb";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import BottomBar from "components/mobileComponents/BottomBar";
 
 interface GlobalPostFeedProps {
   currentUser: { uid: string; displayName: string; profilePicture?: string };
@@ -83,25 +84,9 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
         <CreatePost />
       </div>
       <div className="relative sm:hidden flex justify-around p-2">
-        <TbPhotoPlus
-          onClick={handleToggleCreateMobilePost}
-          size={22}
-          className="cursor-pointer mr-2"
-        />
-        <DMComponent
-          currentUser={currentUser.uid}
-          targetUser={currentUser.uid}
-        />
+        <BottomBar currentUser={currentUser.uid} />
       </div>
-      {toggleCreateMobilePost && (
-        <div className="absolute bottom-10 left-0 right-0 z-49 bg-white p-2">
-          <div className="flex justify-between">
-          <h1>Create Post</h1>
-          <IoIosCloseCircleOutline className="cursor-pointer" size={22} onClick={handleToggleCreateMobilePost} />
-          </div>
-          <CreatePost />
-        </div>
-      )}
+      
     </div>
   );
 }

@@ -140,8 +140,8 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
         <Bio userData={userData} />
       </div>
 
-      <div className="p-5 grid grid-cols-5 ">
-        <div className="border col-span-3">
+      <div className="p-5 grid grid-cols-1 sm:grid-cols-5">
+        <div className="border h-screen overflow-scroll col-span-3">
           <div className="flex justify-center space-x-4 p-4">
             <button
               onClick={() => handleTabChange("posts")}

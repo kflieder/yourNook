@@ -12,7 +12,7 @@ function AutoApproveFollowers({ uid }: AutoAcceptFollowersProps) {
     const fetchAutoApproveStatus = async () => {
         const userData = await userDoc?.fetchUserData();
         if (userData) {
-            setAutoApprove(userData.autoApproveFollow);
+            setAutoApprove(Boolean(userData.autoApproveFollow));
         }
         return userData?.autoApproveFollow
     }

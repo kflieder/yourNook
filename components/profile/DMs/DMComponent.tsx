@@ -11,9 +11,11 @@ import { TiMessages } from "react-icons/ti";
 function DMComponent({
   currentUser,
   targetUser,
+  forceOpen
 }: {
   currentUser: string;
   targetUser: string;
+  forceOpen?: boolean;
 }) {
   const liveCurrentUserData = useLiveUserData(currentUser);
   const liveTargetUserData = useLiveUserData(targetUser);
@@ -24,6 +26,7 @@ function DMComponent({
   const [toggleMessages, setToggleMessages] = useState(false);
   const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
   const isMobile = useIsMobile();
+  const isOpen = forceOpen ?? toggleMessages;
 
   if (isMobile) {
     console.log("User is on a mobile device");
@@ -113,8 +116,8 @@ function DMComponent({
             <TiMessages className='cursor-pointer' onClick={handleToggleMessages} size={24} />
           </div>
           <div>
-            {toggleMessages && (
-              <div className="fixed z-40 bottom-8 right-16 w-3/4 bg-white px-4 py-2 rounded-lg shadow-2xl hide-scrollbar">
+            {isOpen && toggleMessages && (
+              <div className="fixed z-40 bottom-10 right-17 w-3/4 bg-white px-4 py-2 rounded-lg shadow-2xl hide-scrollbar">
                 <div className="flex justify-between items-center">
                   <h1>Messages</h1>
                   <div className='flex'>

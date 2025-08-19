@@ -15,14 +15,32 @@ function CreatePost() {
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [picPreview, setPicPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [inputKey, setInputKey] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleCreatePost(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setIsLoading(true);
     let mediaUrl = "";
 
-    if (mediaFile) {
-      const fileRef = ref(storage, `posts/${Date.now()}_${mediaFile.name}`);
-      const snapShot = await uploadBytes(fileRef, mediaFile);
+    let fileToUpload = mediaFile;
+
+    if (!fileToUpload && fileInputRef.current?.files?.[0]) {
+      fileToUpload = fileInputRef.current.files[0];
+    }
+
+    if (
+      !fileToUpload &&
+      fileInputRef.current?.files?.length === 0 &&
+      mediaFile === null
+    ) {
+      alert("File Selection Failed. Please select a media file.");
+      return;
+    }
+
+    if (fileToUpload) {
+      const fileRef = ref(storage, `posts/${Date.now()}_${fileToUpload.name}`);
+      const snapShot = await uploadBytes(fileRef, fileToUpload);
       mediaUrl = await getDownloadURL(snapShot.ref);
     }
 
@@ -57,12 +75,29 @@ function CreatePost() {
       setContent("");
       setMediaFile(null);
       setPicPreview(null);
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      setInputKey((prev) => prev + 1);
       console.log("Post was added to Firestore!");
       alert("Post created successfully!");
     } catch (error) {
       console.error("Error creating post:", error);
       alert("Failed to create post. Please try again later.");
+    } finally {
+      setIsLoading(false);
     }
+  }
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) {
+      alert("File Selection Failed. Please select a media file.");
+      return;
+    }
+    setMediaFile(file);
+    setPicPreview(URL.createObjectURL(file));
   }
 
   return (
@@ -99,20 +134,36 @@ function CreatePost() {
             <span className="ml-2">Betch go write a blog :D</span>
           )}
         </small>
-        <input
-          ref={fileInputRef}
-          id="file-upload"
-          type="file"
-          accept="image/*,video/*"
-          multiple
-          onChange={(e) => {
-            if (e.target.files) {
-              setMediaFile(e.target.files?.[0] || null);
-              setPicPreview(URL.createObjectURL(e.target.files[0]));
-            }
-          }}
-          className="hidden"
-        />
+        <div className="flex justify-between">
+          <div className="w-22 rounded-lg overflow-hidden">
+            <input
+              key={inputKey}
+              ref={fileInputRef}
+              id="file-upload"
+              type="file"
+              accept="image/jpeg,image/png,image/heic,video/*"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+            <div 
+            onClick={() => {
+              if (fileInputRef.current) {
+                fileInputRef.current.click();
+              }
+            }}
+            className="flex sm:hidden">
+              <TbPhotoPlus size={22} className="mr-2" />
+              <GoDeviceCameraVideo size={25} className="mr-2" />
+            </div>
+          </div>
+          <button
+            disabled={!content && !mediaFile}
+            type="submit"
+            className="flex sm:hidden bg-blue-950 text-white px-2 py-1 text-sm rounded-lg hover:bg-gray-500 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isLoading ? "Creating Post..." : "Post"}
+          </button>
+        </div>
         <div className="flex justify-between items-center">
           {picPreview && (
             <div className="relative">
@@ -124,41 +175,42 @@ function CreatePost() {
                   if (fileInputRef.current) {
                     fileInputRef.current.value = "";
                   }
+                  setInputKey((prev) => prev + 1);
                 }}
               >
                 <IoIosCloseCircleOutline size={18} />
               </div>
-              {
-                mediaFile?.type.startsWith("video") ? (
-                  <video
-                    src={picPreview}
-                    className="w-24 h-24 object-cover rounded"
-                    controls
-                  />
-                ) : (
-                  <img
-                    src={picPreview}
-                    alt="Preview"
-                    className="w-24 h-24 object-cover rounded"
-                  />
-                )
-              }
+              {mediaFile?.type.startsWith("video") ? (
+                <video
+                  src={picPreview}
+                  className="w-24 h-24 object-cover rounded"
+                  controls
+                />
+              ) : (
+                <img
+                  key={mediaFile?.name || picPreview}
+                  src={picPreview}
+                  alt="Preview"
+                  className="w-24 h-24 object-cover rounded"
+                />
+              )}
             </div>
           )}
 
           <label
             htmlFor="file-upload"
-            className="cursor-pointer flex items-center"
+            className="sm:flex hidden cursor-pointer items-center"
           >
             <TbPhotoPlus size={22} className="mr-2" />
             <GoDeviceCameraVideo size={25} className="mr-2" />
           </label>
 
           <button
+            disabled={!content && !mediaFile}
             type="submit"
-            className="bg-blue-950 text-white px-2 py-1 text-sm rounded-lg hover:bg-gray-500 transition-colors cursor-pointer"
+            className="sm:flex hidden bg-blue-950 text-white px-2 py-1 text-sm rounded-lg hover:bg-gray-500 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Post
+            {isLoading ? "Creating Post..." : "Post"}
           </button>
         </div>
       </form>

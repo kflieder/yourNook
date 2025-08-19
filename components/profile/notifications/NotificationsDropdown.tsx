@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import getNotifications from "@/utilities/getNotifications";
 import { db } from "../../../lib/firebase";
@@ -30,11 +30,23 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
     const unsubscribe = getNotifications(userId, (notifications) => {
       setNotifications(notifications);
     });
-    return () => unsubscribe();
+
+    function handleClickOutside(event: MouseEvent) {
+      if (notificationsDivRef.current && !notificationsDivRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      unsubscribe();
+    };
   }, [userId]);
 
   const unreadNotifications = notifications.filter((n) => n.isRead === false);
   const readNotifications = notifications.filter((n) => n.isRead === true);
+  const notificationsDivRef = useRef<HTMLDivElement | null>(null);
 
   async function markAsRead(userId: string, notifications: notification[]) {
     const updatePromises = notifications.filter((n) => {
@@ -52,6 +64,8 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
     }
   }
 
+  const sharedClassNamesForNotification = "flex justify-between items-center gap-2 border-b border-gray-200 sm:text-sm text-xs";
+
   return (
     <div>
       <div className="relative cursor-pointer" onClick={handleOnClick}>
@@ -63,7 +77,7 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
         )} 
       </div>
       {isOpen && (
-        <div className="fixed right-0 mt-2 w-1/2 h-84 overflow-scroll bg-white border border-gray-300 rounded-lg shadow-lg p-4 z-50">
+        <div ref={notificationsDivRef} className="fixed right-10 mt-2 w-[85vw] sm:w-1/2 h-84 overflow-scroll hide-scrollbar bg-white border-t-10 border-teal-700/60 rounded-lg shadow-lg p-4 z-50">
           <ul>
             {notifications.length === 0 ? (
               <li className="text-black">No notifications</li>
@@ -73,7 +87,7 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
                   <h1>New Notifications</h1>
                   {unreadNotifications.map((notification) => (
                     <li key={notification.id} className="p-2">
-                      <div className="flex justify-between items-center gap-2 border">
+                      <div className={sharedClassNamesForNotification}>
                         <span className="text-sm">{notification.message}</span>
                         <span className="text-xs text-gray-500">
                           {notification.createdAt?.toDate?.().toLocaleString()}
@@ -92,8 +106,8 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
                 <h1 className="text-black">No new notifications</h1>
                 {readNotifications.map((notification) => (
                   <div key={notification.id} className="text-gray-500">
-                    <li  className="p-2">
-                      <div className="flex justify-between items-center gap-2 border">
+                    <li className="p-2">
+                      <div className={sharedClassNamesForNotification}>
                         <span className="text-black text-sm">
                           {notification.message}
                         </span>
@@ -118,7 +132,7 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
                 {readNotifications.map((notification) => (
                    <div key={notification.id} className="text-gray-500">
                       <li className="p-2">
-                        <div className="flex justify-between items-center gap-2 border">
+                        <div className={sharedClassNamesForNotification}>
                           <span className="text-black text-sm">
                             {notification.message}
                           </span>
