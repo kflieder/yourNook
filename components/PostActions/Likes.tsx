@@ -4,7 +4,6 @@ import { useAuth } from '@/context/AuthContext';
 import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { sendNotification } from '@/utilities/sendNotification';
-
 interface LikesProps {
     docId: string;
     currentLikes: string[];
@@ -43,7 +42,7 @@ function Likes({ docId, currentLikes, collectionName, targetUid, currentUser, cu
                 toUserId: targetUid, 
                 type: 'like',
                 fromUserId: currentUser,
-                message: `${currentUserDisplayName} liked your post!`
+                message: 'liked your post!'
             });
             console.log(`Notification sent to ${targetUid} for like by ${currentUser}`);
         }
