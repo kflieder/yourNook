@@ -111,6 +111,7 @@ function BlogStyle({
         </div>
         <div className="flex space-x-2 ml-auto">
         <Likes
+          type={'likedBlog'}
           docId={id}
           currentLikes={currentLikes || []}
           collectionName={"blogs"}

@@ -9,6 +9,11 @@ import FollowButton from "components/shared/FollowButton";
 import { formatTimeAgo } from "@/utilities/formatTimeAgoHelper";
 import Link from "next/link";
 import { useUserDoc } from "@/utilities/userDocHelper";
+import {
+  deleteAllNotifications,
+  deleteOneNotification,
+} from "@/utilities/deleteNotificationsHelper";
+import { FaRegTrashCan } from "react-icons/fa6";
 
 type notificationDropDownProps = {
   userId: string;
@@ -22,6 +27,7 @@ type notification = {
   type: string;
   fromUserId: string;
   toUserId: string;
+  postId?: string;
 };
 
 function NotificationsDropdown({ userId }: notificationDropDownProps) {
@@ -91,47 +97,80 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
     }
   }
 
-  const sharedClassNamesForNotification =
-    "flex justify-between items-center py-2 border-b border-gray-200 sm:text-sm text-xs";
+  const linkToContent = (notification: notification) => {
+    switch (notification.type) {
+      case "likedPost":
+        return `/feed/posts/${notification.postId}`;
+      case "likedBlog":
+        return `/feed/blogs/${notification.postId}`;
+      default:
+        return `/profile/${notification.fromUserId}`;
+    }
+  };
 
   const notificationDiv = (notification: notification, senderInfo: any) => (
     <div key={notification.id} className="">
-      <li className="">
-        <div className={sharedClassNamesForNotification}>
-          <div className="text-sm flex items-center">
-            <Link onClick={handleOnClick}
-              className="mr-1 flex items-center"
-              href={`/profile/${notification.fromUserId}`}
-            >
+      <li className="py-1">
+        <div className="text-sm flex w-full border-b justify-between">
+          <div className="flex items-center">
+            <Link onClick={handleOnClick} href={`/profile/${notification.fromUserId}`}>
               <img
-                src={senderInfo.profilePicture}
+                src={senderInfo.profilePicture || "/default-profile.png"}
                 alt={senderInfo.displayName}
-                className="w-6 h-6 rounded-full mr-1 border"
+                className="w-12 h-12 rounded-full mr-1 mb-1 border"
               />
-              {senderInfo.displayName}
             </Link>
-            <span> {notification.message}</span>
+            <div className="flex flex-col ml-2">
+              <div className="flex">
+                <Link
+                  onClick={handleOnClick}
+                  className="flex font-extrabold text-blue-800"
+                  href={`/profile/${notification.fromUserId}`}
+                >
+                  <div className="flex">{senderInfo.displayName}</div>
+                </Link>
+                <span className="font-normal ml-1">
+                  {" "}
+                  {notification.message}
+                </span>
+              </div>
 
-            <span className="text-xs text-gray-500 ml-1">
-              {formatTimeAgo(notification.createdAt?.toDate?.())}
-            </span>
+              <div className="flex justify-center items-center">
+                <span className="text-xs text-gray-500 ml-1 mr-2">
+                  {formatTimeAgo(notification.createdAt?.toDate?.())}
+                </span>
+                <span className="mr-0.25 font-thin text-black">•</span>
+                {notification.type === "follow" && (
+                  <span className="text-xs text-gray-500">
+                    <FollowButton
+                      targetUid={notification.fromUserId}
+                      currentUserUid={notification.toUserId}
+                    />
+                  </span>
+                )}
+                <Link
+                  onClick={handleOnClick}
+                  href={linkToContent(notification)}
+                  className="text-blue-500 hover:underline ml-2"
+                >
+                  View
+                </Link>
+              </div>
+            </div>
           </div>
-
-          {notification.type === "followRequest" && (
-            <AnswerFollowRequestButtons
-              targetUid={notification.fromUserId}
-              currentUserUid={notification.toUserId}
-            />
-          )}
-          {notification.type === "follow" && (
-            <span className="text-xs text-gray-500">
-              <FollowButton
-                targetUid={notification.fromUserId}
-                currentUserUid={notification.toUserId}
-              />
-            </span>
-          )}
+          <button
+            className="cursor-pointer"
+            onClick={() => deleteOneNotification(notification.id, userId)}
+          >
+            <FaRegTrashCan className='text-red-500' />
+          </button>
         </div>
+        {notification.type === "followRequest" && (
+          <AnswerFollowRequestButtons
+            targetUid={notification.fromUserId}
+            currentUserUid={notification.toUserId}
+          />
+        )}
       </li>
     </div>
   );
@@ -153,8 +192,16 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
               <li className="text-black">No notifications</li>
             ) : unreadNotifications.length > 0 ? (
               <>
-                <div className="text-red-500">
-                  <h1>New Notifications</h1>
+                <div className="text-blue-500">
+                  <div className="flex justify-between">
+                    <h1>New Notifications</h1>
+                    <button
+                      className="cursor-pointer"
+                      onClick={() => deleteAllNotifications(userId)}
+                    >
+                      Clear All
+                    </button>
+                  </div>
                   {unreadNotifications.map((notification) => {
                     const senderInfo = senderUserInfo.find(
                       (user: any) => user.uid === notification.fromUserId
@@ -163,7 +210,15 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
                   })}
                 </div>
                 <div className="text-black">
-                  <h1>No New Notifications</h1>
+                  <div className="flex justify-between">
+                    <h1>No New Notifications</h1>
+                    <button
+                      className="cursor-pointer"
+                      onClick={() => deleteAllNotifications(userId)}
+                    >
+                      Clear All
+                    </button>
+                  </div>
                   {readNotifications.map((notification) => {
                     const senderInfo = senderUserInfo.find(
                       (user: any) => user.uid === notification.fromUserId
@@ -175,7 +230,15 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
             ) : (
               <>
                 <div className="text-black">
-                  <h1>No New Notifications</h1>
+                  <div className="flex justify-between">
+                    <h1>No New Notifications</h1>
+                    <button
+                      className="cursor-pointer"
+                      onClick={() => deleteAllNotifications(userId)}
+                    >
+                      Clear All
+                    </button>
+                  </div>
                   {readNotifications.map((notification) => {
                     const senderInfo = senderUserInfo.find(
                       (user: any) => user.uid === notification.fromUserId

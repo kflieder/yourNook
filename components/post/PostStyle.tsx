@@ -206,6 +206,7 @@ function PostStyle({
 
       <div className="relative rounded-b-lg bg-blue-950 flex justify-around items-center border-t p-4">
         <Likes
+          type={'likedPost'}
           docId={docId}
           currentLikes={currentLikes || []}
           collectionName={"posts"}

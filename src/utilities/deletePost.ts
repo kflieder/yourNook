@@ -1,4 +1,4 @@
-import { deleteDoc, collection, doc } from "firebase/firestore";
+import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 
 export default async function deletePost(postId: string) {

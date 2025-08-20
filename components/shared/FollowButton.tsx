@@ -60,7 +60,7 @@ function FollowButton({ targetUid, currentUserUid }: FollowButtonProps) {
         toUserId: targetUid,
         type: "follow",
         fromUserId: currentUser.uid,
-        message: `${currentUser.displayName} started following you!`
+        message: 'started following you!'
       });
 
       setIsFollowing(true);
@@ -100,7 +100,7 @@ function FollowButton({ targetUid, currentUserUid }: FollowButtonProps) {
         toUserId: targetUid,
         type: "followRequest",
         fromUserId: currentUser.uid,
-        message: `${currentUser.displayName} wants to follow you!`
+        message: 'wants to follow you!'
       });
       setFollowRequestStatus("pending");
     } else {
