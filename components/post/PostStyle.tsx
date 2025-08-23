@@ -26,6 +26,7 @@ interface PostStyleProps {
   currentUserDisplayName: string;
   thumbnail?: boolean;
   styleSelector?: string;
+  onThumbnailClick?: (postId: string) => void;
 }
 
 function PostStyle({
@@ -41,11 +42,11 @@ function PostStyle({
   currentUserDisplayName,
   thumbnail = false,
   styleSelector,
+  onThumbnailClick,
 }: PostStyleProps) {
   const [openPostId, setOpenPostId] = useState<string | null>(null);
   const [showReportForm, setShowReportForm] = useState(false);
   const [showEllipsis, setShowEllipsis] = useState(false);
-  const [openThumbnail, setOpenThumbnail] = useState(false);
 
   const handleToggleComments = (postId: string) => {
     setOpenPostId((prev) => (prev === postId ? null : postId));
@@ -59,14 +60,14 @@ function PostStyle({
   };
 
   const handleOpenFromThumbnail = () => {
-    setOpenThumbnail((prev) => !prev);
+    onThumbnailClick?.(docId);
   };
 
 
 
-  if (thumbnail && !openThumbnail)
+  if (thumbnail)
     return (
-      <div className="cursor-pointer" onClick={handleOpenFromThumbnail}>
+      <div className="cursor-pointer border" onClick={handleOpenFromThumbnail}>
         {mediaUrl ? (
           mediaUrl.includes("video") ? (
             <video
@@ -78,11 +79,10 @@ function PostStyle({
             <img
               src={mediaUrl}
               alt="Post media"
-              className="w-full max-h-56 object-contain border"
+              className="w-full h-42 object-contain border"
             />
           )
         ) : null}
-        <p>{textContent}</p>
       </div>
     );
 

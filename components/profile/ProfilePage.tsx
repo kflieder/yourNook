@@ -15,6 +15,8 @@ import DMComponent from "./DMs/DMComponent";
 import DiscussionThreadStyle from "components/discussionThreads/DiscussionThreadStyle";
 import DiscussionThreadForm from "components/discussionThreads/DiscussionThreadForm";
 import UserDiscussionThreads from "components/discussionThreads/UserDiscussionThreads";
+import useIsMobile from "@/utilities/useIsMobile";
+import BottomBar from "components/mobileComponents/BottomBar";
 
 interface ProfilePageProps {
   userData: {
@@ -59,6 +61,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   const [currentUserIsFollowing, setCurrentUserIsFollowing] =
     useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     async function checkAllTheThings() {
@@ -98,9 +101,9 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
     setActiveTab(tab);
   }
 
-  const activeTabClass = "border-b-2 shadow-xl";
+  const activeTabClass = "border-b-2 border-blue-950 shadow-xl h-8";
   const buttonClass =
-    "px-2 transition-all duration-200 hover:border-b-2 hover:shadow-xl rounded cursor-pointer";
+    "w-1/3 cursor-pointer bg-white hover:shadow-xl transition-all duration-200 h-6";
 
   if (isLoading) {
     return (
@@ -110,7 +113,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
     );
   } else if (isPrivate && !currentUserIsFollowing && !isOwner) {
     return (
-      <div className="flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center pt-20">
         <h2>This profile is private.</h2>
         <p>You must follow them to view their content.</p>
         <FollowButton
@@ -140,8 +143,8 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
         <Bio userData={userData} />
       </div>
 
-      <div className="p-5 grid grid-cols-1 sm:grid-cols-5">
-        <div className="border h-screen overflow-scroll col-span-3">
+      <div className="p-5 grid grid-cols-1 sm:grid-cols-5 h-[50vh]">
+        <div className="hide-scrollbar col-span-3">
           <div className="flex justify-center space-x-4 p-4">
             <button
               onClick={() => handleTabChange("posts")}
@@ -212,21 +215,26 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
             ) : null}
           </div>
         </div>
-
-        <div className="col-span-2 border p-5">
-          {isOwner && (
-            <div>
-              {
-                activeTab === "posts" && <CreatePost />
-              }
-              <DMComponent
-                currentUser={username.uid}
-                targetUser={userData.uid || ""}
-              />
-              <FriendsList currentUserUid={username.uid} />
-            </div>
-          )}
-        </div>
+        {isMobile ? (
+          <div>
+            <BottomBar
+              currentUser={username.uid}
+            />
+          </div>
+        ) : (
+          <div className="col-span-2 border p-5">
+            {isOwner && (
+              <div>
+                {activeTab === "posts" && <CreatePost />}
+                <DMComponent
+                  currentUser={username.uid}
+                  targetUser={userData.uid || ""}
+                />
+                <FriendsList currentUserUid={username.uid} />
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

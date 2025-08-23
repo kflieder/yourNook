@@ -83,7 +83,7 @@ export async function sendMessage(threadId: string, message: { senderUid: string
         type: 'dm',
         fromUserId: message.senderUid,
         postId: threadId,
-        message: `New message from ${message.senderDisplayName || 'a user'}: ${message.content}`
+        message: `${message.content}`
     });  
     } catch (error) {
         console.error("Error sending message:", error);

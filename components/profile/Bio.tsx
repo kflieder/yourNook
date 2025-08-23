@@ -3,6 +3,7 @@ import FollowButton from "../shared/FollowButton";
 import FollowerCountPopup from "../shared/FollowerCountPopup";
 import { useAuth } from "@/context/AuthContext";
 import { ImLink } from "react-icons/im";
+import useIsMobile from "@/utilities/useIsMobile";
 
 interface BioProps {
   userData: {
@@ -35,8 +36,12 @@ function Bio({ userData }: BioProps) {
     uniqueUrl,
     profilePicture,
   } = userData;
+  const isMobile = useIsMobile();
+
+  
 
   return (
+ !isMobile ? (
     <div className="bg-blue-50 rounded p-6 flex">
       <div className="flex min-w-50 border-r">
         <div className="">
@@ -101,7 +106,9 @@ function Bio({ userData }: BioProps) {
           </a>
         </div>
       </div>
-    </div>
+    </div> ) : (
+      <div>hi</div>
+    )
   );
 }
 

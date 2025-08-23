@@ -4,8 +4,6 @@ import { usePaginatedPosts } from "@/utilities/usePaginatedPosts";
 import LivePost from "components/post/LivePost";
 import CreatePost from "components/profile/CreatePost";
 import DMComponent from "components/profile/DMs/DMComponent";
-import { TbPhotoPlus } from "react-icons/tb";
-import { IoIosCloseCircleOutline } from "react-icons/io";
 import BottomBar from "components/mobileComponents/BottomBar";
 
 interface GlobalPostFeedProps {

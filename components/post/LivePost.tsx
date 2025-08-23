@@ -3,7 +3,7 @@ import React from 'react'
 import { useLiveUserData } from '@/utilities/useLiveUserData';
 import PostStyle from './PostStyle';
 
-function LivePost({ post, currentUser, currentUserDisplayName, width, thumbnail, styleSelector }: { post: any; currentUser: string; currentUserDisplayName?: string; width?: string; thumbnail?: boolean; styleSelector?: string }) {
+function LivePost({ post, currentUser, currentUserDisplayName, thumbnail, styleSelector, onThumbnailClick }: { post: any; currentUser: string; currentUserDisplayName?: string; width?: string; thumbnail?: boolean; styleSelector?: string; onThumbnailClick?: (postId: string) => void }) {
   if (!post) return null;
 
   const liveUser = useLiveUserData(post.uid);
@@ -23,6 +23,7 @@ function LivePost({ post, currentUser, currentUserDisplayName, width, thumbnail,
         currentUser={currentUser || ''}
         currentUserDisplayName={currentUserDisplayName || ''}
         styleSelector={styleSelector}
+        onThumbnailClick={onThumbnailClick || (() => {})}
         />
     </div>
   )

@@ -11,7 +11,7 @@ import { TiMessages } from "react-icons/ti";
 function DMComponent({
   currentUser,
   targetUser,
-  forceOpen
+  forceOpen,
 }: {
   currentUser: string;
   targetUser: string;
@@ -28,9 +28,7 @@ function DMComponent({
   const isMobile = useIsMobile();
   const isOpen = forceOpen ?? toggleMessages;
 
-  if (isMobile) {
-    console.log("User is on a mobile device");
-  }
+  
 
   useEffect(() => {
     if (dmThreadIdFromSendMessageForm) {
@@ -67,6 +65,7 @@ function DMComponent({
     liveTargetUserData,
     toggleMessages,
     dmThreadId,
+    hasUnreadMessages,
   ]);
 
   function handleToggleNewMessage() {
@@ -112,15 +111,31 @@ function DMComponent({
     <div>
       {isMobile ? (
         <div className="absolute">
+          <TiMessages
+            className={`cursor-pointer ${
+              hasUnreadMessages ? "text-blue-500" : ""
+            }`}
+            onClick={handleToggleMessages}
+            size={24}
+          />
+          <div
+            className={
+              hasUnreadMessages
+                ? "absolute -top-1 -right-1 bg-red-500 text-xs rounded-full p-1"
+                : ""
+            }
+          ></div>
           <div>
-            <TiMessages className='cursor-pointer' onClick={handleToggleMessages} size={24} />
-          </div>
-          <div>
-            {isOpen && toggleMessages && (
-              <div className="fixed z-40 bottom-10 right-17 w-3/4 bg-white px-4 py-2 rounded-lg shadow-2xl hide-scrollbar">
-                <div className="flex justify-between items-center">
-                  <h1>Messages</h1>
-                  <div className='flex'>
+            <div
+              className={
+                isOpen && toggleMessages
+                  ? "block fixed z-40 bottom-10 right-17 w-3/4 bg-white px-4 py-2 rounded-lg shadow-2xl hide-scrollbar"
+                  : "hidden"
+              }
+            >
+              <div className="flex justify-between items-center">
+                <h1>Messages</h1>
+                <div className="flex">
                   <BiMessageAltEdit
                     onClick={handleToggleNewMessage}
                     size={24}
@@ -131,42 +146,44 @@ function DMComponent({
                     size={24}
                     className="cursor-pointer"
                   />
-                  </div>
                 </div>
-                {toggleNewMessage ? (
-              <NewMessage
-                currentUserUid={currentUser}
-                senderDisplayName={liveCurrentUserData?.displayName || ""}
-                senderProfilePicture={liveCurrentUserData?.profilePicture || ""}
-                toggleNewMessageStateFromSendMessageForm={setToggleNewMessage}
-                setDmThreadFromSendMessageForm={
-                  setDmThreadIdFromSendMessageForm
-                }
-              />
-            ) : (
-              toggleMessages && (
-                <Messages
-                  threadId={dmThreadId || ""}
+              </div>
+              {toggleNewMessage ? (
+                <NewMessage
                   currentUserUid={currentUser}
                   senderDisplayName={liveCurrentUserData?.displayName || ""}
                   senderProfilePicture={
                     liveCurrentUserData?.profilePicture || ""
                   }
-                  setHasUnreadMessages={setHasUnreadMessages}
-                  messagesOpen={toggleMessages}
+                  toggleNewMessageStateFromSendMessageForm={setToggleNewMessage}
                   setDmThreadFromSendMessageForm={
                     setDmThreadIdFromSendMessageForm
                   }
                 />
-              )
-            )}
-              </div>
-            )}
+              ) : (
+                <div>
+                  <Messages
+                    key={toggleMessages ? "open" : "closed"}
+                    threadId={dmThreadId || ""}
+                    currentUserUid={currentUser}
+                    senderDisplayName={liveCurrentUserData?.displayName || ""}
+                    senderProfilePicture={
+                      liveCurrentUserData?.profilePicture || ""
+                    }
+                    setHasUnreadMessages={setHasUnreadMessages}
+                    messagesOpen={toggleMessages}
+                    setDmThreadFromSendMessageForm={
+                      setDmThreadIdFromSendMessageForm
+                    }
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       ) : (
         <div className="border border-gray-300 mt-5 p-2 rounded-lg shadow-lg bg-white">
-          <div className="flex justify-between items-center p-1 px-2 bg-gray-100 cursor-pointer rounded">
+          <div  className="flex justify-between items-center p-1 px-2 bg-gray-100 cursor-pointer rounded">
             <div
               onClick={handleToggleMessages}
               className="sm:w-1/2 cursor-pointer"
@@ -202,8 +219,12 @@ function DMComponent({
           </div>
 
           <div
-            className="overflow-scroll hide-scrollbar transition-max-height duration-500 ease-in-out"
-            style={{ height: toggleMessages ? "30vh" : "0px" }}
+            className={
+              toggleMessages
+                ? "overflow-hidden"
+                : "overflow-scroll hide-scrollbar transition-max-height duration-500 ease-in-out"
+            }
+            style={{ height: toggleMessages || toggleNewMessage ? "50vh" : "0px" }}
           >
             {toggleNewMessage ? (
               <NewMessage
@@ -216,21 +237,24 @@ function DMComponent({
                 }
               />
             ) : (
-              toggleMessages && (
-                <Messages
-                  threadId={dmThreadId || ""}
-                  currentUserUid={currentUser}
-                  senderDisplayName={liveCurrentUserData?.displayName || ""}
-                  senderProfilePicture={
-                    liveCurrentUserData?.profilePicture || ""
-                  }
-                  setHasUnreadMessages={setHasUnreadMessages}
-                  messagesOpen={toggleMessages}
-                  setDmThreadFromSendMessageForm={
-                    setDmThreadIdFromSendMessageForm
-                  }
-                />
-              )
+              <div>
+
+                  <Messages
+                    key={toggleMessages ? "open" : "closed"}
+                    threadId={dmThreadId || ""}
+                    currentUserUid={currentUser}
+                    senderDisplayName={liveCurrentUserData?.displayName || ""}
+                    senderProfilePicture={
+                      liveCurrentUserData?.profilePicture || ""
+                    }
+                    setHasUnreadMessages={setHasUnreadMessages}
+                    messagesOpen={toggleMessages}
+                    setDmThreadFromSendMessageForm={
+                      setDmThreadIdFromSendMessageForm
+                    }
+                  />
+                
+              </div>
             )}
           </div>
         </div>

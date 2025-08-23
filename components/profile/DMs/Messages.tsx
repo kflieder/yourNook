@@ -147,18 +147,16 @@ function Messages({
                 <div className="flex flex-col w-full  overflow-hidden">
                   <div className="flex items-end w-full capitalize">
                     <div className="font-bold">
-                    {thread.otherUserDisplayName}
-                    {
-                      isUnread && (
+                      {thread.otherUserDisplayName}
+                      {isUnread && (
                         <span className="text-red-500 text-xs ml-1">New</span>
-                      )
-                    }
+                      )}
                     </div>
                     <span className="w-full ml-2 text-nowrap overflow-hidden flex text-gray-500 text-sm">
-                    - {thread.lastMessageText}
-                  </span>
+                      - {thread.lastMessageText}
+                    </span>
                   </div>
-                  
+
                   <span className="text-gray-400 text-xs">
                     {thread.lastMessageTimestamp?.toDate().toLocaleString()}
                   </span>
@@ -168,61 +166,64 @@ function Messages({
           );
         })}
       {selectedThread && (
-        <div ref={messagesEndRef} className="overflow-y-auto max-h-[60vh] p-2">
-          <div className="sticky top-[-8] left-100 w-full bg-blue-950 text-white flex items-center space-x-4 rounded p-1 px-2">
-            <img
-              className="h-8 w-8 rounded-full inline-block mr-2"
-              src={selectedUsersProfilePicture || ""}
-              alt={`${selectedUsersDisplayName}'s profile`}
-            />
-            <h1>{selectedUsersDisplayName}</h1>
-            <button
-              onClick={handleCloseThread}
-              className="ml-auto cursor-pointer"
-            >
-              <IoIosCloseCircleOutline size={24} />
-            </button>
-          </div>
-          {messages.map((message) => (
-            <div key={message.id}>
-              {message.senderUid === currentUserUid ? (
-                <div className="flex flex-col justify-end items-end space-x-2">
-                  <div className="rounded-2xl p-3 bg-gradient-to-t from-purple-300 via-blue-800 to-blue-400 text-white text-sm my-1 w-2/3">
-                    {message.content}
-                  </div>
-                  {/* <div className="h-8 w-8 rounded-full mb-2">
-                    <img
-                      className="h-8 w-8 rounded-full inline-block mr-2"
-                      src={message.senderProfilePicture}
-                      alt={`${message.senderDisplayName}'s profile`}
-                    />
-                  </div> */}
-                </div>
-              ) : (
-                <div className='flex justify-start items-end space-x-2'>
-                  <div className='h-8 w-8 rounded-full mb-2'>
-                  <img
-                    className="h-8 w-8 rounded-full inline-block mr-2"
-                    src={message.senderProfilePicture}
-                    alt={`${message.senderDisplayName}'s profile`}
-                  />
-                  </div>
-                  <div className="rounded-2xl p-3 bg-gradient-to-t from-gray-300 via-gray-100 to-gray-300 text-sm my-1 w-2/3">
-                    {message.content}
-                  </div>
-                </div>
-              )}
+        <div className="relative">
+          <div
+            ref={messagesEndRef}
+            className="overflow-y-auto max-h-[50vh] p-2 pb-12"
+          >
+            <div className="sticky top-[-8] left-100 w-full bg-blue-950 text-white flex items-center space-x-4 rounded p-1 px-2">
+              <img
+                className="h-8 w-8 rounded-full inline-block mr-2"
+                src={selectedUsersProfilePicture || ""}
+                alt={`${selectedUsersDisplayName}'s profile`}
+              />
+              <h1>{selectedUsersDisplayName}</h1>
+              <button
+                onClick={handleCloseThread}
+                className="ml-auto cursor-pointer"
+              >
+                <IoIosCloseCircleOutline size={24} />
+              </button>
             </div>
-          ))}
-          <SendMessageForm
-            threadId={selectedThread}
-            currentUserUid={currentUserUid ?? ""}
-            senderDisplayName={senderDisplayName ?? ""}
-            senderProfilePicture={senderProfilePicture ?? ""}
-            selectedTargetUserUid={selectedUsersUid ?? ""}
-            targetUserDisplayName={selectedUsersDisplayName || ""}
-            targetUserProfilePicture={selectedUsersProfilePicture || ""}
-          />
+
+            <div className="">
+              {messages.map((message) => (
+                <div key={message.id}>
+                  {message.senderUid === currentUserUid ? (
+                    <div className="flex flex-col justify-end items-end space-x-2">
+                      <div className="rounded-2xl p-3 bg-gradient-to-t from-purple-300 via-blue-800 to-blue-400 text-white text-sm my-1 w-2/3">
+                        {message.content}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex justify-start items-end space-x-2">
+                      <div className="h-8 w-8 rounded-full mb-2">
+                        <img
+                          className="h-8 w-8 rounded-full inline-block mr-2"
+                          src={message.senderProfilePicture}
+                          alt={`${message.senderDisplayName}'s profile`}
+                        />
+                      </div>
+                      <div className="rounded-2xl p-3 bg-gradient-to-t from-gray-300 via-gray-100 to-gray-300 text-sm my-1 w-2/3">
+                        {message.content}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="absolute bottom-0 left-0 right-0 bg-white pt-1">
+              <SendMessageForm
+                threadId={selectedThread}
+                currentUserUid={currentUserUid ?? ""}
+                senderDisplayName={senderDisplayName ?? ""}
+                senderProfilePicture={senderProfilePicture ?? ""}
+                selectedTargetUserUid={selectedUsersUid ?? ""}
+                targetUserDisplayName={selectedUsersDisplayName || ""}
+                targetUserProfilePicture={selectedUsersProfilePicture || ""}
+              />
+            </div>
+          </div>
         </div>
       )}
     </div>

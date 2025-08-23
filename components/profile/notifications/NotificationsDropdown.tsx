@@ -113,29 +113,48 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
       <li className="py-1">
         <div className="text-sm flex w-full border-b justify-between">
           <div className="flex items-center">
-            <Link onClick={handleOnClick} href={`/profile/${notification.fromUserId}`}>
+            <Link
+              onClick={handleOnClick}
+              href={`/profile/${notification.fromUserId}`}
+            >
               <img
-                src={senderInfo.profilePicture || "/default-profile.png"}
+                src={senderInfo.profilePicture}
                 alt={senderInfo.displayName}
                 className="w-12 h-12 rounded-full mr-1 mb-1 border"
               />
             </Link>
             <div className="flex flex-col ml-2">
               <div className="flex">
-                <Link
-                  onClick={handleOnClick}
-                  className="flex font-extrabold text-blue-800"
-                  href={`/profile/${notification.fromUserId}`}
-                >
-                  <div className="flex">{senderInfo.displayName}</div>
-                </Link>
-                <span className="font-normal ml-1">
-                  {" "}
-                  {notification.message}
-                </span>
+                {notification.type === "dm" ? (
+                  <div>
+                    <span className="flex font-normal ml-1">
+                      New Message From: <Link
+                      onClick={handleOnClick}
+                      className="flex font-extrabold text-blue-800"
+                      href={`/profile/${notification.fromUserId}`}
+                    >
+                      <div className="flex ml-1">{senderInfo.displayName}</div>
+                    </Link>
+                    </span>
+                    <span className='italic'>{notification.message}</span>
+                  </div>
+                ) : (
+                  <>
+                    <Link
+                      onClick={handleOnClick}
+                      className="flex font-extrabold text-blue-800"
+                      href={`/profile/${notification.fromUserId}`}
+                    >
+                      <div className="flex">{senderInfo.displayName}</div>
+                    </Link>
+                    <span className="font-normal italic ml-1">
+                      {notification.message}
+                    </span>
+                  </>
+                )}
               </div>
 
-              <div className="flex justify-center items-center">
+              <div className="flex justify-start items-center">
                 <span className="text-xs text-gray-500 ml-1 mr-2">
                   {formatTimeAgo(notification.createdAt?.toDate?.())}
                 </span>
@@ -162,7 +181,7 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
             className="cursor-pointer"
             onClick={() => deleteOneNotification(notification.id, userId)}
           >
-            <FaRegTrashCan className='text-red-500' />
+            <FaRegTrashCan className="text-red-500" />
           </button>
         </div>
         {notification.type === "followRequest" && (
