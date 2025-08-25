@@ -17,6 +17,7 @@ function CommentSection({
   maxChar,
 }: CommentSectionProps) {
   const { comments } = usePostComments(postId);
+  const [isReplying, setIsReplying] = useState(false);
 
   function buildCommentTree(comments: any[]) {
     const map = new Map<string, any>();
@@ -39,6 +40,8 @@ function CommentSection({
     return rootComments;
   }
 
+  console.log(isReplying);
+
   const commentTree = buildCommentTree(comments);
   return (
     <div>
@@ -54,16 +57,19 @@ function CommentSection({
           </div>
         ) : (
           <div>
-            <AddCommentForm
-              postId={postId}
-              postAuthorId={postAuthorId}
-              maxChar={maxChar}
-            />
+            
             <ul>
               {commentTree.map((comment) => (
-                <Comment key={comment.id} comment={comment} maxChar={maxChar} />
+                <Comment key={comment.id} comment={comment} maxChar={maxChar} setHideCommentFormWhileReplying={setIsReplying} />
               ))}
             </ul>
+            {!isReplying && (
+              <AddCommentForm
+                postId={postId}
+                postAuthorId={postAuthorId}
+                maxChar={maxChar}
+              />
+            )}
           </div>
         )}
       </div>

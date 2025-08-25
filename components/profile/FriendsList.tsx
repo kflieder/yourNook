@@ -24,7 +24,7 @@ function FriendsList({ currentUserUid }: FriendsListProps) {
 
 
   return (
-    <div className="flex flex-col border border-gray-300 rounded-lg shadow-2xl p-4 text-center mt-5">
+    <div className="flex flex-col border border-gray-300 rounded-lg shadow-2xl p-4 text-center mt-5 bg-white">
       <h1>All your betches</h1>
       <ul className="border border-gray-300 rounded flex flex-wrap justify-around items-center py-4 space-x-2 space-y-4 bg-gray-100">
         {mutualUserData.map((user, index) => (

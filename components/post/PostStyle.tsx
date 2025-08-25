@@ -67,22 +67,27 @@ function PostStyle({
 
   if (thumbnail)
     return (
-      <div className="cursor-pointer border" onClick={handleOpenFromThumbnail}>
+      <div className="cursor-pointer border bg-gray-500/50" onClick={handleOpenFromThumbnail}>
         {mediaUrl ? (
           mediaUrl.includes("video") ? (
             <video
               controls
-              className="w-full max-h-62 object-contain"
+              className="w-full max-h-42 object-contain"
               src={mediaUrl}
+
             />
-          ) : (
+          ) : ( 
             <img
               src={mediaUrl}
               alt="Post media"
-              className="w-full h-42 object-contain border"
+              className="w-full h-42 object-contain"
             />
           )
-        ) : null}
+        ) : (
+          <div className='h-42 flex justify-center items-center bg-gray-200 text-black p-2'>
+            <p>{textContent}</p>
+          </div>
+        )}
       </div>
     );
 
@@ -93,16 +98,16 @@ function PostStyle({
   };
 
   const profileStyleClasses = {
-    outterMostDivContainer: `flex flex-col justify-between py-2 rounded-lg bg-gradient-to-t from-blue-950 via-gray-400 to-gray-300 text-white min-h-84 w-64 mx-auto my-4 shadow-xl ${
+    outterMostDivContainer: `flex flex-col justify-between rounded-lg bg-gradient-to-t from-blue-950 via-gray-400 to-gray-300 text-white min-h-84 w-full shadow-xl ${
       thumbnail ? "cursor-pointer" : ""
     }`,
-    littleHeaderThing: "border flex justify-between items-end gap-2 mb-2",
+    littleHeaderThing: "flex justify-between items-end gap-2 mb-2",
   };
 
   return (
     <div
       onClick={thumbnail ? handleOpenFromThumbnail : undefined}
-      className={`relative flex flex-col justify-between
+      className={`relative w-full flex flex-col justify-between
          ${
            styleSelector === "feed"
              ? feedStyleClasses.outterMostDivContainer
@@ -230,7 +235,7 @@ function PostStyle({
         />
       </div>
       {openPostId === docId && (
-        <div className="bg-white text-black relative z-99 h-3/4">
+        <div className="bg-white text-black absolute bottom-14 left-1/2 -translate-x-1/2 z-99 h-3/4 w-3/4 overflow-y-auto">
           <CommentSection
             maxChar={300}
             postId={docId}

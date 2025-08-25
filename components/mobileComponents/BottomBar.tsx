@@ -17,7 +17,7 @@ function BottomBar({ currentUser }: { currentUser: string }) {
   }
 
   return (
-    <div className="flex justify-around w-full relative sm:hidden p-2">
+    <div className="flex justify-around w-full relative sm:hidden p-4">
       <TbPhotoPlus
         onClick={() => handleSetActiveTab("createPost")}
         size={22}

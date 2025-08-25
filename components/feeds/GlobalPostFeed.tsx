@@ -20,17 +20,14 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
   const [activePostTab, setActivePostTab] = useState<
     "latest" | "trending" | "friends"
   >("latest");
-  const [toggleCreateMobilePost, setToggleCreateMobilePost] = useState(false);
-
+  
   function handleTabChange(tab: "latest" | "trending" | "friends") {
     if (activePostTab === tab) return;
     setActivePostTab(tab);
     console.log(`Active post tab changed to: ${tab}`);
   }
 
-  function handleToggleCreateMobilePost() {
-    setToggleCreateMobilePost((prev) => !prev);
-  }
+ 
 
   return (
     <div className="w-full grid grid-cols-1 sm:grid-cols-5 justify-between h-screen pt-20">
@@ -81,7 +78,7 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
         />
         <CreatePost />
       </div>
-      <div className="relative sm:hidden flex justify-around p-2">
+      <div className="sm:hidden flex justify-around p-2">
         <BottomBar currentUser={currentUser.uid} />
       </div>
       

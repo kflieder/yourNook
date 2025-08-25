@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import Bio from "./Bio";
 import CreatePost from "./CreatePost";
@@ -62,6 +62,30 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
     useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const isMobile = useIsMobile();
+  const bioRef = useRef<HTMLDivElement>(null);
+  const postsRef = useRef<HTMLDivElement>(null);
+  const [enableScroll, setEnableScroll] = useState<boolean>(false);
+  const [contentType, setContentType] = useState<string[]>([]);
+
+  const handleScroll = () => {
+    if (!bioRef.current || !postsRef.current) return;
+    const rect = bioRef.current.getBoundingClientRect();
+    const threshold = 50;
+    const pastBio = rect.bottom <= threshold;
+    // if (!pastBio) {
+    //   postsRef.current.scrollTop = 0;
+    // }
+    setEnableScroll(pastBio);
+  };
+
+  useEffect(() => {
+    const onScroll = () => handleScroll();
+    handleScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
 
   useEffect(() => {
     async function checkAllTheThings() {
@@ -78,6 +102,9 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
           : targetUserData;
         if (settingUser) {
           setActiveTab(settingUser.defaultContentType || "posts");
+        }
+        if (settingUser?.contentType) {
+          setContentType(settingUser.contentType);
         }
 
         if (targetUserData?.private) {
@@ -101,9 +128,11 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
     setActiveTab(tab);
   }
 
-  const activeTabClass = "border-b-2 border-blue-950 shadow-xl h-8";
+  
+
+  const activeTabClass = "shadow-xl h-8";
   const buttonClass =
-    "w-1/3 cursor-pointer bg-white hover:shadow-xl transition-all duration-200 h-6";
+    "w-1/3 cursor-pointer bg-blue-950/80 text-white hover:shadow-xl transition-all duration-200 h-6";
 
   if (isLoading) {
     return (
@@ -132,110 +161,125 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   }
 
   return (
-    <div className="pt-15">
-      {!isOwner && (
-        <BlockButton
-          blockerUid={username.uid || ""}
-          blockedUid={userData.uid || ""}
-        />
-      )}
-      <div className="mx-10">
+    <div className='sm:pt-15 pt-10 h-screen'>
+      <div ref={bioRef} className="sm:mx-10 shadow-xl">
         <Bio userData={userData} />
       </div>
+    <div
+      className={`sticky top-0 hide-scrollbar pt-2 sm:pl-5 ${
+          enableScroll ? "sm:overflow-y-auto" : "sm:overflow-hidden"
+        } flex flex-col sm:grid sm:grid-cols-5 sm:h-[95vh]`}
+    >
+       <div
+        ref={postsRef}
+        className={`hide-scrollbar ${isOwner ? "col-span-3" : "col-span-5"} overflow-scroll sm:overflow-hidden h-[75vh] sm:h-auto ${
+          enableScroll ? "sm:overflow-scroll" : "sm:overflow-hidden"
+        }`}
+      >
+        <div className="sticky top-0 flex justify-center space-x-4 p-4 bg-white/70 backdrop-blur-sm rounded">
+          {
+            contentType.includes("posts") && (
+              <button
+                onClick={() => handleTabChange("posts")}
+                className={`${buttonClass}
+              ${activeTab === "posts" ? activeTabClass : ""}`}
+              >
+                Posts
+              </button>
+            )
+          }
+          {
+            contentType.includes("blog") && (
+              <button
+                onClick={() => handleTabChange("blog")}
+                className={`${buttonClass}
+              ${activeTab === "blog" ? activeTabClass : ""}`}
+              >
+                Blogs
+              </button>
+            )
+          }
+          {
+            contentType.includes("thread") && (
+              <button
+                onClick={() => handleTabChange("thread")}
+                className={`${buttonClass}
+              ${activeTab === "thread" ? activeTabClass : ""}`}
+              >
+                Threads
+              </button>
+            )
+          }
+        </div>
+        {/* tabs div ^^ */}
 
-      <div className="p-5 grid grid-cols-1 sm:grid-cols-5 h-[50vh]">
-        <div className="hide-scrollbar col-span-3">
-          <div className="flex justify-center space-x-4 p-4">
-            <button
-              onClick={() => handleTabChange("posts")}
-              className={`${buttonClass} ${
-                activeTab === "posts" ? activeTabClass : ""
-              }`}
-            >
-              Posts
-            </button>
-            <button
-              onClick={() => handleTabChange("blog")}
-              className={`${buttonClass}
-          ${activeTab === "blog" ? activeTabClass : ""}`}
-            >
-              Blogs
-            </button>
-            <button
-              onClick={() => handleTabChange("thread")}
-              className={`${buttonClass}
-          ${activeTab === "thread" ? activeTabClass : ""}`}
-            >
-              Threads
-            </button>
-          </div>
-
-          <div className="flex justify-center items-center">
-            {activeTab === "posts" ? (
-              <div className="border flex justify-center items-center">
-                <UserPosts posts={posts} />
-              </div>
-            ) : activeTab === "blog" ? (
-              <div className="col-span-2">
-                <div className="grid grid-cols-2">
-                  {isOwner && (
-                    <BlogForm
-                      authorId={userData.uid || ""}
-                      authorDisplayName={userData.displayName || ""}
-                    />
-                  )}
-                  <div className="">
-                    <UserBlogs
-                      authorId={userData.uid || ""}
-                      authorDisplayName={userData.displayName || ""}
-                      profilePicture={userData.profilePicture || ""}
-                      currentUser={username.uid}
-                      currentUserDisplayName={username.displayName || ""}
-                    />
-                  </div>
-                </div>
-              </div>
-            ) : activeTab === "thread" ? (
-              <div className="col-span-2">
-                <div>
-                  {isOwner && (
-                    <DiscussionThreadForm
-                      currentUserUid={username.uid || ""}
-                      currentUserDisplayName={username.displayName || ""}
-                    />
-                  )}
-                </div>
-                <div className="border">
-                  <UserDiscussionThreads
-                    currentUser={username}
-                    targetUser={userData.uid || ""}
+        <div className="justify-center items-center">
+          {activeTab === "posts" ? (
+            <div className="w-full flex justify-center items-center">
+              <UserPosts posts={posts} />
+            </div>
+          ) : activeTab === "blog" ? (
+            <div className="col-span-2">
+              <div className="grid grid-cols-2">
+                {isOwner && (
+                  <BlogForm
+                    authorId={userData.uid || ""}
+                    authorDisplayName={userData.displayName || ""}
+                  />
+                )}
+                <div className="">
+                  <UserBlogs
+                    authorId={userData.uid || ""}
+                    authorDisplayName={userData.displayName || ""}
+                    profilePicture={userData.profilePicture || ""}
+                    currentUser={username.uid}
+                    currentUserDisplayName={username.displayName || ""}
                   />
                 </div>
               </div>
-            ) : null}
-          </div>
-        </div>
-        {isMobile ? (
-          <div>
-            <BottomBar
-              currentUser={username.uid}
-            />
-          </div>
-        ) : (
-          <div className="col-span-2 border p-5">
-            {isOwner && (
+            </div>
+          ) : activeTab === "thread" ? (
+            <div className="col-span-2 border">
               <div>
-                {activeTab === "posts" && <CreatePost />}
-                <DMComponent
-                  currentUser={username.uid}
+                {isOwner && (
+                  <DiscussionThreadForm
+                    currentUserUid={username.uid || ""}
+                    currentUserDisplayName={username.displayName || ""}
+                  />
+                )}
+              </div>
+              <div className="border">
+                <UserDiscussionThreads
+                  currentUser={username}
                   targetUser={userData.uid || ""}
                 />
-                <FriendsList currentUserUid={username.uid} />
               </div>
-            )}
-          </div>
-        )}
+            </div>
+          ) : null}
+        </div>
       </div>
+      {/* content div ^^ */}
+      {isOwner && (
+      <div className={`col-span-2 sm:h-[95vh]  hide-scrollbar ${enableScroll ? "overflow-scroll" : "overflow-hidden"}`}>
+        <div className="sm:block hidden p-5">
+          
+            <div>
+              {activeTab === "posts" && <CreatePost />}
+              <DMComponent
+                currentUser={username.uid}
+                targetUser={userData.uid || ""}
+              />
+              <FriendsList currentUserUid={username.uid} />
+            </div>
+          
+        </div>
+        <div className="fixed bg-gray-200/50 bottom-0 left-0 right-0 flex">
+          <BottomBar currentUser={username.uid} />
+        </div>
+      </div>
+      )}
+      {/* bottom bar div ^^^ */}
+    </div>
     </div>
   );
 }

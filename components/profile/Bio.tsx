@@ -38,10 +38,7 @@ function Bio({ userData }: BioProps) {
   } = userData;
   const isMobile = useIsMobile();
 
-  
-
-  return (
- !isMobile ? (
+  return !isMobile ? (
     <div className="bg-blue-50 rounded p-6 flex">
       <div className="flex min-w-50 border-r">
         <div className="">
@@ -52,51 +49,52 @@ function Bio({ userData }: BioProps) {
               className="w-36 h-36 rounded-full object-cover"
             />
           </div>
-          <div className='ml-4'>
-          <h1 className="text-2xl font-bold capitalize">{displayName}</h1>
-          <div className="border-b border-gray-500 w-1/2"></div>
-          <div className="flex pt-2 justify-between gap-x-2">
-            <h3>@{uniqueUrl}</h3>
-            <div className="flex flex-col capitalize">
-              {pronouns.she && (
-                <span>
-                  <div>she/her</div>
-                </span>
-              )}
-              {pronouns.he && (
-                <span>
-                  <div>he/him</div>
-                </span>
-              )}
-              {pronouns.theyThem && (
-                <span>
-                  <div>they/them</div>
-                </span>
-              )}
-              {pronouns.other && (
-                <span>
-                  <div>{pronouns.other}</div>
-                </span>
-              )}
+          <div className="ml-4">
+            <h1 className="text-2xl font-bold capitalize">{displayName}</h1>
+            <div className="border-b border-gray-500 w-1/2"></div>
+            <div className="flex pt-2 justify-between gap-x-2">
+              <h3>@{uniqueUrl}</h3>
+              <div className="flex flex-col capitalize">
+                {pronouns.she && (
+                  <span>
+                    <div>she/her</div>
+                  </span>
+                )}
+                {pronouns.he && (
+                  <span>
+                    <div>he/him</div>
+                  </span>
+                )}
+                {pronouns.theyThem && (
+                  <span>
+                    <div>they/them</div>
+                  </span>
+                )}
+                {pronouns.other && (
+                  <span>
+                    <div>{pronouns.other}</div>
+                  </span>
+                )}
+              </div>
             </div>
+            {!isOwner && <FollowButton targetUid={userData.uid ?? ""} />}
           </div>
-          {!isOwner && <FollowButton targetUid={userData.uid ?? ""} />}
         </div>
-  </div>
       </div>
-      <div className='px-6 flex flex-col justify-between w-full'>
+      <div className="px-6 flex flex-col justify-between w-full">
         <div className="text-sm">
           <p>{bio}</p>
         </div>
-        
+
         <div className="">
-          
           <div className="">
             <FollowerCountPopup userId={userData.uid ?? ""} />
           </div>
         </div>
         <div className="flex justify-center items-center">
-          <h2 className="mr-2"><ImLink /></h2>
+          <h2 className="mr-2">
+            <ImLink />
+          </h2>
           <a
             href={`https://${links}`}
             target="_blank"
@@ -106,9 +104,52 @@ function Bio({ userData }: BioProps) {
           </a>
         </div>
       </div>
-    </div> ) : (
-      <div>hi</div>
-    )
+    </div>
+  ) : (
+    <div className='pt-2 flex w-full'>
+      <div className="border-r border-gray-400 flex flex-col p-3 justify-center items-center">
+      <div className="rounded-full w-24 h-24 overflow-scroll">
+        <img
+          src={profilePicture || "/profileAvatar.png"}
+          alt="Profile"
+          className="w-24 h-24 rounded-full object-cover"
+        />
+      </div>
+      {!isOwner && <FollowButton targetUid={userData.uid ?? ""} />}
+      </div>
+      <div className="flex flex-col w-full justify-center items-center overflow-scroll">
+        <h1 className="text-xl font-bold capitalize">{displayName}</h1>
+        <div className="flex justify-between gap-x-2">
+          <h3>@{uniqueUrl}</h3>
+          <div className="flex flex-col capitalize">
+            {pronouns.she && (
+              <span>
+                <div>she/her</div>
+              </span>
+            )}
+            {pronouns.he && (
+              <span>
+                <div>he/him</div>
+              </span>
+            )}
+            {pronouns.theyThem && (
+              <span>
+                <div>they/them</div>
+              </span>
+            )}
+            {pronouns.other && (
+              <span>
+                <div>{pronouns.other}</div>
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="flex flex-col">
+          <FollowerCountPopup userId={userData.uid ?? ""} />
+        </div>
+        
+      </div>
+    </div>
   );
 }
 

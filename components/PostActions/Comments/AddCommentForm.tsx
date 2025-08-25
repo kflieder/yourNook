@@ -48,27 +48,37 @@ function AddCommentForm({ postId, postAuthorId, maxChar, parentId, setShowReplyF
     }
   };
 
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e as any); 
+    }
+  }
+
   return (
-    <form onSubmit={handleSubmit} className="bg-gray-100 p-4 rounded mt-4">
+    <form onSubmit={handleSubmit} className="flex items-center border rounded-3xl">
       <textarea
         value={commentText}
         onChange={(e) => setCommentText(e.target.value)}
         placeholder="Add a comment..."
-        className="w-full p-2 border rounded mb-2"
+        className="w-full px-4 pt-2 h-10 focus:outline-none focus:bg-gray-100 rounded-3xl resize-none overflow-hidden"
         rows={3}
         disabled={isSubmitting}
         maxLength={maxChar}
         style={{ resize: "none" }}
+        onKeyDown={handleKeyDown}
       />
       <small>{commentText.length}/{maxChar ? maxChar : 'unlimited'}</small>
       <button
         type="submit"
-        className={`bg-blue-500 text-white px-4 py-2 rounded ${
-          isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-        }`}
+        className={`text-white p-2.5  rounded-4xl text-sm ${
+            commentText.trim()
+              ? "bg-blue-950 cursor-pointer"
+              : "bg-blue-950/50 cursor-not-allowed"
+          }`}
         disabled={isSubmitting}
       >
-        {isSubmitting ? "Submitting..." : "Add Comment"}{" "}
+        {isSubmitting ? "Submitting..." : "Send"}
       </button>
     </form>
   );
