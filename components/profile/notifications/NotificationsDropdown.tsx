@@ -100,8 +100,10 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
   const linkToContent = (notification: notification) => {
     switch (notification.type) {
       case "likedPost":
+      case "commentPost":
         return `/feed/posts/${notification.postId}`;
       case "likedBlog":
+      case "commentBlog":
         return `/feed/blogs/${notification.postId}`;
       default:
         return `/profile/${notification.fromUserId}`;

@@ -8,7 +8,7 @@ function LivePost({ post, currentUser, currentUserDisplayName, thumbnail, styleS
 
   const liveUser = useLiveUserData(post.uid);
     return (
-    <div>
+    <>
       <PostStyle
         thumbnail={thumbnail}
         displayName={liveUser?.displayName || post.displayName}
@@ -25,7 +25,7 @@ function LivePost({ post, currentUser, currentUserDisplayName, thumbnail, styleS
         styleSelector={styleSelector}
         onThumbnailClick={onThumbnailClick || (() => {})}
         />
-    </div>
+    </>
   )
 }
 

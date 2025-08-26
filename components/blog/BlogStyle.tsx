@@ -131,7 +131,7 @@ function BlogStyle({
         </div>
       </div>
       {expandedComments === id && (
-        <CommentSection maxChar={300} postId={id} postAuthorId={authorUid} />
+        <CommentSection maxChar={300} postId={id} postAuthorId={authorUid} type='commentBlog' message='commented on your blog!' />
       )}
       {showReportForm && (
         <Report postId={id} />

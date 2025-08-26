@@ -9,15 +9,21 @@ interface CommentSectionProps {
   postId: string;
   postAuthorId: string;
   maxChar?: number;
+  type?: string;
+  message?: string; // for notifications
 }
 
 function CommentSection({
   postId,
   postAuthorId,
   maxChar,
+  type,
+  message // for notifications
 }: CommentSectionProps) {
   const { comments } = usePostComments(postId);
   const [isReplying, setIsReplying] = useState(false);
+  const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
+  const [showReplies, setShowReplies] = useState<boolean>(false);
 
   function buildCommentTree(comments: any[]) {
     const map = new Map<string, any>();
@@ -53,6 +59,7 @@ function CommentSection({
               postId={postId}
               postAuthorId={postAuthorId}
               maxChar={maxChar}
+              type='commentPost'
             />
           </div>
         ) : (
@@ -60,7 +67,7 @@ function CommentSection({
             
             <ul>
               {commentTree.map((comment) => (
-                <Comment key={comment.id} comment={comment} maxChar={maxChar} setHideCommentFormWhileReplying={setIsReplying} />
+                <Comment key={comment.id} comment={comment} maxChar={maxChar} setHideCommentFormWhileReplying={setIsReplying} setActiveReplyId={setActiveReplyId} activeReplyId={activeReplyId} setShowReplies={setShowReplies} showReplies={showReplies} />
               ))}
             </ul>
             {!isReplying && (
@@ -68,6 +75,8 @@ function CommentSection({
                 postId={postId}
                 postAuthorId={postAuthorId}
                 maxChar={maxChar}
+                type={type}
+                message={message}
               />
             )}
           </div>

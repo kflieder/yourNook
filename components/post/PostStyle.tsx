@@ -93,12 +93,12 @@ function PostStyle({
 
   const feedStyleClasses = {
     outterMostDivContainer:
-      "rounded-lg bg-gradient-to-t from-blue-950 via-gray-400 to-gray-300 text-white max-h-[60vh] sm:min-h-84 sm:max-h-84 w-[100vw] sm:w-120 h-110 mx-auto my-4 shadow-xl",
+      "rounded-lg bg-gradient-to-t from-blue-950 via-gray-400 to-gray-300 text-white h-100 w-[100vw] sm:w-120 mx-auto my-4 shadow-xl",
     littleHeaderThing: "flex justify-between items-end gap-2 mb-2 px-2",
   };
 
   const profileStyleClasses = {
-    outterMostDivContainer: `flex flex-col justify-between rounded-lg bg-gradient-to-t from-blue-950 via-gray-400 to-gray-300 text-white min-h-84 w-full shadow-xl ${
+    outterMostDivContainer: `flex flex-col justify-between rounded-lg bg-gradient-to-t from-blue-950 via-gray-400 to-gray-300 text-white min-h-98 w-full shadow-xl ${
       thumbnail ? "cursor-pointer" : ""
     }`,
     littleHeaderThing: "flex justify-between items-end gap-2 mb-2",
@@ -240,6 +240,8 @@ function PostStyle({
             maxChar={300}
             postId={docId}
             postAuthorId={targetUid}
+            type='commentPost'
+            message='commented on your post!'
           />
         </div>
       )}

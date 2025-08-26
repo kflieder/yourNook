@@ -9,9 +9,11 @@ interface AddCommentFormProps {
   maxChar?: number; 
   parentId?: string | null;
   setShowReplyForm?: (show: boolean) => void;
+  type?: string;
+  message?: string;
 }
 
-function AddCommentForm({ postId, postAuthorId, maxChar, parentId, setShowReplyForm }: AddCommentFormProps) {
+function AddCommentForm({ postId, postAuthorId, maxChar, parentId, setShowReplyForm, type, message }: AddCommentFormProps) {
   const { username: currentUser } = useAuth();
   const { addComment } = usePostComments(postId);
   const [commentText, setCommentText] = useState("");
@@ -31,11 +33,10 @@ function AddCommentForm({ postId, postAuthorId, maxChar, parentId, setShowReplyF
       });
       await sendNotification({
         toUserId: postAuthorId,
-        type: "comment",
+        type: type || "commentPost",
         fromUserId: currentUser.uid,
-        message: `${
-          currentUser.displayName || "Someone"
-        } commented on your post!`,
+        message: message,
+        postId: postId,
       });
     } catch (error) {
       console.error("Error adding comment:", error);
@@ -61,8 +62,8 @@ function AddCommentForm({ postId, postAuthorId, maxChar, parentId, setShowReplyF
         value={commentText}
         onChange={(e) => setCommentText(e.target.value)}
         placeholder="Add a comment..."
-        className="w-full px-4 pt-2 h-10 focus:outline-none focus:bg-gray-100 rounded-3xl resize-none overflow-hidden"
-        rows={3}
+        className="w-full px-4 focus:outline-none focus:bg-gray-100 rounded-3xl resize-none overflow-hidden"
+        rows={1}
         disabled={isSubmitting}
         maxLength={maxChar}
         style={{ resize: "none" }}
