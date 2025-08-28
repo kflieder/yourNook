@@ -1,0 +1,72 @@
+[
+  {
+    "topic": "Technology",
+    "headerBackground": "linear-gradient(to top, #4A90E2, #9013FE)",
+    "textBackground": "#6FA8FF",
+    "textColor": "#1A3D8F",
+    "icon": "💻"
+  },
+  {
+    "topic": "Health & Wellness",
+    "headerBackground": "linear-gradient(to top, #7ED321, #50E3C2)",
+    "textBackground": "#A8F3B8",
+    "textColor": "#3C8C3F",
+    "icon": "🧘"
+  },
+  {
+    "topic": "Travel",
+    "headerBackground": "linear-gradient(to top, #F5A623, #F8E71C)",
+    "textBackground": "#FFE08A",
+    "textColor": "#B36F00",
+    "icon": "✈️"
+  },
+  {
+    "topic": "Food",
+    "headerBackground": "linear-gradient(to top, #D0021B, #F5A623)",
+    "textBackground": "#F59B8F",
+    "textColor": "#800012",
+    "icon": "🍔"
+  },
+  {
+    "topic": "Personal Finance",
+    "headerBackground": "linear-gradient(to top, #50E3C2, #417505)",
+    "textBackground": "#8FF7D0",
+    "textColor": "#2D5A03",
+    "icon": "💰"
+  },
+  {
+    "topic": "Lifestyle",
+    "headerBackground": "linear-gradient(to top, #9013FE, #BD10E0)",
+    "textBackground": "#B48BFF",
+    "textColor": "#4B008F",
+    "icon": "🏡"
+  },
+  {
+    "topic": "Education",
+    "headerBackground": "linear-gradient(to top, #417505, #7ED321)",
+    "textBackground": "#79C750",
+    "textColor": "#254000",
+    "icon": "📚"
+  },
+  {
+    "topic": "Business",
+    "headerBackground": "linear-gradient(to top, #B8E986, #50E3C2)",
+    "textBackground": "#D9F7BE",
+    "textColor": "#3E7A4D",
+    "icon": "📈"
+  },
+  {
+    "topic": "Parenting",
+    "headerBackground": "linear-gradient(to top, #BD10E0, #9013FE)",
+    "textBackground": "#D49CF5",
+    "textColor": "#580087",
+    "icon": "👶"
+  },
+  {
+    "topic": "Entertainment",
+    "headerBackground": "linear-gradient(to top, #F8E71C, #F5A623)",
+    "textBackground": "#FFF499",
+    "textColor": "#B38F00",
+    "icon": "🎬"
+  }
+]

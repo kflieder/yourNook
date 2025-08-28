@@ -3,7 +3,9 @@ import { db } from '../../../lib/firebase';
 import { collection, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 
 export function useGetBlog(authorId: string) {
-    const [blogs, setBlogs] = useState<Array<{ id: string; title: string; content: string; authorId: string; createdAt: Date; imageUrl?: string; authorDisplayName: string, likes: string[] }>>([]);
+    const [blogs, setBlogs] = useState<Array<{
+      topic: string; id: string; title: string; content: string; authorId: string; createdAt: Date; imageUrl?: string; authorDisplayName: string, likes: string[] 
+}>>([]);
     const [loading, setLoading] = useState(true);
 
 
@@ -30,7 +32,8 @@ export function useGetBlog(authorId: string) {
                     createdAt: data.createdAt?.toDate() ?? new Date(),
                     imageUrl: data.imageUrl,
                     authorDisplayName: data.authorDisplayName ?? "",
-                    likes: data.likes || []
+                    likes: data.likes || [],
+                    topic: data.topic || ""
                 };
             });
             setBlogs(newBlogs);

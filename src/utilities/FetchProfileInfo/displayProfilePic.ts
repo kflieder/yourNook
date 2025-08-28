@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { useUserDoc } from '../userDocHelper';
+import { getUserDocHelper } from '../userDocHelper';
 
 export function displayProfilePic() {
     const { username, loading }: any = useAuth();
@@ -10,7 +10,7 @@ export function displayProfilePic() {
 
     useEffect(() => {
             if (loading || !username?.uid) return;
-            const userDoc = useUserDoc(username?.uid);
+            const userDoc = getUserDocHelper(username?.uid);
             if (!userDoc) return;
             const { fetchUserData } = userDoc;
     

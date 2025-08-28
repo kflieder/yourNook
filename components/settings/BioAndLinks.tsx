@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
-import { useUserDoc } from '@/utilities/userDocHelper';
+import { getUserDocHelper } from '@/utilities/userDocHelper';
 import { displayBioInfo } from '@/utilities/FetchProfileInfo/displayBioInfo';
 import { auth } from '../../lib/firebase';
 import { updateProfile } from 'firebase/auth';
@@ -14,7 +14,7 @@ function BioAndLinks() {
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        const userDoc = useUserDoc(username?.uid);
+        const userDoc = getUserDocHelper(username?.uid);
         if (!userDoc) {
             console.error('User document not found');
             return;

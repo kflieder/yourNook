@@ -7,7 +7,7 @@ import UserPosts from "../post/UserPosts";
 import UserBlogs from "components/blog/UserBlogs";
 import BlogForm from "components/blog/BlogForm";
 import FriendsList from "./FriendsList";
-import { useUserDoc } from "@/utilities/userDocHelper";
+import { getUserDocHelper } from "@/utilities/userDocHelper";
 import BlockButton from "components/shared/BlockButton";
 import { isBlockedBy } from "@/utilities/blockUserHelper";
 import FollowButton from "components/shared/FollowButton";
@@ -49,8 +49,8 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   if (!username) {
     return null;
   }
-  const currentUsersDoc = useUserDoc(username.uid);
-  const targetUsersDoc = useUserDoc(userData.uid);
+  const currentUsersDoc = getUserDocHelper(username.uid);
+  const targetUsersDoc = getUserDocHelper(userData.uid);
   const [activeTab, setActiveTab] = useState<"posts" | "blog" | "thread">(
     "posts"
   );
@@ -220,13 +220,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
             </div>
           ) : activeTab === "blog" ? (
             <div className="col-span-2">
-              <div className="grid grid-cols-2">
-                {isOwner && (
-                  <BlogForm
-                    authorId={userData.uid || ""}
-                    authorDisplayName={userData.displayName || ""}
-                  />
-                )}
+              <div className="">
                 <div className="">
                   <UserBlogs
                     authorId={userData.uid || ""}
@@ -265,6 +259,13 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
           
             <div>
               {activeTab === "posts" && <CreatePost />}
+              {activeTab === "blog" && (
+                <BlogForm
+                  authorId={username.uid || ""}
+                  authorDisplayName={username.displayName || ""}
+                />
+              )}
+              
               <DMComponent
                 currentUser={username.uid}
                 targetUser={userData.uid || ""}

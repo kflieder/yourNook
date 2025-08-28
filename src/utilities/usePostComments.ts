@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { collection, query, onSnapshot, addDoc, orderBy, serverTimestamp, where } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
+import { Timestamp } from 'firebase-admin/firestore';
 
 type Comment = {
   id: string;
   uid: string;
   displayName: string;
   text: string;
-  createdAt: number;
+  createdAt: any;
   parentId?: string | null;
   postId: string;
 };
@@ -19,7 +20,7 @@ export function usePostComments(postId: string): { comments: Comment[], addComme
     if (!postId) return;
 
     const commentsRef = collection(db, 'comments');
-    const q = query(commentsRef, where('postId', '==', postId), orderBy('createdAt', 'asc'));
+    const q = query(commentsRef, where('postId', '==', postId), orderBy('createdAt', 'desc'));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const commentsData = snapshot.docs.map((doc) => ({

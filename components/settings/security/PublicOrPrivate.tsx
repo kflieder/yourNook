@@ -1,9 +1,9 @@
 import React, { useState, useEffect, use } from 'react'
-import { useUserDoc } from '@/utilities/userDocHelper';
+import { getUserDocHelper } from '@/utilities/userDocHelper';
 
 function PublicOrPrivate({ currentUserUid }: { currentUserUid: string | undefined }) {
     const [isPrivate, setIsPrivate] = useState(false);
-    const userDoc = useUserDoc(currentUserUid);
+    const userDoc = getUserDocHelper(currentUserUid);
 
 
     const fetchPrivacySetting = async () => {

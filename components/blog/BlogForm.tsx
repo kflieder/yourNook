@@ -1,6 +1,7 @@
 'use client'
 import { createBlog } from '@/utilities/blogs/createBlogHelper';
 import React, { useState } from 'react'
+import blogTopicData from '@/utilities/blogs/blogTopicData.json'
 
 interface BlogFormProps {
     authorId: string;
@@ -11,6 +12,7 @@ function BlogForm({ authorId, authorDisplayName }: BlogFormProps) {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [imageUrl, setImageUrl] = useState('');
+    const [topic, setTopic] = useState('');
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
@@ -19,7 +21,8 @@ function BlogForm({ authorId, authorDisplayName }: BlogFormProps) {
                 content,
                 imageUrl,
                 authorId,
-                authorDisplayName
+                authorDisplayName,
+                topic
             });
             setTitle('');
             setContent('');
@@ -45,6 +48,17 @@ function BlogForm({ authorId, authorDisplayName }: BlogFormProps) {
         value={content}
         onChange={(e) => setContent(e.target.value)}
         />
+        <label htmlFor='topics'>Select a Topic</label>
+        <select id="topics" name="topics" className='border p-2 rounded'
+        value={topic} onChange={(e) => setTopic(e.target.value)}
+        >
+          <option value="">Select a topic</option>
+          {blogTopicData.map((blogTopic) => (
+            <option className="" key={blogTopic.topic} value={blogTopic.topic} style={{ backgroundColor: blogTopic.textBackground }}>
+              {blogTopic.topic}
+            </option>
+          ))}
+        </select>
         {/* <input 
         type="file"
         placeholder="Image URL"

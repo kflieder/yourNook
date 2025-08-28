@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import { useAuth } from '@/context/AuthContext';
-import { useUserDoc } from '@/utilities/userDocHelper';
+import { getUserDocHelper } from '@/utilities/userDocHelper';
 import { storage } from '../../lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { displayProfilePic } from '@/utilities/FetchProfileInfo/displayProfilePic';
@@ -24,7 +24,7 @@ function ProfilePicutre() {
 
             await uploadBytes(storageRef, profilePicture);
             const downloadUrl = await getDownloadURL(storageRef);
-            const { updateUserData } = useUserDoc(username?.uid);
+            const { updateUserData } = getUserDocHelper(username?.uid);
             await updateUserData({ profilePicture: downloadUrl });
 
             setProfilePicture(null);

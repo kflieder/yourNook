@@ -3,7 +3,7 @@ import {
   updateFollowRequestStatus,
   getFollowRequestStatus,
 } from "@/utilities/followRequestHelper";
-import { useUserDoc } from "@/utilities/userDocHelper";
+import { getUserDocHelper } from "@/utilities/userDocHelper";
 import { useLiveUserData } from "@/utilities/useLiveUserData";
 import { sendNotification } from "@/utilities/sendNotification";
 import { arrayUnion } from "firebase/firestore";
@@ -19,8 +19,8 @@ export function AnswerFollowRequestButtons({
   const [followRequestStatus, setFollowRequestStatus] = useState<
     "pending" | "accepted" | "rejected" | null
   >(null);
-  const currentUserDoc = useUserDoc(currentUserUid);
-  const targetUserDoc = useUserDoc(targetUid);
+  const currentUserDoc = getUserDocHelper(currentUserUid);
+  const targetUserDoc = getUserDocHelper(targetUid);
   const liveCurrentUser = useLiveUserData(currentUserUid);
   const liveTargetUser = useLiveUserData(targetUid);
 

@@ -4,7 +4,21 @@ import { useUserDmThreads } from "@/utilities/useUserDmThreads";
 import SendMessageForm from "./SendMessageForm";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { doc, updateDoc } from "firebase/firestore";
-import { db } from "../../../lib/firebase"; // Adjust the path as necessary
+import { db } from "../../../lib/firebase"; 
+import { useLiveUserData } from "@/utilities/useLiveUserData";
+import ThreadItem from "./ThreadItem";
+
+
+type DmThread = {
+  threadId: string;
+  otherUserUid: string;
+  otherUserDisplayName: string;
+  otherUserProfilePicture: string;
+  lastMessageText?: string;
+  lastMessageTimestamp?: any; // or Timestamp if using Firestore
+  lastMessageSenderUid?: string;
+  isRead?: boolean;
+};
 
 function Messages({
   threadId,
@@ -35,6 +49,9 @@ function Messages({
   const [unreadMessages, setUnreadMessages] = useState(false);
   const [clearDmThread, setClearDmThread] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const liveSelectedUsersData = useLiveUserData(selectedUsersUid || "");
+
+  console.log("liveSelectedUsersData:", liveSelectedUsersData?.profilePicture);
 
   useEffect(() => {
     const messageContainer = messagesEndRef.current;
@@ -59,9 +76,9 @@ function Messages({
         (thread) => thread.threadId === threadId
       );
       if (selectedThreadData) {
-        setSelectedUsersDisplayName(selectedThreadData.otherUserDisplayName);
+        setSelectedUsersDisplayName(liveSelectedUsersData?.displayName || selectedThreadData.otherUserDisplayName);
         setSelectedUsersProfilePicture(
-          selectedThreadData.otherUserProfilePicture
+          liveSelectedUsersData?.profilePicture || selectedThreadData.otherUserProfilePicture
         );
         setSelectedUsersUid(selectedThreadData.otherUserUid);
       }
@@ -91,22 +108,7 @@ function Messages({
     messagesOpen,
   ]);
 
-  async function markThreadAsRead(threadId: string, currentUserUid: string) {
-    const threadDocRef = doc(db, "dmThreads", threadId);
-    const userThreadDocRef = doc(
-      db,
-      "users",
-      currentUserUid,
-      "dmThreads",
-      threadId
-    );
-    await updateDoc(threadDocRef, {
-      isRead: true,
-    });
-    await updateDoc(userThreadDocRef, {
-      isRead: true,
-    });
-  }
+  
 
   function handleCloseThread() {
     setSelectedThread(null);
@@ -116,55 +118,21 @@ function Messages({
 
   return (
     <div>
-      {selectedThread === null &&
-        userDmThreads.map((thread) => {
-          const isUnread =
-            !thread.isRead && thread.lastMessageSenderUid !== currentUserUid;
-
-          return (
-            <div
-              onClick={() => {
-                handleSelectedThread(thread.threadId);
-                setSelectedUsersDisplayName(thread.otherUserDisplayName);
-                setSelectedUsersProfilePicture(thread.otherUserProfilePicture);
-                setSelectedUsersUid(thread.otherUserUid);
-                if (currentUserUid) {
-                  markThreadAsRead(thread.threadId, currentUserUid);
-                }
-              }}
-              className="flex items-center space-x-4 border-b py-1 hover:bg-gray-100"
-              key={thread.threadId}
-            >
-              <div className="flex w-full items-center space-x-4 cursor-pointer">
-                <div className="w-14 h-14 rounded-full overflow-hidden flex-shrink-0 border">
-                  <img
-                    className="w-14 h-14 object-cover border rounded-full mr-2"
-                    src={thread.otherUserProfilePicture}
-                    alt={`${thread.otherUserDisplayName}'s profile`}
-                  />
-                </div>
-
-                <div className="flex flex-col w-full  overflow-hidden">
-                  <div className="flex items-end w-full capitalize">
-                    <div className="font-bold">
-                      {thread.otherUserDisplayName}
-                      {isUnread && (
-                        <span className="text-red-500 text-xs ml-1">New</span>
-                      )}
-                    </div>
-                    <span className="w-full ml-2 text-nowrap overflow-hidden flex text-gray-500 text-sm">
-                      - {thread.lastMessageText}
-                    </span>
-                  </div>
-
-                  <span className="text-gray-400 text-xs">
-                    {thread.lastMessageTimestamp?.toDate().toLocaleString()}
-                  </span>
-                </div>
-              </div>
-            </div>
-          );
-        })}
+      {(selectedThread === null || selectedThread === undefined) &&
+        userDmThreads.map((thread) => (
+          <ThreadItem
+            key={thread.threadId}
+            thread={thread}
+            currentUserUid={currentUserUid}
+            onSelect={(thread: DmThread) => {
+                 handleSelectedThread(thread.threadId);
+                  setSelectedUsersDisplayName(thread.otherUserDisplayName);
+                  setSelectedUsersProfilePicture(thread.otherUserProfilePicture);
+                  setSelectedUsersUid(thread.otherUserUid);
+              }
+            }
+          />
+        ))}
       {selectedThread && (
         <div className="relative">
           <div
@@ -174,10 +142,10 @@ function Messages({
             <div className="sticky top-[-8] left-100 w-full bg-blue-950 text-white flex items-center space-x-4 rounded p-1 px-2">
               <img
                 className="h-8 w-8 rounded-full inline-block mr-2"
-                src={selectedUsersProfilePicture || ""}
-                alt={`${selectedUsersDisplayName}'s profile`}
+                src={liveSelectedUsersData?.profilePicture || selectedUsersProfilePicture}
+                alt={`${selectedUsersDisplayName}'s profile pic`}
               />
-              <h1>{selectedUsersDisplayName}</h1>
+              <h1>{liveSelectedUsersData?.displayName || selectedUsersDisplayName}</h1>
               <button
                 onClick={handleCloseThread}
                 className="ml-auto cursor-pointer"
@@ -200,8 +168,8 @@ function Messages({
                       <div className="h-8 w-8 rounded-full mb-2">
                         <img
                           className="h-8 w-8 rounded-full inline-block mr-2"
-                          src={message.senderProfilePicture}
-                          alt={`${message.senderDisplayName}'s profile`}
+                          src={liveSelectedUsersData?.profilePicture || message.senderProfilePicture}
+                          alt={`${message.senderDisplayName}'s profile pic`}
                         />
                       </div>
                       <div className="rounded-2xl p-3 bg-gradient-to-t from-gray-300 via-gray-100 to-gray-300 text-sm my-1 w-2/3">

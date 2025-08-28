@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase'; 
-import { useUserDoc } from '@/utilities/userDocHelper'; 
+import { getUserDocHelper } from '@/utilities/userDocHelper'; 
 import { useAuth } from '@/context/AuthContext'
 import { useUniqueUrl } from '@/utilities/FetchProfileInfo/displayUniqueUrl'; 
 
@@ -20,7 +20,7 @@ function UniqueUrl() {
 
 
     async function handleSave() {
-        const userDoc = useUserDoc(username?.uid);
+        const userDoc = getUserDocHelper(username?.uid);
         if (!userDoc) return
         const { updateUserData } = userDoc
 

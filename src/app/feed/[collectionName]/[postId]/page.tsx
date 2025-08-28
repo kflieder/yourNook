@@ -40,6 +40,7 @@ async function Page({ params }: Props) {
       profilePicture: string;
       likes?: string[];
       authorId: string;
+      topic?: string;
       [key: string]: any;
     }),
     id: postId,
@@ -86,6 +87,7 @@ console.log(blog)
           currentUser={currentUser?.uid || ""}
           currentUserDisplayName={currentUser?.displayName || ""}
           authorUid={blog.authorId || ""}
+          topic={blog.topic || ""}
         />
       )}
 

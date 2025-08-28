@@ -1,7 +1,7 @@
 import React from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { deleteUser } from 'firebase/auth'
-import { useUserDoc } from '@/utilities/userDocHelper'
+import { getUserDocHelper } from '@/utilities/userDocHelper'
 
 function DeleteAccount() {
     const { username, firebaseUser } = useAuth()
@@ -13,7 +13,7 @@ function DeleteAccount() {
             console.error('No user is logged in')
             return
         }
-        const userDoc = useUserDoc(username?.uid)
+        const userDoc = getUserDocHelper(username?.uid)
         if (!userDoc) return;
         const { setUserData } = userDoc
         

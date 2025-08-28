@@ -15,10 +15,11 @@ function UserBlogs({
   authorDisplayName,
   profilePicture,
   currentUser,
-  currentUserDisplayName,
+  currentUserDisplayName
 }: UserBlogsProps) {
   const { blogs, loading } = useGetBlog(authorId);
-
+ 
+  console.log(blogs, "Blogs in UserBlogs component");
  
   return (
     <div className="flex flex-col gap-4 p-4 relative">
@@ -41,6 +42,7 @@ function UserBlogs({
             currentUser={currentUser}
             currentUserDisplayName={currentUserDisplayName}
             authorUid={authorId}
+            topic={blog.topic}
           />
         </div>
       )}

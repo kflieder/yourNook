@@ -8,7 +8,7 @@ import { AnswerFollowRequestButtons } from "./AnswerFollowRequest";
 import FollowButton from "components/shared/FollowButton";
 import { formatTimeAgo } from "@/utilities/formatTimeAgoHelper";
 import Link from "next/link";
-import { useUserDoc } from "@/utilities/userDocHelper";
+import { getUserDocHelper } from "@/utilities/userDocHelper";
 import {
   deleteAllNotifications,
   deleteOneNotification,
@@ -37,7 +37,7 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
 
   const getSenderInfo = async (userId: string) => {
     if (!userId) return null;
-    const userDoc = await useUserDoc(userId);
+    const userDoc = await getUserDocHelper(userId);
     if (!userDoc) return null;
     return await userDoc.fetchUserData();
   };

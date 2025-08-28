@@ -21,7 +21,6 @@ function CommentSection({
   message // for notifications
 }: CommentSectionProps) {
   const { comments } = usePostComments(postId);
-  const [isReplying, setIsReplying] = useState(false);
   const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
   const [showReplies, setShowReplies] = useState<boolean>(false);
 
@@ -46,12 +45,11 @@ function CommentSection({
     return rootComments;
   }
 
-  console.log(isReplying);
 
   const commentTree = buildCommentTree(comments);
   return (
-    <div>
-      <div>
+    
+      <div className="border-l ml-2">
         {comments.length === 0 ? (
           <div>
             <p>No Comments yets, be the first!</p>
@@ -60,6 +58,7 @@ function CommentSection({
               postAuthorId={postAuthorId}
               maxChar={maxChar}
               type='commentPost'
+              parentId={null}
             />
           </div>
         ) : (
@@ -67,22 +66,26 @@ function CommentSection({
             
             <ul>
               {commentTree.map((comment) => (
-                <Comment key={comment.id} comment={comment} maxChar={maxChar} setHideCommentFormWhileReplying={setIsReplying} setActiveReplyId={setActiveReplyId} activeReplyId={activeReplyId} setShowReplies={setShowReplies} showReplies={showReplies} />
+                <Comment key={comment.id} comment={comment} maxChar={maxChar} 
+                setActiveReplyId={setActiveReplyId} activeReplyId={activeReplyId} setShowReplies={setShowReplies} showReplies={showReplies} />
               ))}
             </ul>
-            {!isReplying && (
+            
+              <div className='sticky bottom-0 left-0 right-0 bg-white'>
               <AddCommentForm
                 postId={postId}
                 postAuthorId={postAuthorId}
                 maxChar={maxChar}
                 type={type}
                 message={message}
+                parentId={null}
               />
-            )}
+              </div>
+            
           </div>
         )}
       </div>
-    </div>
+    
   );
 }
 

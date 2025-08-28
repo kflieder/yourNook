@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react'
-import { useUserDoc } from '@/utilities/userDocHelper'
+import { getUserDocHelper } from '@/utilities/userDocHelper'
 
 interface AutoAcceptFollowersProps {
   uid: string | undefined;
 }
 
 function AutoApproveFollowers({ uid }: AutoAcceptFollowersProps) {
-    const userDoc = useUserDoc(uid);
+    const userDoc = getUserDocHelper(uid);
     const [autoApprove, setAutoApprove] = useState<boolean>(false);
 
     const fetchAutoApproveStatus = async () => {

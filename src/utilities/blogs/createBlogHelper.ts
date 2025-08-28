@@ -10,6 +10,7 @@ interface CreateBlogData {
   authorDisplayName: string;
   likes?: string[];
   createdAt?: Date;
+  topic?: string;
 }
 
 export async function createBlog(data: CreateBlogData): Promise<void> {

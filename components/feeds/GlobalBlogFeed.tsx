@@ -30,6 +30,7 @@ function GlobalBlogFeed({ currentUser, currentUserDisplayName }: GlobalBlogFeedP
           currentUser={currentUser}
           currentUserDisplayName={currentUserDisplayName}
           authorUid={post.authorId}
+          topic={post.topic}
         />
         </div>
       ))}

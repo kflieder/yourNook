@@ -1,6 +1,6 @@
 'use client';
 import { useAuth } from '@/context/AuthContext';
-import { useUserDoc } from '../userDocHelper';
+import { getUserDocHelper } from '../userDocHelper';
 import { useEffect, useState } from 'react';
 
 
@@ -20,7 +20,7 @@ export function displayBioInfo() {
     useEffect(() => {
             async function fetchSettings() {
                 if (!username?.uid) return;
-                const userDoc = useUserDoc(username?.uid);
+                const userDoc = getUserDocHelper(username?.uid);
                 if (!userDoc) {
                     console.error('User document not found');
                     return;

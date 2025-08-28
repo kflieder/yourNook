@@ -2,7 +2,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../../lib/firebase.js'; 
 
 
-export function useUserDoc(uid: string | undefined) {
+export function getUserDocHelper(uid: string | undefined) {
     if (!uid) {
         return null;
     }

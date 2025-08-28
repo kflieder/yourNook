@@ -7,6 +7,8 @@ import NewMessage from "./NewMessage";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import useIsMobile from "@/utilities/useIsMobile";
 import { TiMessages } from "react-icons/ti";
+import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowUp } from "react-icons/io";
 
 function DMComponent({
   currentUser,
@@ -18,7 +20,6 @@ function DMComponent({
   forceOpen?: boolean;
 }) {
   const liveCurrentUserData = useLiveUserData(currentUser);
-  const liveTargetUserData = useLiveUserData(targetUser);
   const [dmThreadId, setDmThreadId] = useState<string | null>(null);
   const [toggleNewMessage, setToggleNewMessage] = useState(false);
   const [dmThreadIdFromSendMessageForm, setDmThreadIdFromSendMessageForm] =
@@ -27,46 +28,46 @@ function DMComponent({
   const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
   const isMobile = useIsMobile();
   const isOpen = forceOpen ?? toggleMessages;
+  const [toggleOpen, setToggleOpen] = useState(false);
+ 
 
-  
+  // useEffect(() => {
+  //   if (dmThreadIdFromSendMessageForm) {
+  //     setDmThreadId(dmThreadIdFromSendMessageForm);
+  //     setDmThreadIdFromSendMessageForm(null);
+  //   }
+  // }, [dmThreadIdFromSendMessageForm]);
 
-  useEffect(() => {
-    if (dmThreadIdFromSendMessageForm) {
-      setDmThreadId(dmThreadIdFromSendMessageForm);
-      setDmThreadIdFromSendMessageForm(null);
-    }
-  }, [dmThreadIdFromSendMessageForm]);
+  // useEffect(() => {
+  //   if (!toggleMessages) return;
+  //   if (!liveCurrentUserData || !liveTargetUserData) return;
+  //   if (dmThreadId) return;
 
-  useEffect(() => {
-    if (!toggleMessages) return;
-    if (!liveCurrentUserData || !liveTargetUserData) return;
-    if (dmThreadId) return;
-
-    const fetchDmThread = async () => {
-      try {
-        const threadId = await getOrCreateDmThread(
-          currentUser,
-          targetUser,
-          liveTargetUserData?.displayName,
-          liveTargetUserData?.profilePicture,
-          liveCurrentUserData?.displayName,
-          liveCurrentUserData?.profilePicture
-        );
-        setDmThreadId(threadId || null);
-      } catch (error) {
-        console.error("Error fetching or creating DM thread:", error);
-      }
-    };
-    fetchDmThread();
-  }, [
-    currentUser,
-    targetUser,
-    liveCurrentUserData,
-    liveTargetUserData,
-    toggleMessages,
-    dmThreadId,
-    hasUnreadMessages,
-  ]);
+  //   const fetchDmThread = async () => {
+  //     try {
+  //       const threadId = await getOrCreateDmThread(
+  //         currentUser,
+  //         targetUser,
+  //         liveTargetUserData?.displayName,
+  //         liveTargetUserData?.profilePicture,
+  //         liveCurrentUserData?.displayName,
+  //         liveCurrentUserData?.profilePicture
+  //       );
+  //       setDmThreadId(threadId || null);
+  //     } catch (error) {
+  //       console.error("Error fetching or creating DM thread:", error);
+  //     }
+  //   };
+  //   fetchDmThread();
+  // }, [
+  //   currentUser,
+  //   targetUser,
+  //   liveCurrentUserData,
+  //   liveTargetUserData,
+  //   toggleMessages,
+  //   dmThreadId,
+  //   hasUnreadMessages,
+  // ]);
 
   function handleToggleNewMessage() {
     setToggleNewMessage((prev) => !prev);
@@ -75,19 +76,28 @@ function DMComponent({
     }
   }
   function handleToggleMessages() {
-    if (toggleMessages) {
-      closeEverything();
-    } else {
+    if (!toggleMessages) {
       setToggleMessages(true);
-      setToggleNewMessage(false);
+      handleOpenCloseDiv();
+    }
+    if (toggleMessages) {
+        handleOpenCloseDiv();
+        const setTimeOut = setTimeout(() => {
+          closeEverything();
+        }, 500);
+        return () => clearTimeout(setTimeOut);
     }
   }
 
   function closeEverything() {
-    setToggleMessages(false);
-    setToggleNewMessage(false);
-    setDmThreadId(null);
-    setDmThreadIdFromSendMessageForm(null);
+    setToggleOpen(false);
+    const timeout = setTimeout(() => {
+      setToggleMessages(false);
+      setToggleNewMessage(false);
+      setDmThreadId(null);
+      setDmThreadIdFromSendMessageForm(null);
+    }, 500);
+    return () => clearTimeout(timeout);
   }
 
   function handleMobileClose() {
@@ -106,6 +116,10 @@ function DMComponent({
       dmThreadIdFromSendMessageForm
     );
   }, [dmThreadId, dmThreadIdFromSendMessageForm]);
+  
+  function handleOpenCloseDiv() {
+    setToggleOpen((prev) => !prev);
+  }
 
   return (
     <div>
@@ -183,7 +197,7 @@ function DMComponent({
         </div>
       ) : (
         <div className="border border-gray-300 mt-5 p-2 rounded-lg shadow-lg bg-white">
-          <div  className="flex justify-between items-center p-1 px-2 bg-gray-100 cursor-pointer rounded">
+          <div className="flex justify-between items-center p-1 px-2 bg-gray-100 cursor-pointer rounded ">
             <div
               onClick={handleToggleMessages}
               className="sm:w-1/2 cursor-pointer"
@@ -191,13 +205,18 @@ function DMComponent({
               {hasUnreadMessages ? (
                 <span className="text-red-500 font-bold">Unread Messages</span>
               ) : (
-                <h1 className="font-bold">Messages</h1>
+                <div className="font-bold w-full flex justify-between items-center">
+                  <h1 >Messages</h1>
+                   {
+                    toggleOpen ? <IoIosArrowUp size={24} /> : <IoIosArrowDown size={24} />
+                  }
+                </div>
               )}
             </div>
 
             <div className="flex flex-col items-end space-x-2 cursor-pointer">
               <div>
-                {toggleMessages ? (
+                {toggleOpen ? (
                   <div className="flex space-x-2">
                     <BiMessageAltEdit
                       onClick={handleToggleNewMessage}
@@ -219,12 +238,9 @@ function DMComponent({
           </div>
 
           <div
-            className={
-              toggleMessages
-                ? "overflow-hidden"
-                : "overflow-scroll hide-scrollbar transition-max-height duration-500 ease-in-out"
-            }
-            style={{ height: toggleMessages || toggleNewMessage ? "50vh" : "0px" }}
+            className={`hide-scrollbar overflow-y-auto transition-[max-height] duration-1000 ease-in-out ${
+              toggleOpen ? "max-h-[50vh]" : "max-h-0"
+            }`}
           >
             {toggleNewMessage ? (
               <NewMessage
@@ -238,22 +254,20 @@ function DMComponent({
               />
             ) : (
               <div>
-
-                  <Messages
-                    key={toggleMessages ? "open" : "closed"}
-                    threadId={dmThreadId || ""}
-                    currentUserUid={currentUser}
-                    senderDisplayName={liveCurrentUserData?.displayName || ""}
-                    senderProfilePicture={
-                      liveCurrentUserData?.profilePicture || ""
-                    }
-                    setHasUnreadMessages={setHasUnreadMessages}
-                    messagesOpen={toggleMessages}
-                    setDmThreadFromSendMessageForm={
-                      setDmThreadIdFromSendMessageForm
-                    }
-                  />
-                
+                <Messages
+                  key={toggleMessages ? "open" : "closed"}
+                  threadId={dmThreadId || ""}
+                  currentUserUid={currentUser}
+                  senderDisplayName={liveCurrentUserData?.displayName || ""}
+                  senderProfilePicture={
+                    liveCurrentUserData?.profilePicture || ""
+                  }
+                  setHasUnreadMessages={setHasUnreadMessages}
+                  messagesOpen={toggleMessages}
+                  setDmThreadFromSendMessageForm={
+                    setDmThreadIdFromSendMessageForm
+                  }
+                />
               </div>
             )}
           </div>

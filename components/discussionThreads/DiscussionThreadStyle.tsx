@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from "react";
-import { useUserDoc } from "@/utilities/userDocHelper";
+import { getUserDocHelper } from "@/utilities/userDocHelper";
 import Link from "next/link";
 import Likes from "components/PostActions/Likes";
 import CommentSection, { CommentCount } from "components/PostActions/Comments/CommentSection";
@@ -27,7 +27,7 @@ function DiscussionThreadStyle({
   postId?: string;
   currentUserDisplayName?: string;
 }) {
-  const authorUidsDoc = useUserDoc(authorUid);
+  const authorUidsDoc = getUserDocHelper(authorUid);
   const [authorUidData, setauthorUidData] = useState<any>(null);
   const [showComments, setShowComments] = useState(false);  
   const [showReportForm, setShowReportForm] = useState(false);
@@ -76,6 +76,7 @@ function DiscussionThreadStyle({
       </div>
       <div className='flex items-center space-x-2 mt-2'>
         <Likes
+          type='discussionThreads'
           docId={postId || ""}
           currentLikes={currentLikes || []}
           collectionName={"discussionThreads"}

@@ -8,12 +8,12 @@ interface AddCommentFormProps {
   postAuthorId: string;
   maxChar?: number; 
   parentId?: string | null;
-  setShowReplyForm?: (show: boolean) => void;
   type?: string;
   message?: string;
+  setActiveReplyIdAfterSubmit?: (id: string | null) => void;
 }
 
-function AddCommentForm({ postId, postAuthorId, maxChar, parentId, setShowReplyForm, type, message }: AddCommentFormProps) {
+function AddCommentForm({ postId, postAuthorId, maxChar, parentId, type, message, setActiveReplyIdAfterSubmit }: AddCommentFormProps) {
   const { username: currentUser } = useAuth();
   const { addComment } = usePostComments(postId);
   const [commentText, setCommentText] = useState("");
@@ -43,9 +43,7 @@ function AddCommentForm({ postId, postAuthorId, maxChar, parentId, setShowReplyF
     } finally {
       setIsSubmitting(false);
       setCommentText("");
-      if (setShowReplyForm){
-        setShowReplyForm(false);
-      }
+      setActiveReplyIdAfterSubmit?.(null);
     }
   };
 

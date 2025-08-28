@@ -94,7 +94,7 @@ function PostStyle({
   const feedStyleClasses = {
     outterMostDivContainer:
       "rounded-lg bg-gradient-to-t from-blue-950 via-gray-400 to-gray-300 text-white h-100 w-[100vw] sm:w-120 mx-auto my-4 shadow-xl",
-    littleHeaderThing: "flex justify-between items-end gap-2 mb-2 px-2",
+    littleHeaderThing: "flex justify-between items-end gap-2 mb-2",
   };
 
   const profileStyleClasses = {
@@ -122,7 +122,7 @@ function PostStyle({
         }
         `}
       >
-        <div className="flex bg-gray-50/30 rounded p-1 items-center gap-2">
+        <div className="flex bg-gray-100/70 rounded p-1 items-center gap-2">
           {profilePicture ? (
             <Link href={`/profile/${targetUid}`}>
               <img
@@ -197,7 +197,7 @@ function PostStyle({
               className="w-full h-full object-contain"
             />
             {textContent && (
-              <p className="absolute bottom-20 sm:bottom-0 left-0 p-2 w-full text-center bg-gray-400/80 rounded">
+              <p className="absolute bottom-15 sm:bottom-10 left-0 p-2 w-full text-center bg-gray-400/80 rounded">
                 {textContent}
               </p>
             )}
@@ -235,7 +235,7 @@ function PostStyle({
         />
       </div>
       {openPostId === docId && (
-        <div className="bg-white text-black absolute bottom-14 left-1/2 -translate-x-1/2 z-99 h-3/4 w-3/4 overflow-y-auto">
+        <div className="bg-white text-black absolute bottom-14 left-1/2 -translate-x-1/2 z-99 h-3/4 w-3/4 overflow-y-auto hide-scrollbar">
           <CommentSection
             maxChar={300}
             postId={docId}

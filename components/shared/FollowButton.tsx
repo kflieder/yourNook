@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { useUserDoc } from "@/utilities/userDocHelper";
+import { getUserDocHelper } from "@/utilities/userDocHelper";
 import { useLiveUserData } from "@/utilities/useLiveUserData";
 import { sendNotification } from "@/utilities/sendNotification";
 import { createFollowRequest, getFollowRequestStatus } from "@/utilities/followRequestHelper";
@@ -15,8 +15,8 @@ interface FollowButtonProps {
 
 function FollowButton({ targetUid, currentUserUid }: FollowButtonProps) {
   const { username: currentUser }: any = useAuth();
-  const currentUserDoc = useUserDoc(currentUser?.uid);
-  const targetUserDoc = useUserDoc(targetUid);
+  const currentUserDoc = getUserDocHelper(currentUser?.uid);
+  const targetUserDoc = getUserDocHelper(targetUid);
   const liveCurrentUser = useLiveUserData(currentUser?.uid);
   const liveTargetUser = useLiveUserData(targetUid);
   const [isFollowing, setIsFollowing] = useState(false);

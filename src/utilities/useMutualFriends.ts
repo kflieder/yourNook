@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import { useLiveUserData } from './useLiveUserData';
-import { useUserDoc } from './userDocHelper';
+import { getUserDocHelper } from './userDocHelper';
 
 interface Friend {
     displayName: string;
@@ -27,7 +27,7 @@ export function useMutualFriends(currentUserUid: string | undefined) {
         async function fetchMutualUserData() {
           const mutualUserData = await Promise.all(
             mutuals.map(async (uid: string) => {
-              const userData = await useUserDoc(uid)?.fetchUserData();
+              const userData = await getUserDocHelper(uid)?.fetchUserData();
               return {
                 displayName: userData?.displayName || "Unknown User",
                 uniqueUrl: userData?.uniqueUrl || "",
