@@ -176,7 +176,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
           enableScroll ? "sm:overflow-scroll" : "sm:overflow-hidden"
         }`}
       >
-        <div className="sticky top-0 flex justify-center space-x-4 p-4 bg-white/70 backdrop-blur-sm rounded">
+        <div className="sticky top-0 z-40 flex justify-center space-x-4 p-4 bg-white/70 backdrop-blur-sm rounded">
           {
             contentType.includes("posts") && (
               <button

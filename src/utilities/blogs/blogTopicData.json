@@ -57,9 +57,9 @@
   },
   {
     "topic": "Parenting",
-    "headerBackground": "linear-gradient(to top, #BD10E0, #9013FE)",
-    "textBackground": "#D49CF5",
-    "textColor": "#580087",
+    "headerBackground": "linear-gradient(to top, #FFB6C1, #FFD1DC)",
+    "textBackground": "#FFE4E9",
+    "textColor": "#A83D5C",
     "icon": "👶"
   },
   {
@@ -68,5 +68,33 @@
     "textBackground": "#FFF499",
     "textColor": "#B38F00",
     "icon": "🎬"
+  },
+  {
+    "topic": "Creative Writing",
+    "headerBackground": "linear-gradient(to top, #FF7F50, #FF6347)",
+    "textBackground": "#FFAB91",
+    "textColor": "#6D1B00",
+    "icon": "✍️"
+  },
+  {
+    "topic": "Fanfic",
+    "headerBackground": "linear-gradient(to top, #BA68C8, #7B1FA2)",
+    "textBackground": "#D1C4E9",
+    "textColor": "#4A148C",
+    "icon": "📖"
+  },
+  {
+    "topic": "Spirituality",
+    "headerBackground": "linear-gradient(to top, #FFD54F, #FFB300)",
+    "textBackground": "#FFF9C4",
+    "textColor": "#F57F17",
+    "icon": "🕉️"
+  },
+  {
+    "topic": "Other",
+    "headerBackground": "linear-gradient(to top, #90A4AE, #607D8B)",
+    "textBackground": "#CFD8DC",
+    "textColor": "#263238",
+    "icon": "❓"
   }
 ]

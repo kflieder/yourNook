@@ -19,14 +19,12 @@ function UserBlogs({
 }: UserBlogsProps) {
   const { blogs, loading } = useGetBlog(authorId);
  
-  console.log(blogs, "Blogs in UserBlogs component");
  
   return (
     <div className="flex flex-col gap-4 p-4 relative">
       {loading && <p>Loading...</p>}
       {!loading && blogs.length === 0 && <p>No blogs found.</p>}
       {blogs.map((blog) => {
-        console.log("Blog:", blog);
         return (
         
         <div key={blog.id}>

@@ -30,9 +30,9 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
  
 
   return (
-    <div className="w-full grid grid-cols-1 sm:grid-cols-5 justify-between h-screen pt-20">
+    <div className="w-full grid grid-cols-1 sm:grid-cols-5 justify-between h-screen sm:h-[80vh]">
       <div className="col-span-3 flex flex-col gap-y-4 overflow-scroll overflow-x-hidden hide-scrollbar">
-        <div className="flex items-start justify-around w-full mt-10">
+        <div className="flex items-start justify-around w-full sm:mt-10">
           <h1
             onClick={() => handleTabChange("latest")}
             className={`cursor-pointer ${
@@ -71,14 +71,14 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
         {loading && <p>Loading...</p>}
         {hasMore && <div ref={loadMoreRef} />}
       </div>
-      <div className="hidden sm:flex flex-col col-span-2 gap-y-4 pr-5 pt-20 overflow-hidden overflow-x-hidden hide-scrollbar">
+      <div className="hidden h-[80vh] sm:flex flex-col col-span-2 gap-y-4 pt-20 pr-2 overflow-auto overflow-x-hidden hide-scrollbar">
         <DMComponent
           currentUser={currentUser.uid}
           targetUser={currentUser.uid}
         />
         <CreatePost />
       </div>
-      <div className="sm:hidden flex justify-around p-2">
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white flex justify-around p-2">
         <BottomBar currentUser={currentUser.uid} />
       </div>
       

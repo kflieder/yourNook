@@ -62,7 +62,7 @@ function BlogStyle({
       className={`flex flex-col rounded overflow-hidden shadow-2xl ${
         expandedBlog === id
           ? "absolute top-0 left-0 w-full z-50 bg-gray-100 h-124 justify-start"
-          : "relative bg-white"
+          : "relative bg-white z-1"
       }`}
     >
       <div
@@ -83,7 +83,7 @@ function BlogStyle({
         </span>
       </div>
       <div
-        className="cursor-pointer flex flex-col items-center rounded bg-white"
+        className="flex flex-col items-center rounded bg-white"
       >
         <div className="flex w-full items-center p-4 gap-4">
           <h2
@@ -115,7 +115,7 @@ function BlogStyle({
                   }) ?? "Unknown"}
           </p>
         </div>
-        <div className='w-full px-6 space-y-2'>
+        <div className='relative w-full px-6 space-y-2'>
         <h2
           className={`font-bold text-md capitalize ${
             expandedBlog === id ? "text-2xl pb-2" : "text-xl"
@@ -132,6 +132,9 @@ function BlogStyle({
         >
           {content}
         </p>
+        <button className='absolute bottom-2 right-2 text-white px-2 py-1 rounded-full cursor-pointer bg-gray-600/80' onClick={() => handleExpandBlog(id)}>
+          Read More
+        </button>
         </div>
 
         {imageUrl && <img src={imageUrl} alt={title} />}
@@ -153,9 +156,6 @@ function BlogStyle({
             <p>{authorData?.displayName || authorDisplayName}</p>
           </Link>
         </div>
-         <button onClick={() => handleExpandBlog(id)}>
-          Read More
-        </button>
         <div className="flex space-x-2 ml-auto">
           <Likes
             type={"likedBlog"}

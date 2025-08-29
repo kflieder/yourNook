@@ -32,7 +32,7 @@ function FeedPage() {
       
       </div>
 
-      <div className=''></div>
+      <div className='pt-30'></div>
       {activeTab === 'posts' && <GlobalPostFeed currentUser={{ ...currentUser, displayName: currentUser.displayName ?? '' }} />}
       {activeTab === 'blogs' && <GlobalBlogFeed currentUser={currentUser.uid} currentUserDisplayName={currentUser.displayName ?? ''} />}
      

@@ -51,8 +51,6 @@ function Messages({
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const liveSelectedUsersData = useLiveUserData(selectedUsersUid || "");
 
-  console.log("liveSelectedUsersData:", liveSelectedUsersData?.profilePicture);
-
   useEffect(() => {
     const messageContainer = messagesEndRef.current;
     if (messageContainer) {

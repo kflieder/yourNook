@@ -2,6 +2,7 @@
 import React from 'react'
 import { usePaginatedPosts } from '@/utilities/usePaginatedPosts';
 import BlogStyle from 'components/blog/BlogStyle';
+import BlogForm from 'components/blog/BlogForm';
 
 interface GlobalBlogFeedProps {
   currentUser: string;
@@ -11,13 +12,13 @@ interface GlobalBlogFeedProps {
 
 function GlobalBlogFeed({ currentUser, currentUserDisplayName }: GlobalBlogFeedProps) {
   const { posts, loading, hasMore, loadMoreRef } = usePaginatedPosts("blogs", "createdAt", currentUser, "authorId");
-  console.log(currentUser)
   return (
-    <div className='flex flex-col items-center justify-center'>
+    <div className='grid grid-cols-5 h-[85vh]'>
+    <div className='col-span-3 flex flex-col items-center justify-start hide-scrollbar p-1 overflow-scroll gap-y-4'>
       {loading && <p>Loading...</p>}
       {!loading && posts.length === 0 && <p>No blogs found.</p>}
       {posts.map((post) => (
-        <div key={post.id} className='w-1/2 gap-y-4 p-4 border'>
+        <div key={post.id} className='w-full'>
         <BlogStyle
           id={post.id}
           title={post.title}
@@ -35,6 +36,10 @@ function GlobalBlogFeed({ currentUser, currentUserDisplayName }: GlobalBlogFeedP
         </div>
       ))}
       {hasMore && <div ref={loadMoreRef}>Load more...</div>}
+    </div>
+    <div className='col-span-2 h-[80vh] overflow-hidden'>
+      <BlogForm authorId={currentUser} authorDisplayName={currentUserDisplayName} />
+    </div>
     </div>
   )
 }

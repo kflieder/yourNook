@@ -108,14 +108,14 @@ function DMComponent({
     }
   }
 
-  useEffect(() => {
-    console.log(
-      "DM Thread ID from DMComponent:",
-      dmThreadId,
-      "fromSendMsg:",
-      dmThreadIdFromSendMessageForm
-    );
-  }, [dmThreadId, dmThreadIdFromSendMessageForm]);
+  // useEffect(() => {
+  //   console.log(
+  //     "DM Thread ID from DMComponent:",
+  //     dmThreadId,
+  //     "fromSendMsg:",
+  //     dmThreadIdFromSendMessageForm
+  //   );
+  // }, [dmThreadId, dmThreadIdFromSendMessageForm]);
   
   function handleOpenCloseDiv() {
     setToggleOpen((prev) => !prev);
@@ -197,16 +197,16 @@ function DMComponent({
         </div>
       ) : (
         <div className="border border-gray-300 mt-5 p-2 rounded-lg shadow-lg bg-white">
-          <div className="flex justify-between items-center p-1 px-2 bg-gray-100 cursor-pointer rounded ">
+          <div className="flex justify-between items-center p-1 px-2 bg-gray-100 rounded ">
             <div
               onClick={handleToggleMessages}
-              className="sm:w-1/2 cursor-pointer"
+              className="cursor-pointer "
             >
               {hasUnreadMessages ? (
                 <span className="text-red-500 font-bold">Unread Messages</span>
               ) : (
-                <div className="font-bold w-full flex justify-between items-center">
-                  <h1 >Messages</h1>
+                <div className="font-bold w-full flex justify-between items-center gap-1">
+                  <h1 className='' >Messages</h1>
                    {
                     toggleOpen ? <IoIosArrowUp size={24} /> : <IoIosArrowDown size={24} />
                   }
