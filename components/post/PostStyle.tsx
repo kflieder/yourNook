@@ -67,7 +67,7 @@ function PostStyle({
 
   if (thumbnail)
     return (
-      <div className="cursor-pointer border bg-gray-500/50" onClick={handleOpenFromThumbnail}>
+      <div className="cursor-pointer border bg-gray-500/50 w-42 h-42" onClick={handleOpenFromThumbnail}>
         {mediaUrl ? (
           mediaUrl.includes("video") ? (
             <video
@@ -98,7 +98,7 @@ function PostStyle({
   };
 
   const profileStyleClasses = {
-    outterMostDivContainer: `flex flex-col justify-between rounded-lg bg-gradient-to-t from-blue-950 via-gray-400 to-gray-300 text-white min-h-98 w-full shadow-xl ${
+    outterMostDivContainer: `flex flex-col justify-between rounded-lg bg-gradient-to-t from-blue-950 via-gray-400 to-gray-300 text-white min-h-98 w-[100vw] sm:w-120 shadow-xl ${
       thumbnail ? "cursor-pointer" : ""
     }`,
     littleHeaderThing: "flex justify-between items-end gap-2 mb-2",

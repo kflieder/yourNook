@@ -213,25 +213,17 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
         </div>
         {/* tabs div ^^ */}
 
-        <div className="justify-center items-center">
+        <div className="flex flex-col justify-center items-center">
           {activeTab === "posts" ? (
-            <div className="w-full flex justify-center items-center">
-              <UserPosts posts={posts} />
-            </div>
-          ) : activeTab === "blog" ? (
-            <div className="col-span-2">
-              <div className="">
-                <div className="">
-                  <UserBlogs
+            <UserPosts posts={posts} />
+           ) : activeTab === "blog" ? (
+            <UserBlogs
                     authorId={userData.uid || ""}
                     authorDisplayName={userData.displayName || ""}
                     profilePicture={userData.profilePicture || ""}
                     currentUser={username.uid}
                     currentUserDisplayName={username.displayName || ""}
                   />
-                </div>
-              </div>
-            </div>
           ) : activeTab === "thread" ? (
             <div className="col-span-2 border">
               <div>
@@ -274,7 +266,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
             </div>
           
         </div>
-        <div className="fixed bg-gray-200/50 bottom-0 left-0 right-0 flex">
+        <div className="fixed bottom-0 left-0 right-0 flex z-50 bg-blue-100">
           <BottomBar currentUser={username.uid} />
         </div>
       </div>

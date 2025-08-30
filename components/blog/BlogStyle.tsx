@@ -59,9 +59,9 @@ function BlogStyle({
 
   return (
     <div
-      className={`flex flex-col rounded overflow-hidden shadow-2xl ${
+      className={`w-full flex flex-col rounded overflow-hidden shadow-2xl ${
         expandedBlog === id
-          ? "absolute top-0 left-0 w-full z-50 bg-gray-100 h-124 justify-start"
+          ? "absolute top-0 left-0 w-full z-50 bg-gray-100 h-[75vh] overflow-auto"
           : "relative bg-white z-1"
       }`}
     >
@@ -126,14 +126,14 @@ function BlogStyle({
         <p
           className={`${
             expandedBlog === id
-              ? "h-124 overflow-y-auto pt-6 px-10 whitespace-pre-wrap break-word"
+              ? "pt-6 px-10 whitespace-pre-wrap break-words overflow-auto border h-84"
               : "h-24 overflow-hidden"
           }`}
         >
           {content}
         </p>
         <button className='absolute bottom-2 right-2 text-white px-2 py-1 rounded-full cursor-pointer bg-gray-600/80' onClick={() => handleExpandBlog(id)}>
-          Read More
+          {expandedBlog === id ? "Close" : "Read More"}
         </button>
         </div>
 

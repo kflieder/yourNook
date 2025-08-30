@@ -65,42 +65,40 @@ function UserPosts({
   }
 
   return (
-    <div className="w-full hide-scrollbar">
-      <div
-        className={`grid ${
-          showThumbnails
-            ? "grid-cols-3"
-            : "grid-cols-1"
-        } gap-4 hide-scrollbar w-full`}
-      >
-        {clickedPostId && (
-          <div
-            className="col-span-1 flex justify-end fixed top-50 right-0 z-50 bg-white rounded-full"
+    <div
+      className={`relative rounded w-full grid justify-center items-center overflow-auto  ${
+        showThumbnails ? "grid-cols-3" : "grid-cols-1 h-[65vh] sm:h-[85vh]"
+      } gap-4 hide-scrollbar`}
+    >
+      {clickedPostId && (
+        <div className="sticky top-2 z-50 h-0 flex justify-end pl-10">
+          <IoIosCloseCircleOutline
+            className="cursor-pointer rounded-full text-white bg-gray-700/50"
+            size={34}
             onClick={closePost}
+          />
+        </div>
+      )}
+      {livePosts
+        // .filter(post => !post.mediaUrl?.includes("video")) // Filter out video posts
+        .map((post) => (
+          <div
+            ref={(el) => {
+              postRefs.current[post.id] = el;
+            }}
+            key={post.id}
+            className="flex justify-center"
           >
-            <IoIosCloseCircleOutline size={34} />
+            <LivePost
+              thumbnail={showThumbnails}
+              onThumbnailClick={onThumbnailClick}
+              post={post}
+              currentUser={currentUser?.uid || ""}
+              currentUserDisplayName={currentUser?.displayName || ""}
+              styleSelector="profile"
+            />
           </div>
-        )}
-        {livePosts
-          // .filter(post => !post.mediaUrl?.includes("video")) // Filter out video posts
-          .map((post) => (
-            <div
-              ref={(el) => {
-                postRefs.current[post.id] = el;
-              }}
-              key={post.id}
-            >
-              <LivePost
-                thumbnail={showThumbnails}
-                onThumbnailClick={onThumbnailClick}
-                post={post}
-                currentUser={currentUser?.uid || ""}
-                currentUserDisplayName={currentUser?.displayName || ""}
-                styleSelector="profile"
-              />
-            </div>
-          ))}
-      </div>
+        ))}
     </div>
   );
 }
