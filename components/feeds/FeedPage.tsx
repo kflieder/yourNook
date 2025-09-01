@@ -4,6 +4,7 @@ import GlobalPostFeed from './GlobalPostFeed'
 import { useAuth } from '@/context/AuthContext'
 import GlobalBlogFeed from './GlobalBlogFeed'
 import GlobalDiscussionThreadFeed from './GlobalDiscussionThreadFeed'
+import BottomBar from 'components/mobileComponents/BottomBar'
 
 
 
@@ -37,6 +38,9 @@ function FeedPage() {
       {activeTab === 'blogs' && <GlobalBlogFeed currentUser={currentUser.uid} currentUserDisplayName={currentUser.displayName ?? ''} />}
      
       {activeTab === 'threads' && <GlobalDiscussionThreadFeed currentUser={currentUser.uid} />}
+    <div className="fixed z-10 bottom-0 left-0 right-0 bg-white flex justify-around">
+        <BottomBar currentUser={currentUser.uid} />
+      </div>
     </div>
   )
 }

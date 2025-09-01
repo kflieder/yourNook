@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, use } from "react";
+import React, { useEffect, useState, useRef} from "react";
 import { useLiveUserData } from "@/utilities/useLiveUserData";
 import { getOrCreateDmThread } from "@/utilities/dmThreadHelper";
 import Messages from "./Messages";
@@ -29,7 +29,8 @@ function DMComponent({
   const isMobile = useIsMobile();
   const isOpen = forceOpen ?? toggleMessages;
   const [toggleOpen, setToggleOpen] = useState(false);
- 
+  const mobileModalRef = useRef<HTMLDivElement | null>(null);
+  const desktopMouseEventRef = useRef<HTMLDivElement | null>(null);
 
   // useEffect(() => {
   //   if (dmThreadIdFromSendMessageForm) {
@@ -84,7 +85,7 @@ function DMComponent({
         handleOpenCloseDiv();
         const setTimeOut = setTimeout(() => {
           closeEverything();
-        }, 500);
+        }, 300);
         return () => clearTimeout(setTimeOut);
     }
   }
@@ -96,7 +97,7 @@ function DMComponent({
       setToggleNewMessage(false);
       setDmThreadId(null);
       setDmThreadIdFromSendMessageForm(null);
-    }, 500);
+    }, 300);
     return () => clearTimeout(timeout);
   }
 
@@ -107,6 +108,25 @@ function DMComponent({
       closeEverything();
     }
   }
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (!toggleMessages || !isOpen) return;
+
+      const clickedNode = event.target as Node;
+      const clickOutsideMobile = mobileModalRef.current && !mobileModalRef.current.contains(clickedNode);
+      const clickOutsideDesktop = desktopMouseEventRef.current && !desktopMouseEventRef.current.contains(clickedNode);
+
+      if (clickOutsideMobile && clickOutsideDesktop) {
+        closeEverything();
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [toggleMessages, isOpen]);
 
   // useEffect(() => {
   //   console.log(
@@ -122,9 +142,8 @@ function DMComponent({
   }
 
   return (
-    <div>
-      {isMobile ? (
-        <div className="absolute">
+    <>
+      <div className="absolute block lg:hidden">
           <TiMessages
             className={`cursor-pointer ${
               hasUnreadMessages ? "text-blue-500" : ""
@@ -139,11 +158,12 @@ function DMComponent({
                 : ""
             }
           ></div>
-          <div>
+          
             <div
+              ref={mobileModalRef}
               className={
                 isOpen && toggleMessages
-                  ? "block fixed z-40 bottom-10 right-17 w-3/4 bg-white px-4 py-2 rounded-lg shadow-2xl hide-scrollbar"
+                  ? "block fixed z-40 bottom-15 right-50 w-1/2 bg-white px-4 py-2 rounded-lg shadow-2xl hide-scrollbar"
                   : "hidden"
               }
             >
@@ -193,10 +213,10 @@ function DMComponent({
                 </div>
               )}
             </div>
-          </div>
+          
         </div>
-      ) : (
-        <div className="border border-gray-300 mt-5 p-2 rounded-lg shadow-lg bg-white">
+
+        <div ref={desktopMouseEventRef} className="border border-gray-300 p-2 rounded-lg shadow-lg bg-white lg:block hidden">
           <div className="flex justify-between items-center p-1 px-2 bg-gray-100 rounded ">
             <div
               onClick={handleToggleMessages}
@@ -238,7 +258,7 @@ function DMComponent({
           </div>
 
           <div
-            className={`hide-scrollbar overflow-y-auto transition-[max-height] duration-1000 ease-in-out ${
+            className={`hide-scrollbar overflow-y-auto transition-[max-height] duration-300 ease-in-out ${
               toggleOpen ? "max-h-[50vh]" : "max-h-0"
             }`}
           >
@@ -272,8 +292,8 @@ function DMComponent({
             )}
           </div>
         </div>
-      )}
-    </div>
+      
+    </>
   );
 }
 

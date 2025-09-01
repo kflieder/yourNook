@@ -54,23 +54,36 @@ function AddCommentForm({ postId, postAuthorId, maxChar, parentId, type, message
     }
   }
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setCommentText(e.target.value);
+      if (e.target.scrollHeight > e.target.clientHeight) {
+        e.target.style.height = "auto";
+        e.target.style.height = `${e.target.scrollHeight}px`;
+      }
+      if (e.target.value.trim() === "") {
+        e.target.style.height = "30px"; // Reset to default height
+      }
+    };
+  
+   
+
   return (
-    <form onSubmit={handleSubmit} className="flex items-center border rounded-3xl">
+    <form onSubmit={handleSubmit} className="flex items-center border border-gray-200">
       <textarea
         value={commentText}
-        onChange={(e) => setCommentText(e.target.value)}
+        onChange={handleInputChange}
         placeholder="Add a comment..."
-        className="w-full px-4 focus:outline-none focus:bg-gray-100 rounded-3xl resize-none overflow-hidden"
+        className="w-full px-2 pt-1 focus:outline-none focus:bg-gray-100 rounded-3xl resize-none overflow-hidden text-md"
         rows={1}
         disabled={isSubmitting}
         maxLength={maxChar}
         style={{ resize: "none" }}
         onKeyDown={handleKeyDown}
       />
-      <small>{commentText.length}/{maxChar ? maxChar : 'unlimited'}</small>
+      <small className='h-full flex items-end mr-1 text-xs'>{commentText.length}/{maxChar ? maxChar : 'unlimited'}</small>
       <button
         type="submit"
-        className={`text-white p-2.5  rounded-4xl text-sm ${
+        className={`text-white p-1 rounded-4xl text-xs ${
             commentText.trim()
               ? "bg-blue-950 cursor-pointer"
               : "bg-blue-950/50 cursor-not-allowed"

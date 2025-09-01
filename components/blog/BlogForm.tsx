@@ -6,7 +6,7 @@ import CustomTopicSelectDropdown from './CustomTopicSelectDropdown';
 
 interface BlogFormProps {
     authorId: string;
-    authorDisplayName: string;
+    authorDisplayName?: string;
 }
 
 function BlogForm({ authorId, authorDisplayName }: BlogFormProps) {
@@ -27,7 +27,7 @@ function BlogForm({ authorId, authorDisplayName }: BlogFormProps) {
               content,
                 imageUrl,
                 authorId,
-                authorDisplayName,
+                authorDisplayName: authorDisplayName || 'Unknown',
                 topic
             });
             setTitle('');
@@ -40,7 +40,7 @@ function BlogForm({ authorId, authorDisplayName }: BlogFormProps) {
     };
 
   return (
-    <form onSubmit={handleSubmit} className='flex flex-col border border-gray-300 rounded space-y-4 p-4 w-full bg-white h-[50vh]'>
+    <form onSubmit={handleSubmit} className='flex flex-col border border-gray-300 rounded space-y-4 p-4 w-full bg-white h-[45vh]'>
       <input
         className='border p-2 rounded bg-gray-100 border-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-400'
         type="text"

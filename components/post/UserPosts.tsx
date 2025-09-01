@@ -66,12 +66,12 @@ function UserPosts({
 
   return (
     <div
-      className={`relative rounded w-full grid justify-center items-center overflow-auto  ${
+      className={`relative rounded w-full grid justify-center items-center overflow-auto sm:pb-20  ${
         showThumbnails ? "grid-cols-3" : "grid-cols-1 h-[65vh] sm:h-[85vh]"
       } gap-4 hide-scrollbar`}
     >
       {clickedPostId && (
-        <div className="sticky top-2 z-50 h-0 flex justify-end pl-10">
+        <div className="sticky top-0 sm:top-2 z-50 h-0 flex justify-end pl-10">
           <IoIosCloseCircleOutline
             className="cursor-pointer rounded-full text-white bg-gray-700/50"
             size={34}

@@ -13,7 +13,7 @@ interface GlobalBlogFeedProps {
 function GlobalBlogFeed({ currentUser, currentUserDisplayName }: GlobalBlogFeedProps) {
   const { posts, loading, hasMore, loadMoreRef } = usePaginatedPosts("blogs", "createdAt", currentUser, "authorId");
   return (
-    <div className='grid grid-cols-5 h-[85vh]'>
+    <div className='relative p-4 grid grid-cols-5 h-[85vh]'>
     <div className='col-span-3 flex flex-col items-center justify-start hide-scrollbar p-1 overflow-scroll gap-y-4'>
       {loading && <p>Loading...</p>}
       {!loading && posts.length === 0 && <p>No blogs found.</p>}

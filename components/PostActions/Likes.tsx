@@ -13,9 +13,10 @@ interface LikesProps {
     displayName: string;
     currentUserDisplayName?: string;
     type: string;
+    message: string;
 }
 
-function Likes({ docId, currentLikes, collectionName, targetUid, currentUser, currentUserDisplayName, type }: LikesProps) {
+function Likes({ docId, currentLikes, collectionName, targetUid, currentUser, currentUserDisplayName, type, message }: LikesProps) {
   const { username } = useAuth();
   const [likes, setLikes] = useState<string[]>(currentLikes || []);
   const [loading, setLoading] = useState(false);
@@ -43,7 +44,7 @@ function Likes({ docId, currentLikes, collectionName, targetUid, currentUser, cu
                 toUserId: targetUid, 
                 type: type,
                 fromUserId: currentUser,
-                message: 'liked your post!',
+                message: message,
                 postId: docId
             });
             console.log(`Notification sent to ${targetUid} for like by ${currentUser}`);

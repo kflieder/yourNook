@@ -166,7 +166,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
         <Bio userData={userData} />
       </div>
     <div
-      className={`sticky top-0 hide-scrollbar pt-2 sm:pl-5 ${
+      className={`hide-scrollbar pt-2 sm:pl-5 ${
           enableScroll ? "sm:overflow-y-auto" : "sm:overflow-hidden"
         } flex flex-col sm:grid sm:grid-cols-5 sm:h-[95vh]`}
     >
@@ -248,8 +248,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
       {isOwner && (
       <div className={`col-span-2 sm:h-[95vh]  hide-scrollbar ${enableScroll ? "overflow-scroll" : "overflow-hidden"}`}>
         <div className="sm:block hidden p-5">
-          
-            <div>
+           <div>
               {activeTab === "posts" && <CreatePost />}
               {activeTab === "blog" && (
                 <BlogForm
@@ -257,21 +256,23 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
                   authorDisplayName={username.displayName || ""}
                 />
               )}
-              
+              <div className="sm:hidden lg:block mt-2">
               <DMComponent
                 currentUser={username.uid}
                 targetUser={userData.uid || ""}
               />
+              </div>
               <FriendsList currentUserUid={username.uid} />
             </div>
           
         </div>
-        <div className="fixed bottom-0 left-0 right-0 flex z-50 bg-blue-100">
-          <BottomBar currentUser={username.uid} />
-        </div>
+        
       </div>
       )}
       {/* bottom bar div ^^^ */}
+      <div className="fixed bottom-0 left-0 right-0 flex z-50 bg-blue-100">
+          <BottomBar currentUser={username.uid} />
+        </div>
     </div>
     </div>
   );

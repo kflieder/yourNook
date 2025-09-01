@@ -18,7 +18,7 @@ function CommentSection({
   postAuthorId,
   maxChar,
   type,
-  message // for notifications
+  message, // for notifications
 }: CommentSectionProps) {
   const { comments } = usePostComments(postId);
   const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
@@ -45,47 +45,53 @@ function CommentSection({
     return rootComments;
   }
 
-
   const commentTree = buildCommentTree(comments);
   return (
-    
-      <div className="border-l ml-2">
-        {comments.length === 0 ? (
-          <div>
-            <p>No Comments yets, be the first!</p>
+    <>
+      {comments.length === 0 ? (
+        <div className="h-full flex flex-col justify-end">
+          <span className="flex flex-col h-full justify-center items-center">
+            <p className="font-extrabold text-xl">No Comments yet,</p> be the
+            first!
+          </span>
+          <AddCommentForm
+            postId={postId}
+            postAuthorId={postAuthorId}
+            maxChar={maxChar}
+            type={type}
+            parentId={null}
+            message={message}
+          />
+        </div>
+      ) : (
+        <>
+          <ul className="">
+            {commentTree.map((comment) => (
+              <Comment
+                key={comment.id}
+                comment={comment}
+                maxChar={maxChar}
+                setActiveReplyId={setActiveReplyId}
+                activeReplyId={activeReplyId}
+                setShowReplies={setShowReplies}
+                showReplies={showReplies}
+              />
+            ))}
+          </ul>
+
+          <div className="sticky bottom-0 left-0 right-0 bg-white">
             <AddCommentForm
               postId={postId}
               postAuthorId={postAuthorId}
               maxChar={maxChar}
-              type='commentPost'
+              type={type}
+              message={message}
               parentId={null}
             />
           </div>
-        ) : (
-          <div>
-            
-            <ul>
-              {commentTree.map((comment) => (
-                <Comment key={comment.id} comment={comment} maxChar={maxChar} 
-                setActiveReplyId={setActiveReplyId} activeReplyId={activeReplyId} setShowReplies={setShowReplies} showReplies={showReplies} />
-              ))}
-            </ul>
-            
-              <div className='sticky bottom-0 left-0 right-0 bg-white'>
-              <AddCommentForm
-                postId={postId}
-                postAuthorId={postAuthorId}
-                maxChar={maxChar}
-                type={type}
-                message={message}
-                parentId={null}
-              />
-              </div>
-            
-          </div>
-        )}
-      </div>
-    
+        </>
+      )}
+    </>
   );
 }
 

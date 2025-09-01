@@ -62,7 +62,7 @@ function Comment({
 
   return (
     <>
-      <li key={comment.id} className="flex p-2 border-b">
+      <li key={comment.id} className="flex p-2 shadow-md">
         <img
           className="w-8 h-8 rounded-full"
           src={authorData?.profilePicture}
@@ -107,6 +107,7 @@ function Comment({
         )}
         </div>
         {activeReplyId === comment.id && (
+          <div className="border border-gray-300 rounded-2xl overflow-hidden">
           <AddCommentForm
             postId={comment.postId ?? ""}
             parentId={comment.id}
@@ -114,6 +115,7 @@ function Comment({
             maxChar={maxChar}
             setActiveReplyIdAfterSubmit={setActiveReplyId}
           />
+          </div>
         )}
         </div>
       </li>
@@ -121,9 +123,9 @@ function Comment({
         showReplies &&
         comment.replies &&
         comment.replies.length > 0 && (
-          <ul className="ml-4 mt-2">
+          <ul className="ml-4 max-h-84 overflow-y-auto hide-scrollbar">
             {comment.replies.map((reply) => (
-              <div key={reply.id} className="ml-4 mt-2 border">
+              <div key={reply.id} className="border-l-2 pl-4">
                 <Comment
                   key={reply.id}
                   comment={reply}

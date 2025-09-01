@@ -93,7 +93,7 @@ function PostStyle({
 
   const feedStyleClasses = {
     outterMostDivContainer:
-      "rounded-lg bg-gradient-to-t from-blue-950 via-gray-400 to-gray-300 text-white h-100 w-[100vw] sm:w-120 mx-auto my-4 shadow-xl",
+      "rounded-lg bg-gradient-to-t from-blue-950 via-gray-400 to-gray-300 text-white h-100 w-[100vw] sm:w-120 my-4 shadow-xl",
     littleHeaderThing: "flex justify-between items-end gap-2 mb-2",
   };
 
@@ -115,7 +115,7 @@ function PostStyle({
          }`}
     >
       <div
-        className={`relative z-10 text-black ${
+        className={`relative z-1 text-black ${
           styleSelector === "feed"
             ? feedStyleClasses.littleHeaderThing
             : profileStyleClasses.littleHeaderThing
@@ -219,6 +219,7 @@ function PostStyle({
           currentUser={currentUser}
           displayName={displayName}
           currentUserDisplayName={currentUserDisplayName}
+          message={"liked your post!"}
         />
         <div
           onClick={() => handleToggleComments(docId)}
@@ -235,7 +236,7 @@ function PostStyle({
         />
       </div>
       {openPostId === docId && (
-        <div className="bg-white text-black absolute bottom-14 left-1/2 -translate-x-1/2 z-99 h-3/4 w-3/4 overflow-y-auto hide-scrollbar">
+        <div className="bg-white rounded shadow-2xl text-black absolute bottom-14 left-1/2 -translate-x-1/2 z-99 h-full w-3/4 overflow-y-auto hide-scrollbar">
           <CommentSection
             maxChar={300}
             postId={docId}

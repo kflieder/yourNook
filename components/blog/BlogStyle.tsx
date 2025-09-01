@@ -1,6 +1,6 @@
 "use client";
 import { Timestamp } from "firebase-admin/firestore";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Likes from "components/PostActions/Likes";
 import CommentSection, {
   CommentCount,
@@ -45,6 +45,7 @@ function BlogStyle({
   const [expandedComments, setExpandedComments] = useState<string | null>(null);
   const [showReportForm, setShowReportForm] = useState(false);
   const authorData = useLiveUserData(authorUid);
+  const expandedBlogRef = useRef<HTMLDivElement | null>(null);
 
   const handleExpandBlog = (blogId: string) => {
     setExpandedBlog((prev) => (prev === blogId ? null : blogId));
@@ -57,11 +58,30 @@ function BlogStyle({
     setShowReportForm((prev) => !prev);
   }
 
+  useEffect(() => {
+    if (expandedBlogRef.current) {
+      expandedBlogRef.current.scrollIntoView({ behavior: "auto", block: "center" });
+    }
+  }, [expandedBlog]);
+
+  useEffect(() => {
+    if (expandedBlog){
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [expandedBlog]);
+     
+
   return (
     <div
+      ref={expandedBlog ? expandedBlogRef : null}
       className={`w-full flex flex-col rounded overflow-hidden shadow-2xl ${
         expandedBlog === id
-          ? "absolute top-0 left-0 w-full z-50 bg-gray-100 h-[75vh] overflow-auto"
+          ? "absolute top-0 left-0 w-full z-49 bg-gray-100 h-[80vh] overflow-auto"
           : "relative bg-white z-1"
       }`}
     >
@@ -126,7 +146,7 @@ function BlogStyle({
         <p
           className={`${
             expandedBlog === id
-              ? "pt-6 px-10 whitespace-pre-wrap break-words overflow-auto border h-84"
+              ? "pt-6 px-10 whitespace-pre-wrap break-words overflow-auto border-2 border-gray-200 rounded h-90 hide-scrollbar"
               : "h-24 overflow-hidden"
           }`}
         >
@@ -166,6 +186,7 @@ function BlogStyle({
             currentUser={currentUser}
             displayName={authorDisplayName}
             currentUserDisplayName={currentUserDisplayName}
+            message={"liked your blog!"}
           />
           <div
             onClick={() => handleExpandedComments(id)}
@@ -188,13 +209,15 @@ function BlogStyle({
         </div>
       </div>
       {expandedComments === id && (
-        <CommentSection
-          maxChar={300}
-          postId={id}
-          postAuthorId={authorUid}
-          type="commentBlog"
+        <div className="absolute bottom-15 left-0 w-full z-50 bg-gray-100 h-56 overflow-auto">
+          <CommentSection
+            maxChar={300}
+            postId={id}
+            postAuthorId={authorUid}
+            type="commentBlog"
           message="commented on your blog!"
         />
+        </div>
       )}
       {showReportForm && <Report postId={id} />}
     </div>
