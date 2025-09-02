@@ -68,10 +68,11 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   const [contentType, setContentType] = useState<string[]>([]);
 
   const handleScroll = () => {
+    if (isMobile) return;
     if (!bioRef.current || !postsRef.current) return;
     const rect = bioRef.current.getBoundingClientRect();
     const threshold = 50;
-    const pastBio = rect.bottom <= threshold;
+    const pastBio = rect.bottom < threshold;
     // if (!pastBio) {
     //   postsRef.current.scrollTop = 0;
     // }
@@ -128,8 +129,6 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
     setActiveTab(tab);
   }
 
-  
-
   const activeTabClass = "shadow-xl h-8";
   const buttonClass =
     "w-1/3 cursor-pointer bg-blue-950/80 text-white hover:shadow-xl transition-all duration-200 h-6";
@@ -161,24 +160,27 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   }
 
   return (
-    <div className='sm:pt-15 pt-10 h-screen'>
+    <div className="sm:pt-15 pt-10 h-screen">
       <div ref={bioRef} className="sm:mx-10 shadow-xl">
         <Bio userData={userData} />
       </div>
-    <div
-      className={`hide-scrollbar pt-2 sm:pl-5 ${
-          enableScroll ? "sm:overflow-y-auto" : "sm:overflow-hidden"
-        } flex flex-col sm:grid sm:grid-cols-5 sm:h-[95vh]`}
-    >
-       <div
-        ref={postsRef}
-        className={`hide-scrollbar ${isOwner ? "col-span-3" : "col-span-5"} overflow-scroll sm:overflow-hidden h-[75vh] sm:h-auto ${
-          enableScroll ? "sm:overflow-scroll" : "sm:overflow-hidden"
-        }`}
+      <div
+        className={`hide-scrollbar pt-2 sm:pl-5 flex flex-col sm:grid sm:grid-cols-5 sm:h-[95vh]`}
       >
-        <div className="sticky top-0 z-40 flex justify-center space-x-4 p-4 bg-white/70 backdrop-blur-sm rounded">
-          {
-            contentType.includes("posts") && (
+        <div
+          ref={postsRef}
+          className={`hide-scrollbar ${isOwner ? "col-span-3" : "col-span-5"} 
+          h-[75vh] sm:h-auto 
+           ${
+             isMobile
+               ? "overflow-scroll touch-pan-y"
+               : enableScroll
+               ? "sm:overflow-scroll"
+               : "sm:overflow-hidden"
+           }`}
+        >
+          <div className="sticky top-0 sm:top-2.5 z-40 flex justify-center space-x-4 p-4 bg-white/70 backdrop-blur-sm rounded">
+            {contentType.includes("posts") && (
               <button
                 onClick={() => handleTabChange("posts")}
                 className={`${buttonClass}
@@ -186,10 +188,8 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
               >
                 Posts
               </button>
-            )
-          }
-          {
-            contentType.includes("blog") && (
+            )}
+            {contentType.includes("blog") && (
               <button
                 onClick={() => handleTabChange("blog")}
                 className={`${buttonClass}
@@ -197,10 +197,8 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
               >
                 Blogs
               </button>
-            )
-          }
-          {
-            contentType.includes("thread") && (
+            )}
+            {contentType.includes("thread") && (
               <button
                 onClick={() => handleTabChange("thread")}
                 className={`${buttonClass}
@@ -208,68 +206,69 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
               >
                 Threads
               </button>
-            )
-          }
-        </div>
-        {/* tabs div ^^ */}
+            )}
+          </div>
+          {/* tabs div ^^ */}
 
-        <div className="flex flex-col justify-center items-center">
-          {activeTab === "posts" ? (
-            <UserPosts posts={posts} />
-           ) : activeTab === "blog" ? (
-            <UserBlogs
-                    authorId={userData.uid || ""}
-                    authorDisplayName={userData.displayName || ""}
-                    profilePicture={userData.profilePicture || ""}
-                    currentUser={username.uid}
-                    currentUserDisplayName={username.displayName || ""}
-                  />
-          ) : activeTab === "thread" ? (
-            <div className="border-2">
+          <div className="flex flex-col justify-center items-center pb-10 pt-4 sm:pb-0">
+            {activeTab === "posts" ? (
+              <UserPosts posts={posts} />
+            ) : activeTab === "blog" ? (
+              <UserBlogs
+                authorId={userData.uid || ""}
+                authorDisplayName={userData.displayName || ""}
+                profilePicture={userData.profilePicture || ""}
+                currentUser={username.uid}
+                currentUserDisplayName={username.displayName || ""}
+              />
+            ) : activeTab === "thread" ? (
+              <div className="border-2">
                 <UserDiscussionThreads
                   currentUser={username}
                   targetUser={userData.uid || ""}
                 />
               </div>
-          ) : null}
+            ) : null}
+          </div>
         </div>
-      </div>
-      {/* content div ^^ */}
-      {isOwner && (
-      <div className={`col-span-2 sm:h-[95vh]  hide-scrollbar ${enableScroll ? "overflow-scroll" : "overflow-hidden"}`}>
-        <div className="sm:block hidden p-5">
-           <div>
-              {activeTab === "posts" && <CreatePost />}
-              {activeTab === "blog" && (
-                <BlogForm
-                  authorId={username.uid || ""}
-                  authorDisplayName={username.displayName || ""}
-                />
-              )}
-              {activeTab === "thread" && (
-                <DiscussionThreadForm
-                  currentUserUid={username.uid || ""}
-                  currentUserDisplayName={username.displayName || ""}
-                />
-              )}
-              <div className="sm:hidden lg:block mt-2">
-              <DMComponent
-                currentUser={username.uid}
-                targetUser={userData.uid || ""}
-              />
+        {/* content div ^^ */}
+        {isOwner && (
+          <div
+            className={`col-span-2 sm:h-[95vh]  hide-scrollbar ${
+              enableScroll ? "overflow-scroll" : "overflow-hidden"
+            }`}
+          >
+            <div className="sm:block hidden p-5">
+              <div>
+                {activeTab === "posts" && <CreatePost />}
+                {activeTab === "blog" && (
+                  <BlogForm
+                    authorId={username.uid || ""}
+                    authorDisplayName={username.displayName || ""}
+                  />
+                )}
+                {activeTab === "thread" && (
+                  <DiscussionThreadForm
+                    currentUserUid={username.uid || ""}
+                    currentUserDisplayName={username.displayName || ""}
+                  />
+                )}
+                <div className="sm:hidden lg:block mt-2">
+                  <DMComponent
+                    currentUser={username.uid}
+                    targetUser={userData.uid || ""}
+                  />
+                </div>
+                <FriendsList currentUserUid={username.uid} />
               </div>
-              <FriendsList currentUserUid={username.uid} />
             </div>
-          
-        </div>
-        
-      </div>
-      )}
-      {/* bottom bar div ^^^ */}
-      <div className="fixed bottom-0 left-0 right-0 flex z-50 bg-blue-100">
+          </div>
+        )}
+        {/* bottom bar div ^^^ */}
+        <div className="fixed bottom-0 left-0 right-0 flex z-50 bg-blue-100">
           <BottomBar currentUser={username.uid} />
         </div>
-    </div>
+      </div>
     </div>
   );
 }

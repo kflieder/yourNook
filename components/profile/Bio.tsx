@@ -108,7 +108,7 @@ function Bio({ userData }: BioProps) {
   ) : (
     <div className='pt-2 flex w-full'>
       <div className="border-r border-gray-400 flex flex-col p-3 justify-center items-center">
-      <div className="rounded-full w-24 h-24 overflow-scroll">
+      <div className="rounded-full w-24 h-24">
         <img
           src={profilePicture || "/profileAvatar.png"}
           alt="Profile"
@@ -117,7 +117,7 @@ function Bio({ userData }: BioProps) {
       </div>
       {!isOwner && <FollowButton targetUid={userData.uid ?? ""} />}
       </div>
-      <div className="flex flex-col w-full justify-center items-center overflow-scroll">
+      <div className="flex flex-col w-full justify-center items-center">
         <h1 className="text-xl font-bold capitalize">{displayName}</h1>
         <div className="flex justify-between gap-x-2">
           <h3>@{uniqueUrl}</h3>

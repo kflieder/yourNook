@@ -66,7 +66,7 @@ function UserPosts({
 
   return (
     <div
-      className={`relative rounded w-full grid justify-center items-center overflow-auto sm:pb-20  ${
+      className={`relative rounded w-full grid justify-center items-center sm:pb-20  ${
         showThumbnails ? "grid-cols-3" : "grid-cols-1 h-[65vh] sm:h-[85vh]"
       } gap-4 hide-scrollbar`}
     >
