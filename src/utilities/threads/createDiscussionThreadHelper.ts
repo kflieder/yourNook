@@ -1,5 +1,5 @@
 import { db } from "lib/firebase";
-import { collection, doc, setDoc, Timestamp } from "firebase/firestore";
+import { collection, doc, serverTimestamp, setDoc, Timestamp } from "firebase/firestore";
 
 
 interface CreateDiscussionThreadData {
@@ -8,7 +8,7 @@ interface CreateDiscussionThreadData {
   authorId: string;
   authorDisplayName: string;
   likes?: string[];
-  createdAt?: Date;
+  createdAt?: any;
 }
 
 export async function createDiscussionThread(data: CreateDiscussionThreadData): Promise<void> {
@@ -19,7 +19,7 @@ export async function createDiscussionThread(data: CreateDiscussionThreadData): 
     await setDoc(newDiscussionThreadRef, {
       ...data,
       id: newDiscussionThreadRef.id,
-      createdAt: Timestamp.now(),
+      createdAt: serverTimestamp(),
     });
   } catch (error) {
     console.error("Error creating thread:", error);

@@ -9,6 +9,7 @@ function GlobalDiscussionThreadFeed({ currentUser }: { currentUser: string }) {
     console.log(currentUserData, "Current User Data in GlobalDiscussionThreadFeed");
     console.log(currentUserData?.displayName, "Current User Display Name in GlobalDiscussionThreadFeed");
     
+    console.log('current USERRRR', currentUser)
   return (
     <div className='gap-y-2 flex flex-col border w-full justify-center items-center px-10 sm:pb-20'>
       <h2>Global Discussion Threads</h2>
@@ -16,7 +17,7 @@ function GlobalDiscussionThreadFeed({ currentUser }: { currentUser: string }) {
       {!loading && posts.length === 0 && <p>No threads found.</p>}
       {posts.map((post) => (
         <DiscussionThreadStyle
-           key={post.id}
+            key={post.id}
             currentUser={currentUser}
             title={post.title}
             content={post.content}

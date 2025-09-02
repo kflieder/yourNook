@@ -225,22 +225,12 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
                     currentUserDisplayName={username.displayName || ""}
                   />
           ) : activeTab === "thread" ? (
-            <div className="col-span-2 border">
-              <div>
-                {isOwner && (
-                  <DiscussionThreadForm
-                    currentUserUid={username.uid || ""}
-                    currentUserDisplayName={username.displayName || ""}
-                  />
-                )}
-              </div>
-              <div className="border">
+            <div className="border-2">
                 <UserDiscussionThreads
                   currentUser={username}
                   targetUser={userData.uid || ""}
                 />
               </div>
-            </div>
           ) : null}
         </div>
       </div>
@@ -254,6 +244,12 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
                 <BlogForm
                   authorId={username.uid || ""}
                   authorDisplayName={username.displayName || ""}
+                />
+              )}
+              {activeTab === "thread" && (
+                <DiscussionThreadForm
+                  currentUserUid={username.uid || ""}
+                  currentUserDisplayName={username.displayName || ""}
                 />
               )}
               <div className="sm:hidden lg:block mt-2">

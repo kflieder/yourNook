@@ -48,6 +48,8 @@ async function Page({ params }: Props) {
   };
   const currentUser = await getCurrentUserServer();
 
+
+
 //  const authorRef = doc(db, 'users', blog.authorId)
 //  const authorSnap = await getDoc(authorRef);
 //  const authorData = authorSnap.data();
@@ -97,7 +99,7 @@ console.log(blog)
           authorUid={blog.authorId}
           title={blog.title}
           content={blog.content}
-          createdAt={blog.createdAt}
+          createdAt={blog.createdAt ? new Date(blog.createdAt) : null}
           currentLikes={blog.likes || []}
           postId={postId}
           currentUserDisplayName={currentUser?.displayName}

@@ -29,7 +29,7 @@ function BottomBar({ currentUser }: { currentUser: string }) {
             : "bg-none shadow-none"
         }`}
       />
-      <div className="flex items-center justify-center w-8 h-8" onClick={() => setActiveTab("messages")}>
+      <div className="flex items-center justify-center w-8 h-8 lg:hidden" onClick={() => setActiveTab("messages")}>
         <DMComponent currentUser={currentUser} targetUser={currentUser} forceOpen={activeTab === "messages"} />
       </div>
       <div className="cursor-pointer" onClick={() => handleSetActiveTab("createBlog")}>

@@ -13,13 +13,12 @@ interface GlobalBlogFeedProps {
 function GlobalBlogFeed({ currentUser, currentUserDisplayName }: GlobalBlogFeedProps) {
   const { posts, loading, hasMore, loadMoreRef } = usePaginatedPosts("blogs", "createdAt", currentUser, "authorId");
   return (
-    <div className='relative p-4 grid grid-cols-5 h-[85vh]'>
-    <div className='col-span-3 flex flex-col items-center justify-start hide-scrollbar p-1 overflow-scroll gap-y-4'>
-      {loading && <p>Loading...</p>}
+    <div className='w-full space-y-4 px-10'>
+     {loading && <p>Loading...</p>}
       {!loading && posts.length === 0 && <p>No blogs found.</p>}
       {posts.map((post) => (
-        <div key={post.id} className='w-full'>
         <BlogStyle
+          key={post.id}
           id={post.id}
           title={post.title}
           content={post.content}
@@ -33,13 +32,8 @@ function GlobalBlogFeed({ currentUser, currentUserDisplayName }: GlobalBlogFeedP
           authorUid={post.authorId}
           topic={post.topic}
         />
-        </div>
       ))}
       {hasMore && <div ref={loadMoreRef}>Load more...</div>}
-    </div>
-    <div className='col-span-2 h-[80vh] overflow-hidden'>
-      <BlogForm authorId={currentUser} authorDisplayName={currentUserDisplayName} />
-    </div>
     </div>
   )
 }

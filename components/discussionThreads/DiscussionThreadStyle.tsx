@@ -55,68 +55,84 @@ function DiscussionThreadStyle({
   };
 
   return (
-    <div className="border border-gray-300 bg-white w-full sm:w-1/2 p-4 rounded-lg shadow-sm flex items-start">
-      <Link href={`/profile/${authorUid}`}>
-        <img
-          src={authorUidData?.profilePicture}
-          alt="Author Profile"
-          className="w-10 h-10 rounded-full border"
-        />
-      </Link>
-      <div className="flex-1 ml-2">
-        <div className="flex items-center gap-2">
-        <Link href={`/profile/${authorUid}`}>
-          <h2 className="font-semibold capitalize">{authorUidData?.displayName || "Unknown Author"}</h2>
+    <div className="border border-gray-300 bg-white w-full p-4 rounded-lg shadow-sm flex flex-col items-start">
+      <div className="border p-2 w-full border-gray-300 bg-white rounded-lg shadow-sm flex items-start">
+        <Link className="hidden sm:block" href={`/profile/${authorUid}`}>
+          <img
+            src={authorUidData?.profilePicture}
+            alt="Author Profile"
+            className="w-10 h-10 rounded-full border"
+          />
         </Link>
-        <p className='text-xs'>
-          {createdAt ? formatTimeAgo('toDate' in createdAt ? createdAt.toDate() : createdAt) : "Unknown time"}
-        </p>
-      </div>
-        <h3 className="text-xl font-semibold">{title}</h3>
-        <p className="">{content}</p>
-      <div className="flex items-center space-x-2 mt-2">
-        <Likes
-          message="liked your thread"
-          type="discussionThreads"
-          docId={postId || ""}
-          currentLikes={currentLikes || []}
-          collectionName={"discussionThreads"}
-          targetUid={authorUid}
-          currentUser={currentUser}
-          displayName={authorUidData?.displayName || "Unknown Author"}
-          currentUserDisplayName={
-            currentUserDisplayName || currentUser?.displayName || "Unknown User"
-          }
-        />
-        <div onClick={handleToggleComments} className="cursor-pointer flex">
-          <CommentCount postId={postId || ""} />
-        </div>
-        <SharePost
-          postId={postId || ""}
-          postAuthorId={authorUid || ""}
-          currentUser={currentUser?.uid || ""}
-          currentUserDisplayName={
-            currentUserDisplayName || currentUser?.displayName || ""
-          }
-          collectionName={"discussionThreads"}
-        />
-        <div onClick={handleShowReportForm} className="ml-2">
-          <MdReportGmailerrorred className="cursor-pointer" size={24} />
-        </div>
-      </div>
-      <div>
-        {showComments && (
-          <div className="mt-4">
-            <CommentSection postId={postId || ""} postAuthorId={authorUid} />
+        <div className="flex-1 ml-2">
+          <div className="flex items-center gap-2 mb-4 sm:mb-0">
+            <Link className="sm:hidden block" href={`/profile/${authorUid}`}>
+              <img
+                src={authorUidData?.profilePicture}
+                alt="Author Profile"
+                className="w-10 h-10 rounded-full border"
+              />
+            </Link>
+            <Link href={`/profile/${authorUid}`}>
+              <h2 className="font-semibold capitalize">
+                {authorUidData?.displayName || "Unknown Author"}
+              </h2>
+            </Link>
+            <p className="text-xs">
+              {createdAt
+                ? formatTimeAgo(
+                    createdAt.toDate ? createdAt.toDate() : new Date(createdAt)
+                  )
+                : "Unknown time"}
+            </p>
           </div>
-        )}
-        {showReportForm && (
-          <div className="mt-4">
-            <Report postId={postId || ""} />
+          <h3 className="text-xl font-semibold">{title}</h3>
+          <p className="">{content}</p>
+          <div className="flex items-center space-x-2 mt-2">
+            <Likes
+              message="liked your thread"
+              type="likedDiscussionThread"
+              docId={postId || ""}
+              currentLikes={currentLikes || []}
+              collectionName={"discussionThreads"}
+              targetUid={authorUid}
+              currentUser={currentUser.uid || currentUser}
+              displayName={authorUidData?.displayName || "Unknown Author"}
+              currentUserDisplayName={
+                currentUserDisplayName ||
+                currentUser?.displayName ||
+                "Unknown User"
+              }
+            />
+            <div onClick={handleToggleComments} className="cursor-pointer flex">
+              <CommentCount postId={postId || ""} />
+            </div>
+            <SharePost
+              postId={postId || ""}
+              postAuthorId={authorUid || ""}
+              currentUser={currentUser?.uid || ""}
+              currentUserDisplayName={
+                currentUserDisplayName || currentUser?.displayName || ""
+              }
+              collectionName={"discussionThreads"}
+            />
+            <div onClick={handleShowReportForm} className="ml-2">
+              <MdReportGmailerrorred className="cursor-pointer" size={24} />
+            </div>
           </div>
-        )}
+          <div></div>
+        </div>
       </div>
-      </div>
+      {showComments && (
+        <div className="mt-4">
+          <CommentSection postId={postId || ""} postAuthorId={authorUid} />
+        </div>
+      )}
+      {showReportForm && (
+        <div className="mt-4">
+          <Report postId={postId || ""} />
+        </div>
+      )}
     </div>
   );
 }

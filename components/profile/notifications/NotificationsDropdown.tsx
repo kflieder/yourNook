@@ -105,6 +105,9 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
       case "likedBlog":
       case "commentBlog":
         return `/feed/blogs/${notification.postId}`;
+      case "likedDiscussionThread":
+      case "commentDiscussionThread":  
+        return `/feed/discussionThreads/${notification.postId}`;
       default:
         return `/profile/${notification.fromUserId}`;
     }
@@ -120,7 +123,7 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
               href={`/profile/${notification.fromUserId}`}
             >
               <img
-                src={senderInfo.profilePicture}
+                src={senderInfo.profilePicture || "/profileAvatar.png"}
                 alt={senderInfo.displayName}
                 className="w-12 h-12 rounded-full mr-1 mb-1 border"
               />
