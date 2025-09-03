@@ -3,7 +3,7 @@ import { createDiscussionThread } from '@/utilities/threads/createDiscussionThre
 
 function DiscussionThreadForm({ currentUserUid, currentUserDisplayName }: {
   currentUserUid: string;
-  currentUserDisplayName: string;
+  currentUserDisplayName?: string;
 }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -14,8 +14,8 @@ function DiscussionThreadForm({ currentUserUid, currentUserDisplayName }: {
       await createDiscussionThread({
         title,
         content,
-        authorId: currentUserUid, 
-        authorDisplayName: currentUserDisplayName, 
+        authorId: currentUserUid,
+        authorDisplayName: currentUserDisplayName || "",
       });
       setTitle('');
       setContent('');
@@ -25,19 +25,18 @@ function DiscussionThreadForm({ currentUserUid, currentUserDisplayName }: {
   };
 
   return (
-    <div className='border'>
-      <h2>Create a New Thread</h2>
-      <form onSubmit={handleSubmit}> 
+    <div className='border border-gray-300 rounded bg-white p-4'>
+      
+      <form className='flex flex-col gap-4 border border-gray-300 rounded p-4' onSubmit={handleSubmit}> 
         <div>
-          <label className='border' htmlFor="title">Title:</label>
-          <input className='border' type="text" id="title" name="title" required value={title} onChange={(e) => setTitle(e.target.value)} />
+          <input className='border rounded px-2 bg-gray-100 w-full' placeholder='Title' type="text" id="title" name="title" required value={title} onChange={(e) => setTitle(e.target.value)} />
         </div>
         <div>
-          <label className='border' htmlFor="content">Content:</label>
-          <textarea className='border' id="content" name="content" required value={content} onChange={(e) => setContent(e.target.value)}></textarea>
+          <textarea placeholder='Prompt' className='border px-2 rounded bg-gray-100 w-full resize-none' id="content" name="content" required value={content} onChange={(e) => setContent(e.target.value)}></textarea>
         </div>
         <button className='border cursor-pointer' type="submit">Submit</button>
       </form>
+      
     </div>
   )
 }

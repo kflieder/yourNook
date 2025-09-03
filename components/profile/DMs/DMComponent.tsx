@@ -163,7 +163,7 @@ function DMComponent({
               ref={mobileModalRef}
               className={
                 isOpen && toggleMessages
-                  ? "block fixed z-40 bottom-15 right-50 w-1/2 bg-white px-4 py-2 rounded-lg shadow-2xl hide-scrollbar"
+                  ? "block fixed z-40 bottom-16 right-0 w-1/2 bg-white px-4 py-2 rounded-lg shadow-2xl hide-scrollbar"
                   : "hidden"
               }
             >

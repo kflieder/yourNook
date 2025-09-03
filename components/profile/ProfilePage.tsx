@@ -73,9 +73,9 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
     const rect = bioRef.current.getBoundingClientRect();
     const threshold = 50;
     const pastBio = rect.bottom < threshold;
-    // if (!pastBio) {
-    //   postsRef.current.scrollTop = 0;
-    // }
+    if (!pastBio) {
+      postsRef.current.scrollTop = 0;
+    }
     setEnableScroll(pastBio);
   };
 

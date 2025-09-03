@@ -39,14 +39,14 @@ function Bio({ userData }: BioProps) {
   const isMobile = useIsMobile();
 
   return !isMobile ? (
-    <div className="bg-blue-50 rounded p-6 flex">
+    <div className="bg-blue-50 rounded px-6 py-2 flex">
       <div className="flex min-w-50 border-r">
         <div className="">
-          <div className="rounded-full w-36 h-36 overflow-hidden mb-2">
+          <div className="rounded-full w-34 h-34 overflow-hidden mb-2">
             <img
               src={profilePicture || "/profileAvatar.png"}
               alt="Profile"
-              className="w-36 h-36 rounded-full object-cover"
+              className="w-34 h-34 rounded-full object-cover"
             />
           </div>
           <div className="ml-4">
