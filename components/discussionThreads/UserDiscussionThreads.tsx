@@ -6,7 +6,7 @@ function UserDiscussionThreads({ currentUser, targetUser }: { currentUser: any; 
   const { discussionThreads, loading } = useGetDiscussionThread(targetUser); 
   console.log("Discussion Threads:", discussionThreads);
   return (
-    <>
+    <div className='space-y-4'>
       {loading && <p>Loading discussion threads...</p>}
       {!loading && discussionThreads.length === 0 && <p>No discussion threads found.</p>}
       {discussionThreads.map((thread) => (
@@ -20,7 +20,7 @@ function UserDiscussionThreads({ currentUser, targetUser }: { currentUser: any; 
         currentLikes={thread.likes} 
         postId={thread.id} />
       ))}
-    </>
+    </div>
   )
 }
 

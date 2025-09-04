@@ -67,7 +67,7 @@ function PostStyle({
 
   if (thumbnail)
     return (
-      <div className="cursor-pointer border bg-gray-500/50 w-42 h-42" onClick={handleOpenFromThumbnail}>
+      <div className="cursor-pointer bg-gray-500/50 w-42 h-42" onClick={handleOpenFromThumbnail}>
         {mediaUrl ? (
           mediaUrl.includes("video") ? (
             <video

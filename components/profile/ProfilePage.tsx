@@ -71,7 +71,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
     if (isMobile) return;
     if (!bioRef.current || !postsRef.current) return;
     const rect = bioRef.current.getBoundingClientRect();
-    const threshold = 50;
+    const threshold = window.innerHeight * 0.1;
     const pastBio = rect.bottom < threshold;
     if (!pastBio) {
       postsRef.current.scrollTop = 0;
@@ -86,6 +86,8 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
+
+    
   }, []);
 
   useEffect(() => {
@@ -160,12 +162,12 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   }
 
   return (
-    <div className="sm:pt-15 pt-10 h-screen">
+    <div className="sm:pt-15 pt-10">
       <div ref={bioRef} className="sm:mx-10 shadow-xl">
         <Bio userData={userData} />
       </div>
       <div
-        className={`hide-scrollbar pt-2 sm:pl-5 flex flex-col sm:grid sm:grid-cols-5 sm:h-[95vh]`}
+        className={`hide-scrollbar sm:pt-2 sm:pl-5 flex flex-col sm:grid sm:grid-cols-5 sm:h-[95vh]`}
       >
         <div
           ref={postsRef}
@@ -222,12 +224,10 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
                 currentUserDisplayName={username.displayName || ""}
               />
             ) : activeTab === "thread" ? (
-              <div className="border-2">
                 <UserDiscussionThreads
                   currentUser={username}
                   targetUser={userData.uid || ""}
                 />
-              </div>
             ) : null}
           </div>
         </div>
