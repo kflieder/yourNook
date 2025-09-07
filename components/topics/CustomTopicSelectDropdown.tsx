@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import blogTopicData from "@/utilities/blogs/blogTopicData.json";
+import topicData from "../topics/topicData.json";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 export default function CustomTopicSelectDropdown({
@@ -38,7 +38,7 @@ export default function CustomTopicSelectDropdown({
       {isOpen && (
         <div className="absolute z-50 left-0 mx-4 bg-white border rounded p-2 text-center shadow-2xl">
           <ul className="border bg-gray-100">
-            {blogTopicData.map((t) => (
+            {topicData.map((t) => (
               <li
                 className="inline-block px-2 py-1 rounded-full cursor-pointer m-1 shadow-lg"
                 style={{

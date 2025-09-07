@@ -18,7 +18,9 @@ function UserDiscussionThreads({ currentUser, targetUser }: { currentUser: any; 
         createdAt={thread.createdAt} 
         authorUid={thread.authorId} 
         currentLikes={thread.likes} 
-        postId={thread.id} />
+        postId={thread.id}
+        topic={thread.topic || ''}
+        />
       ))}
     </div>
   )

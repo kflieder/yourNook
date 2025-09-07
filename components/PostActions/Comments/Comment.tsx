@@ -62,12 +62,20 @@ function Comment({
 
   return (
     <>
-      <li key={comment.id} className="flex p-2 shadow-md">
+      <li key={comment.id} className="flex pt-2 px-2 shadow-md">
+        <div className="flex flex-col items-center">
         <img
-          className="w-8 h-8 rounded-full"
+          className="min-w-8 max-h-8 min-h-8 rounded-full"
           src={authorData?.profilePicture}
           alt={`${authorData?.displayName}'s profile`}
         />
+        {
+          showReplies && comment.replies && comment.replies.length > 0 && (
+            <div className="h-full rounded-b-lg border border-gray-400 w-0"></div>
+          )
+        }
+        
+        </div>
         <div className="ml-2">
         <div className="flex items-baseline space-x-1">
           <strong>{comment.displayName}</strong> 
@@ -123,9 +131,9 @@ function Comment({
         showReplies &&
         comment.replies &&
         comment.replies.length > 0 && (
-          <ul className="ml-4 max-h-84 overflow-y-auto hide-scrollbar">
+          <ul className="ml-5.75 max-h-84 overflow-y-auto hide-scrollbar">
             {comment.replies.map((reply) => (
-              <div key={reply.id} className="border-l-2 pl-4">
+              <div key={reply.id} className="border-l-2 border-gray-400 pl-4">
                 <Comment
                   key={reply.id}
                   comment={reply}

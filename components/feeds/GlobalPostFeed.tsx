@@ -2,10 +2,6 @@
 import React, { useState } from "react";
 import { usePaginatedPosts } from "@/utilities/usePaginatedPosts";
 import LivePost from "components/post/LivePost";
-import CreatePost from "components/profile/CreatePost";
-import DMComponent from "components/profile/DMs/DMComponent";
-import BottomBar from "components/mobileComponents/BottomBar";
-
 interface GlobalPostFeedProps {
   currentUser: { uid: string; displayName: string; profilePicture?: string };
 }
@@ -30,8 +26,7 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
  
 
   return (
-    <div className="w-full grid grid-cols-1 lg:grid-cols-2 justify-between h-screen sm:h-[80vh]">
-      <div className="flex flex-col gap-y-4 overflow-scroll overflow-x-hidden hide-scrollbar">
+      <div>
         <div className="flex items-start justify-around w-full sm:mt-5">
           <h1
             onClick={() => handleTabChange("latest")}
@@ -71,18 +66,7 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
         {loading && <p>Loading...</p>}
         {hasMore && <div ref={loadMoreRef} />}
       </div>
-      <div className="hidden lg:flex justify-center items-center">
-        <div className='w-116 h-full flex flex-col justify-center gap-y-8'>
-        <DMComponent
-          currentUser={currentUser.uid}
-          targetUser={currentUser.uid}
-        />
-        <CreatePost />
-        </div>
-      </div>
       
-      
-    </div>
   );
 }
 

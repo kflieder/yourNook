@@ -10,6 +10,7 @@ import SharePost from "components/PostActions/SharePost";
 import { MdReportGmailerrorred } from "react-icons/md";
 import Report from "components/PostActions/Report";
 import { formatTimeAgo } from "@/utilities/formatTimeAgoHelper";
+import topicData from "../topics/topicData.json";
 
 function DiscussionThreadStyle({
   currentUser,
@@ -20,6 +21,7 @@ function DiscussionThreadStyle({
   currentLikes,
   postId,
   currentUserDisplayName,
+  topic,
 }: {
   currentUser: any;
   authorUid?: any;
@@ -29,6 +31,7 @@ function DiscussionThreadStyle({
   currentLikes: string[];
   postId?: string;
   currentUserDisplayName?: string;
+  topic: string;
 }) {
   const authorUidsDoc = getUserDocHelper(authorUid);
   const [authorUidData, setauthorUidData] = useState<any>(null);
@@ -42,8 +45,6 @@ function DiscussionThreadStyle({
       setauthorUidData(userData);
     };
     fetchauthorUidData();
-    console.log("Current User:", currentUser);
-    console.log("Target User:", authorUid);
   }, [authorUid]);
 
   const handleToggleComments = () => {
@@ -73,18 +74,27 @@ function DiscussionThreadStyle({
                 className="w-10 h-10 rounded-full border"
               />
             </Link>
-            <Link href={`/profile/${authorUid}`}>
-              <h2 className="font-semibold capitalize">
-                {authorUidData?.displayName || "Unknown Author"}
-              </h2>
-            </Link>
-            <p className="text-xs">
-              {createdAt
-                ? formatTimeAgo(
-                    createdAt.toDate ? createdAt.toDate() : new Date(createdAt)
-                  )
-                : "Unknown time"}
-            </p>
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-2">
+                <Link href={`/profile/${authorUid}`}>
+                  <h2 className="font-semibold capitalize">
+                    {authorUidData?.displayName || "Unknown Author"}
+                  </h2>
+                </Link>
+                <p className="text-xs">
+                  {createdAt
+                    ? formatTimeAgo(
+                        createdAt.toDate
+                          ? createdAt.toDate()
+                          : new Date(createdAt)
+                      )
+                    : "Unknown time"}
+                </p>
+              </div>
+              <div style={{background: topicData.find((t) => t.topic === topic)?.textBackground || 'black', color: topicData.find((t) => t.topic === topic)?.textColor || 'black'}} className="text-xs px-2 py-1 rounded-full">
+                {topic}
+              </div>
+            </div>
           </div>
           <h3 className="text-xl font-semibold">{title}</h3>
           <p className="">{content}</p>

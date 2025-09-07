@@ -95,7 +95,7 @@ console.log(blog)
 
       {collectionName === "discussionThreads" && (
         <DiscussionThreadStyle
-          currentUser={currentUser}
+          currentUser={currentUser || ""}
           authorUid={blog.authorId}
           title={blog.title}
           content={blog.content}
@@ -103,6 +103,7 @@ console.log(blog)
           currentLikes={blog.likes || []}
           postId={postId}
           currentUserDisplayName={currentUser?.displayName}
+          topic={blog.topic || ""}
         />
       )}
     </div>

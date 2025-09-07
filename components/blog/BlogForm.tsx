@@ -1,8 +1,7 @@
 'use client'
 import { createBlog } from '@/utilities/blogs/createBlogHelper';
 import React, { useState } from 'react'
-import blogTopicData from '@/utilities/blogs/blogTopicData.json'
-import CustomTopicSelectDropdown from './CustomTopicSelectDropdown';
+import CustomTopicSelectDropdown from '../topics/CustomTopicSelectDropdown';
 
 interface BlogFormProps {
     authorId: string;

@@ -9,6 +9,7 @@ interface CreateDiscussionThreadData {
   authorDisplayName: string;
   likes?: string[];
   createdAt?: any;
+  topic: string;
 }
 
 export async function createDiscussionThread(data: CreateDiscussionThreadData): Promise<void> {

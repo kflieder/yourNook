@@ -10,7 +10,7 @@ import Report from "components/PostActions/Report";
 import { MdReportGmailerrorred } from "react-icons/md";
 import { useLiveUserData } from "@/utilities/useLiveUserData";
 import Link from "next/link";
-import blogTopicData from "@/utilities/blogs/blogTopicData.json";
+import topicData from "../topics/topicData.json";
 
 interface BlogStyleProps {
   id: string;
@@ -88,7 +88,7 @@ function BlogStyle({
       <div
         style={{
           background:
-            blogTopicData.find((t) => t.topic === topic)?.headerBackground ||
+            topicData.find((t) => t.topic === topic)?.headerBackground ||
             "white",
         }}
         className="flex items-center space-x-2 p-2"
@@ -96,10 +96,10 @@ function BlogStyle({
         <span
           className="text-2xl"
           style={{
-            color: blogTopicData.find((t) => t.topic === topic)?.textColor,
+            color: topicData.find((t) => t.topic === topic)?.textColor,
           }}
         >
-          {blogTopicData.find((t) => t.topic === topic)?.icon}
+          {topicData.find((t) => t.topic === topic)?.icon}
         </span>
       </div>
       <div
@@ -110,10 +110,10 @@ function BlogStyle({
             className="p-1 px-2 rounded-full"
             style={{
               color:
-                blogTopicData.find((t) => t.topic === topic)?.textColor ||
+                topicData.find((t) => t.topic === topic)?.textColor ||
                 "black",
               background:
-                blogTopicData.find((t) => t.topic === topic)?.textBackground ||
+                topicData.find((t) => t.topic === topic)?.textBackground ||
                 "white",
             }}
           >

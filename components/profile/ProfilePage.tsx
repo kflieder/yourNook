@@ -171,7 +171,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
       >
         <div
           ref={postsRef}
-          className={`hide-scrollbar ${isOwner ? "col-span-3" : "col-span-5"} 
+          className={`hide-scrollbar pb-5 sm:pb-20 ${isOwner ? "col-span-3" : "col-span-5"} 
           h-[75vh] sm:h-auto 
            ${
              isMobile
@@ -212,7 +212,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
           </div>
           {/* tabs div ^^ */}
 
-          <div className="flex flex-col justify-center items-center pb-10 pt-4 sm:pb-0">
+          <div className="flex flex-col justify-center items-center pt-4 sm:pb-0">
             {activeTab === "posts" ? (
               <UserPosts posts={posts} />
             ) : activeTab === "blog" ? (
@@ -253,7 +253,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
                     currentUserDisplayName={username.displayName || ""}
                   />
                 )}
-                <div className="sm:hidden lg:block mt-2">
+                <div className="sm:hidden lg:block mt-4">
                   <DMComponent
                     currentUser={username.uid}
                     targetUser={userData.uid || ""}

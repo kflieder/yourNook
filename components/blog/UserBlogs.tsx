@@ -21,7 +21,7 @@ function UserBlogs({
  
  
   return (
-    <div className="flex flex-col gap-4 p-4 w-full sm:pb-20">
+    <div className="flex flex-col gap-4 p-4 w-full">
       {loading && <p>Loading...</p>}
       {!loading && blogs.length === 0 && <p>No blogs found.</p>}
       {blogs.map((blog) => {

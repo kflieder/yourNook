@@ -3,7 +3,7 @@ import { db } from '../../../lib/firebase';
 import { collection, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 
 export function useGetDiscussionThread(authorId: string) {
-    const [discussionThreads, setDiscussionThreads] = useState<Array<{ id: string; title: string; content: string; authorId: string; createdAt: Date; authorDisplayName: string, likes: string[] }>>([]);
+    const [discussionThreads, setDiscussionThreads] = useState<Array<{ id: string; title: string; content: string; authorId: string; createdAt: Date; authorDisplayName: string, likes: string[], topic: string }>>([]);
     const [loading, setLoading] = useState(true);
 
 
@@ -29,7 +29,8 @@ export function useGetDiscussionThread(authorId: string) {
                     authorId: data.authorId ?? "",
                     createdAt: data.createdAt?.toDate() ?? new Date(),
                     authorDisplayName: data.authorDisplayName ?? "",
-                    likes: data.likes || []
+                    likes: data.likes || [],
+                    topic: data.topic ?? "",
                 };
             });
             setDiscussionThreads(newDiscussionThreads);

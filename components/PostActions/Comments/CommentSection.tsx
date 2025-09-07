@@ -64,8 +64,8 @@ function CommentSection({
           />
         </div>
       ) : (
-        <>
-          <ul className="">
+        <div className=" flex flex-col justify-between h-full">
+          <ul>
             {commentTree.map((comment) => (
               <Comment
                 key={comment.id}
@@ -89,7 +89,7 @@ function CommentSection({
               parentId={null}
             />
           </div>
-        </>
+        </div>
       )}
     </>
   );
