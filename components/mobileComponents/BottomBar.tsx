@@ -39,6 +39,7 @@ function BottomBar({ currentUser }: { currentUser: string }) {
     };
   }, [activeTab]);
 
+  console.log('from bottom bar currentUser:', currentUser);
   return (
     <div className="flex relative justify-end w-full bg-blue-100 border-gray-300 shadow-lg">
       <div

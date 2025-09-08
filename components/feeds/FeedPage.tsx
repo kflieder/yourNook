@@ -50,7 +50,7 @@ function FeedPage() {
         </button>
       </div>
 
-      <div className="w-full grid grid-cols-1 lg:grid-cols-2 justify-between h-screen sm:h-[90vh] pt-30">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-2 justify-between h-screen pt-30 pb-20">
         <div className="flex flex-col gap-y-4 overflow-scroll overflow-x-hidden hide-scrollbar">
         {activeTab === "posts" && (
           <GlobalPostFeed

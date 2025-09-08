@@ -163,6 +163,10 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
 
   return (
     <div className="sm:pt-15 pt-10">
+      <BlockButton
+        blockerUid={username.uid || ""}
+        blockedUid={userData.uid || ""}
+      />
       <div ref={bioRef} className="sm:mx-10 shadow-xl">
         <Bio userData={userData} />
       </div>

@@ -1,7 +1,7 @@
 'use client'
 import React, { useState }from 'react'
 import { useAuth } from '@/context/AuthContext';
-import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { doc, updateDoc, arrayUnion, arrayRemove, increment } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { sendNotification } from '@/utilities/sendNotification';
 interface LikesProps {
@@ -32,12 +32,14 @@ function Likes({ docId, currentLikes, collectionName, targetUid, currentUser, cu
     try {
         if (userHasLiked) {
             await updateDoc(postRef, {
-                likes: arrayRemove(username.uid)
+                likes: arrayRemove(username.uid),
+                likeCount: increment(-1)
             });
             setLikes(prev => prev.filter(uid => uid !== username.uid));
         } else {
             await updateDoc(postRef, {
-                likes: arrayUnion(username.uid)
+                likes: arrayUnion(username.uid),
+                likeCount: increment(1)
             });
             setLikes(prev => [...prev, username.uid]);
             await sendNotification({

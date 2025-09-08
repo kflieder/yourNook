@@ -151,7 +151,7 @@ function CreatePost() {
                 fileInputRef.current.click();
               }
             }}
-            className="flex sm:hidden">
+            className="flex cursor-pointer">
               <TbPhotoPlus size={22} className="mr-2" />
               <GoDeviceCameraVideo size={25} className="mr-2" />
             </div>
@@ -159,7 +159,7 @@ function CreatePost() {
           <button
             disabled={!content && !mediaFile}
             type="submit"
-            className="flex sm:hidden bg-blue-950 text-white px-2 py-1 text-sm rounded-lg hover:bg-gray-500 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex bg-blue-950 text-white px-2 py-1 text-sm rounded-lg hover:bg-gray-500 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? "Creating Post..." : "Post"}
           </button>
@@ -195,23 +195,7 @@ function CreatePost() {
                 />
               )}
             </div>
-          )}
-
-          <label
-            htmlFor="file-upload"
-            className="sm:flex hidden cursor-pointer items-center"
-          >
-            <TbPhotoPlus size={22} className="mr-2" />
-            <GoDeviceCameraVideo size={25} className="mr-2" />
-          </label>
-
-          <button
-            disabled={!content && !mediaFile}
-            type="submit"
-            className="sm:flex hidden bg-blue-950 text-white px-2 py-1 text-sm rounded-lg hover:bg-gray-500 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isLoading ? "Creating Post..." : "Post"}
-          </button>
+          )}   
         </div>
       </form>
     </div>

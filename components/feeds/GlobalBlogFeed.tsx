@@ -1,8 +1,9 @@
 'use client'
-import React from 'react'
+import React, {useState} from 'react'
 import { usePaginatedPosts } from '@/utilities/usePaginatedPosts';
 import BlogStyle from 'components/blog/BlogStyle';
-import BlogForm from 'components/blog/BlogForm';
+import CustomTopicSelectDropdown from 'components/topics/CustomTopicSelectDropdown';
+
 
 interface GlobalBlogFeedProps {
   currentUser: string;
@@ -12,11 +13,16 @@ interface GlobalBlogFeedProps {
 
 function GlobalBlogFeed({ currentUser, currentUserDisplayName }: GlobalBlogFeedProps) {
   const { posts, loading, hasMore, loadMoreRef } = usePaginatedPosts("blogs", "createdAt", currentUser, "authorId");
+  const [searchedTopic, setSearchedTopic] = useState('');
+  const filteredPosts = searchedTopic ? posts.filter((post) => post.topic === searchedTopic) : posts;
   return (
-    <div className='w-full space-y-4 px-10'>
-     {loading && <p>Loading...</p>}
+    <div className='w-full space-y-4 px-10 flex flex-col justify-center items-center'>
+      <div className=''>
+        <CustomTopicSelectDropdown selectedTopic={searchedTopic} onSelectTopic={setSearchedTopic} styleSelector='feed' />
+      </div>
+      {loading && <p>Loading...</p>}
       {!loading && posts.length === 0 && <p>No blogs found.</p>}
-      {posts.map((post) => (
+      {filteredPosts.map((post) => (
         <BlogStyle
           key={post.id}
           id={post.id}

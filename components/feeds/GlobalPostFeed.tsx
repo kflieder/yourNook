@@ -7,9 +7,15 @@ interface GlobalPostFeedProps {
 }
 
 function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
-  const { posts, loading, hasMore, loadMoreRef } = usePaginatedPosts(
+  const { posts: latestPosts, loading, hasMore, loadMoreRef } = usePaginatedPosts(
     "posts",
     "createdAt",
+    currentUser.uid,
+    "uid"
+  );
+  const { posts: trendingPosts, loading: trendingLoading, hasMore: trendingHasMore, loadMoreTrendingRef } = usePaginatedPosts(
+    "posts",
+    "likeCount",
     currentUser.uid,
     "uid"
   );
@@ -26,8 +32,8 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
  
 
   return (
-      <div>
-        <div className="flex items-start justify-around w-full sm:mt-5">
+      <>
+        <div className="flex items-start justify-around w-full">
           <h1
             onClick={() => handleTabChange("latest")}
             className={`cursor-pointer ${
@@ -53,19 +59,40 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
             Friends
           </h1>
         </div>
-        {posts.map((post) => (
-          <div key={post.id} className="w-full rounded flex justify-center">
-            <LivePost
-              post={post}
-              currentUser={currentUser.uid}
-              currentUserDisplayName={currentUser.displayName}
-              styleSelector="feed"
-            />
+
+            <div className={`${activePostTab === "latest" ? "" : "hidden"}`}>
+              {latestPosts.map((post) => (
+                <div key={post.id} className="w-full rounded flex justify-center">
+                  <LivePost
+                    post={post}
+                    currentUser={currentUser.uid}
+                    currentUserDisplayName={currentUser.displayName}
+                    styleSelector="feed"
+                  />
+                </div>
+              ))}
+              {hasMore && <div ref={loadMoreRef} />}
+              {loading && <p>Loading...</p>}
+            </div>
+          
+
+
+          <div className={`${activePostTab === "trending" ? "" : "hidden"}`}>
+            {trendingPosts.map((post) => (
+              <div key={post.id} className="w-full rounded flex justify-center">
+                <LivePost
+                  post={post}
+                  currentUser={currentUser.uid}
+                  currentUserDisplayName={currentUser.displayName}
+                  styleSelector="feed"
+                />
+              </div>
+            ))}
+            {trendingHasMore && <div ref={loadMoreTrendingRef} />}
+            {trendingLoading && <p>Loading...</p>}
           </div>
-        ))}
-        {loading && <p>Loading...</p>}
-        {hasMore && <div ref={loadMoreRef} />}
-      </div>
+
+      </>
       
   );
 }

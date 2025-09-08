@@ -10,6 +10,8 @@ import {
   getDocs,
   DocumentData,
   QueryDocumentSnapshot,
+  getDoc,
+  doc,
 } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 import { getBlockedUsers, getUsersWhoBlockedMe } from "./blockUserHelper";
@@ -25,7 +27,7 @@ interface Post {
 
 export function usePaginatedPosts(
   collectionName: string,
-  sortField = "createdAt",
+  sortField: "createdAt" | "likeCount" = "createdAt",
   currentUser: string | undefined,
   authorIdField: string
 ) {
@@ -66,20 +68,53 @@ export function usePaginatedPosts(
         id: doc.id,
         ...doc.data(),
       })) as Post[];
-      const filteredPosts = firstPosts.filter(
-        (post) =>
-          post[authorIdField] && !blockedUids.includes(post[authorIdField]) && !usersWhoBlockedMe.includes(post[authorIdField])
-      );
+
+      const fetchPrivacyAndFilter = async () => {
+        const authorIds = Array.from(
+          new Set(firstPosts.map((post) => post[authorIdField] || post.uid))
+        );
+        const authorPrivacyMap: Record<string, boolean> = {};
+        const authorFollowers: Record<string, string[]> = {};
+        await Promise.all(
+          authorIds.map(async (authorId) => {
+            const userDoc = await getDoc(doc(db, "users", authorId));
+            authorPrivacyMap[authorId] = userDoc.data()?.private || false;
+            authorFollowers[authorId] = userDoc.data()?.followers || [];
+          })
+        );
+
+        console.log("Author Privacy Map:", authorPrivacyMap);
+        const filteredPosts = firstPosts.filter((post) => {
+          const authorId = post[authorIdField];
+          const privateStatus = authorPrivacyMap[authorId] || false;
+          const followers: string[] = authorFollowers[authorId] || [];
+          if (
+            !authorId ||
+            blockedUids.includes(authorId) ||
+            usersWhoBlockedMe.includes(authorId)
+          ) {
+            return false;
+          }
+          return !privateStatus || followers.includes(currentUser || "");
+        });
+        return filteredPosts;
+      };
+
+      fetchPrivacyAndFilter().then((filteredPosts) => {
+        setPosts((prev) => {
+          const existingIds = new Set(prev.map((p) => p.id));
+          const unique = filteredPosts.filter((p) => !existingIds.has(p.id));
+          return [...prev, ...unique];
+        });
+      });
+
       const lastVisibleDoc = snapshot.docs.findLast((doc) => {
         const data = doc.data();
         return (
-          data[authorIdField] && !blockedUids.includes(data[authorIdField]) && !usersWhoBlockedMe.includes(data[authorIdField])
+          data[authorIdField] &&
+          !blockedUids.includes(data[authorIdField]) &&
+          !usersWhoBlockedMe.includes(data[authorIdField])
         );
-      });
-      setPosts((prev) => {
-        const existingIds = new Set(prev.map((p) => p.id));
-        const unique = filteredPosts.filter((p) => !existingIds.has(p.id));
-        return [...prev, ...unique];
       });
       setLastDoc(lastVisibleDoc || null);
       setHasMore(true);
@@ -105,9 +140,31 @@ export function usePaginatedPosts(
         id: doc.id,
         ...doc.data(),
       })) as Post[];
+
+      const authorIds = Array.from(new Set(newPosts.map((post) => post[authorIdField] || post.uid)));
+      const authorPrivacyMap: Record<string, boolean> = {};
+      const authorFollowers: Record<string, string[]> = {};
+
+      await Promise.all(
+        authorIds.map(async (authorId) => {
+          const userDoc = await getDoc(doc(db, "users", authorId));
+          authorPrivacyMap[authorId] = userDoc.data()?.private || false;
+          authorFollowers[authorId] = userDoc.data()?.followers || [];
+        })
+      );
+
       const filteredPosts = newPosts.filter((post) => {
-        const idToCheck = post[authorIdField] || post.uid;
-        return !blockedUids.includes(idToCheck) && !usersWhoBlockedMe.includes(idToCheck);
+        const authorId = post[authorIdField] || post.uid;
+        const privateStatus = authorPrivacyMap[authorId] || false;
+        const followers: string[] = authorFollowers[authorId] || [];
+        if (
+          !authorId ||
+          blockedUids.includes(authorId) ||
+          usersWhoBlockedMe.includes(authorId)
+        ) {
+          return false;
+        }
+        return !privateStatus || followers.includes(currentUser || "");
       });
 
       console.log(
@@ -143,6 +200,7 @@ export function usePaginatedPosts(
 
   const observer = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const loadMoreTrendingRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (observer.current) observer.current.disconnect();
@@ -154,8 +212,11 @@ export function usePaginatedPosts(
     if (loadMoreRef.current) {
       observer.current.observe(loadMoreRef.current);
     }
+    if (loadMoreTrendingRef.current) {
+      observer.current.observe(loadMoreTrendingRef.current);
+    }
     return () => observer.current?.disconnect();
   }, [fetchMorePosts]);
 
-  return { posts, loading, hasMore, loadMoreRef };
+  return { posts, loading, hasMore, loadMoreRef, loadMoreTrendingRef };
 }
