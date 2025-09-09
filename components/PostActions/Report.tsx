@@ -54,37 +54,43 @@ function Report({ postId }: ReportButtonProps) {
   }
 
   return (
-    <div>
-    {!isSubtmitted ? (
-        <form onSubmit={handleSubmitReport}>
-      <p>Why are you reporting this post?</p>
-      {reportOptions.map((reason) => (
-        <label key={reason} className="block mb-1">
-          <input
-            type="checkbox"
-            checked={reasons.includes(reason)}
-            onChange={() => handleCheckboxChange(reason)}
-            className="mr-2"
+    <>
+      {!isSubtmitted ? (
+        <form className='sm:w-96 w-74 border border-gray-300 px-4 py-1 flex flex-col justify-center items-center' onSubmit={handleSubmitReport}>
+          <p>Why are you reporting this post?</p>
+          <div className='flex flex-col justify-start'>
+          {reportOptions.map((reason) => (
+            <label key={reason} className="flex items-center mb-1 ml-2">
+              <input
+                type="checkbox"
+                checked={reasons.includes(reason)}
+                onChange={() => handleCheckboxChange(reason)}
+                className="mr-2"
+              />
+              {reason}
+            </label>
+          ))}
+          </div>
+          <textarea
+            value={customReason}
+            onChange={(e) => setCustomReason(e.target.value)}
+            placeholder="Add a custom reason (optional)"
+            className="w-full p-2 border rounded mb-2 resize-none"
           />
-          {reason}
-        </label>
-      ))}
-      <textarea
-        value={customReason}
-        onChange={(e) => setCustomReason(e.target.value)}
-        placeholder="Add a custom reason (optional)"
-        className="w-full p-2 border rounded mb-2"
-      />
-      <button
-        type="submit"
-        className="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-      >
-        Submit Report
-      </button>
-    </form>
-    ) : (
-      <p className="text-green-500">Thank you for your report!</p>)}
-    </div>
+          <div className='w-full flex justify-end'>
+          <button
+            disabled={!currentUser || reasons.length === 0}
+            type="submit"
+            className="flex items-center bg-red-500 text-white px-2 text-sm rounded hover:bg-red-600 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Submit Report
+          </button>
+          </div>
+        </form>
+      ) : (
+        <p className="text-green-500">Thank you for your report!</p>
+      )}
+    </>
   );
 }
 

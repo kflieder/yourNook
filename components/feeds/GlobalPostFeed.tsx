@@ -2,6 +2,9 @@
 import React, { useState } from "react";
 import { usePaginatedPosts } from "@/utilities/usePaginatedPosts";
 import LivePost from "components/post/LivePost";
+import { useMutualFriends } from "@/utilities/useMutualFriends";
+
+
 interface GlobalPostFeedProps {
   currentUser: { uid: string; displayName: string; profilePicture?: string };
 }
@@ -22,13 +25,23 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
   const [activePostTab, setActivePostTab] = useState<
     "latest" | "trending" | "friends"
   >("latest");
-  
+
+  const mutualFriends  = useMutualFriends(currentUser.uid);
+  const friendUids = mutualFriends.map((friend) => friend.uid);
+  const { posts: latestFriendsPosts, loading: latestLoading, hasMore: latestFriendsHasMore, loadMoreRef: loadMoreFriendsRef } = usePaginatedPosts(
+    "posts",
+    "createdAt",
+    currentUser.uid,
+    "uid",
+    friendUids
+  );
+
   function handleTabChange(tab: "latest" | "trending" | "friends") {
     if (activePostTab === tab) return;
     setActivePostTab(tab);
     console.log(`Active post tab changed to: ${tab}`);
   }
-
+ 
  
 
   return (
@@ -91,7 +104,20 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
             {trendingHasMore && <div ref={loadMoreTrendingRef} />}
             {trendingLoading && <p>Loading...</p>}
           </div>
-
+          <div className={`${activePostTab === "friends" ? "" : "hidden"}`}>
+            {latestFriendsPosts.map((post) => (
+              <div key={post.id} className="w-full rounded flex justify-center">
+                <LivePost
+                  post={post}
+                  currentUser={currentUser.uid}
+                  currentUserDisplayName={currentUser.displayName}
+                  styleSelector="feed"
+                />
+              </div>
+            ))}
+            {latestFriendsHasMore && <div ref={loadMoreFriendsRef} />}
+            {latestLoading && <p>Loading...</p>}
+          </div>
       </>
       
   );

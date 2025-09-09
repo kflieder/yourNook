@@ -6,11 +6,10 @@ import CommentSection, {
   CommentCount,
 } from "components/PostActions/Comments/CommentSection";
 import SharePost from "components/PostActions/SharePost";
-import Report from "components/PostActions/Report";
-import { MdReportGmailerrorred } from "react-icons/md";
 import { useLiveUserData } from "@/utilities/useLiveUserData";
 import Link from "next/link";
 import topicData from "../topics/topicData.json";
+import Elipsis from "components/shared/Elipsis";
 
 interface BlogStyleProps {
   id: string;
@@ -25,6 +24,7 @@ interface BlogStyleProps {
   currentUser: string;
   currentUserDisplayName: string;
   topic: string;
+  onExpandChange: (expanded: boolean) => void;
 }
 
 function BlogStyle({
@@ -40,6 +40,7 @@ function BlogStyle({
   currentUserDisplayName,
   authorUid,
   topic,
+  onExpandChange
 }: BlogStyleProps) {
   const [expandedBlog, setExpandedBlog] = useState<string | null>(null);
   const [expandedComments, setExpandedComments] = useState<string | null>(null);
@@ -48,15 +49,17 @@ function BlogStyle({
   const expandedBlogRef = useRef<HTMLDivElement | null>(null);
 
   const handleExpandBlog = (blogId: string) => {
-    setExpandedBlog((prev) => (prev === blogId ? null : blogId));
+    setExpandedBlog((prev) => {
+      const isExpanding = prev !== blogId;
+      onExpandChange(isExpanding);
+      return isExpanding ? blogId : null;
+    });
   };
 
   const handleExpandedComments = (blogId: string) => {
     setExpandedComments((prev) => (prev === blogId ? null : blogId));
   };
-  function handleExpandedReportForm() {
-    setShowReportForm((prev) => !prev);
-  }
+
 
   useEffect(() => {
     if (expandedBlogRef.current) {
@@ -91,7 +94,7 @@ function BlogStyle({
             topicData.find((t) => t.topic === topic)?.headerBackground ||
             "white",
         }}
-        className="flex items-center space-x-2 p-2"
+        className="flex items-center space-x-2 p-2 justify-between"
       >
         <span
           className="text-2xl"
@@ -101,6 +104,11 @@ function BlogStyle({
         >
           {topicData.find((t) => t.topic === topic)?.icon}
         </span>
+        <Elipsis
+          currentUser={currentUser}
+          targetUid={authorUid}
+          docId={id}
+        />
       </div>
       <div
         className="flex flex-col items-center rounded bg-white"
@@ -201,11 +209,7 @@ function BlogStyle({
             currentUserDisplayName={currentUserDisplayName}
             collectionName={"blogs"}
           />
-          <MdReportGmailerrorred
-            onClick={() => handleExpandedReportForm()}
-            className="cursor-pointer"
-            size={24}
-          />
+          
         </div>
       </div>
       {expandedComments === id && (
@@ -219,7 +223,6 @@ function BlogStyle({
         />
         </div>
       )}
-      {showReportForm && <Report postId={id} />}
     </div>
   );
 }

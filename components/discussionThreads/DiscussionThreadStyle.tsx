@@ -7,10 +7,9 @@ import CommentSection, {
   CommentCount,
 } from "components/PostActions/Comments/CommentSection";
 import SharePost from "components/PostActions/SharePost";
-import { MdReportGmailerrorred } from "react-icons/md";
-import Report from "components/PostActions/Report";
 import { formatTimeAgo } from "@/utilities/formatTimeAgoHelper";
 import topicData from "../topics/topicData.json";
+import Elipsis from "components/shared/Elipsis";
 
 function DiscussionThreadStyle({
   currentUser,
@@ -36,7 +35,6 @@ function DiscussionThreadStyle({
   const authorUidsDoc = getUserDocHelper(authorUid);
   const [authorUidData, setauthorUidData] = useState<any>(null);
   const [showComments, setShowComments] = useState(false);
-  const [showReportForm, setShowReportForm] = useState(false);
 
   useEffect(() => {
     const fetchauthorUidData = async () => {
@@ -51,12 +49,33 @@ function DiscussionThreadStyle({
     setShowComments((prev) => !prev);
   };
 
-  const handleShowReportForm = () => {
-    setShowReportForm((prev) => !prev);
-  };
-
+ 
   return (
-    <div className="border border-gray-300 bg-white w-full p-4 rounded-lg shadow-sm flex flex-col items-start">
+    <div className="border border-gray-300 bg-white sm:w-1/2 w-full pt-0.25 rounded-lg shadow-sm flex flex-col items-start" style={{
+            background:
+              topicData.find((t) => t.topic === topic)?.textBackground ||
+              "white"
+          }}
+      >
+        <div className="flex justify-between relative w-full mb-0.25">
+          <div
+            style={{
+              background:
+                topicData.find((t) => t.topic === topic)?.textBackground ||
+              "white",
+            color:
+              topicData.find((t) => t.topic === topic)?.textColor || "black",
+          }}
+          className="text-xs rounded-full flex justify-center items-center px-2"
+        >
+          {topic}
+        </div>
+        <Elipsis
+          currentUser={currentUser}
+          targetUid={authorUid}
+          docId={postId || ""}
+        />
+      </div>
       <div className="border p-2 w-full border-gray-300 bg-white rounded-lg shadow-sm flex items-start">
         <Link className="hidden sm:block" href={`/profile/${authorUid}`}>
           <img
@@ -81,6 +100,7 @@ function DiscussionThreadStyle({
                     {authorUidData?.displayName || "Unknown Author"}
                   </h2>
                 </Link>
+
                 <p className="text-xs">
                   {createdAt
                     ? formatTimeAgo(
@@ -91,11 +111,9 @@ function DiscussionThreadStyle({
                     : "Unknown time"}
                 </p>
               </div>
-              <div style={{background: topicData.find((t) => t.topic === topic)?.textBackground || 'black', color: topicData.find((t) => t.topic === topic)?.textColor || 'black'}} className="text-xs px-2 py-1 rounded-full">
-                {topic}
-              </div>
             </div>
           </div>
+
           <h3 className="text-xl font-semibold">{title}</h3>
           <p className="">{content}</p>
           <div className="flex items-center space-x-2 mt-2">
@@ -126,9 +144,7 @@ function DiscussionThreadStyle({
               }
               collectionName={"discussionThreads"}
             />
-            <div onClick={handleShowReportForm} className="ml-2">
-              <MdReportGmailerrorred className="cursor-pointer" size={24} />
-            </div>
+            
           </div>
           <div></div>
         </div>
@@ -138,11 +154,7 @@ function DiscussionThreadStyle({
           <CommentSection postId={postId || ""} postAuthorId={authorUid} />
         </div>
       )}
-      {showReportForm && (
-        <div className="mt-4">
-          <Report postId={postId || ""} />
-        </div>
-      )}
+      
     </div>
   );
 }

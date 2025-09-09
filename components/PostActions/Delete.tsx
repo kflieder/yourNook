@@ -17,8 +17,8 @@ function Delete({postId}: { postId: string }) {
   console.log("Delete function called with postId:", postId);
  
   return (
-    <div onClick={handleDelete} className="flex hover:bg-gray-200 cursor-pointer justify-start space-x-2 ml-2 items-center">
-      <FaRegTrashCan size={20} />
+    <div onClick={handleDelete} className="flex hover:bg-gray-200 cursor-pointer justify-start space-x-1 items-center">
+      <FaRegTrashCan size={16} />
       <p>Delete</p>
     </div>
   )

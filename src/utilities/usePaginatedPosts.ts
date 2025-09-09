@@ -29,7 +29,8 @@ export function usePaginatedPosts(
   collectionName: string,
   sortField: "createdAt" | "likeCount" = "createdAt",
   currentUser: string | undefined,
-  authorIdField: string
+  authorIdField: string,
+  friendUids?: string[]
 ) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
@@ -83,9 +84,13 @@ export function usePaginatedPosts(
           })
         );
 
-        console.log("Author Privacy Map:", authorPrivacyMap);
         const filteredPosts = firstPosts.filter((post) => {
           const authorId = post[authorIdField];
+
+          if (friendUids && !friendUids.includes(authorId)) {
+            return false;
+          }
+
           const privateStatus = authorPrivacyMap[authorId] || false;
           const followers: string[] = authorFollowers[authorId] || [];
           if (
@@ -155,6 +160,9 @@ export function usePaginatedPosts(
 
       const filteredPosts = newPosts.filter((post) => {
         const authorId = post[authorIdField] || post.uid;
+        if (friendUids && !friendUids.includes(authorId)) {
+          return false;
+        }
         const privateStatus = authorPrivacyMap[authorId] || false;
         const followers: string[] = authorFollowers[authorId] || [];
         if (

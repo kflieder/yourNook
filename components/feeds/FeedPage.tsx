@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { use, useState } from "react";
 import GlobalPostFeed from "./GlobalPostFeed";
 import { useAuth } from "@/context/AuthContext";
 import GlobalBlogFeed from "./GlobalBlogFeed";
@@ -15,6 +15,7 @@ function FeedPage() {
   const [activeTab, setActiveTab] = React.useState<
     "posts" | "blogs" | "threads"
   >("posts");
+  const [expandedBlog, setExpandedBlog] = useState(false);
 
   if (!currentUser) {
     return <div>Loading...</div>;
@@ -23,6 +24,7 @@ function FeedPage() {
   function handleTabChange(tab: "posts" | "blogs" | "threads") {
     setActiveTab(tab);
   }
+  console.log(expandedBlog);
 
   const buttonStyle = "px-4 py-2 rounded-3xl focus:outline-none cursor-pointer";
   const activeButtonStyle = `${buttonStyle} bg-blue-950 text-white`;
@@ -51,7 +53,7 @@ function FeedPage() {
       </div>
 
       <div className="w-full grid grid-cols-1 lg:grid-cols-2 justify-between h-screen pt-30 pb-20">
-        <div className="flex flex-col gap-y-4 overflow-scroll overflow-x-hidden hide-scrollbar">
+        <div className={`flex flex-col gap-y-4 overflow-x-hidden hide-scrollbar ${expandedBlog ? "overflow-hidden" : "overflow-scroll"}`}>
         {activeTab === "posts" && (
           <GlobalPostFeed
             currentUser={{
@@ -64,6 +66,9 @@ function FeedPage() {
           <GlobalBlogFeed
             currentUser={currentUser.uid}
             currentUserDisplayName={currentUser.displayName ?? ""}
+            onExpandChange={(expanded) => {
+              setExpandedBlog(expanded);
+            }}
           />
         )}
 

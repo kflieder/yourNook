@@ -130,6 +130,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   function handleTabChange(tab: "posts" | "blog" | "thread") {
     setActiveTab(tab);
   }
+  console.log(isBlocked)
 
   const activeTabClass = "shadow-xl h-8";
   const buttonClass =
@@ -154,7 +155,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
     );
   } else if (isBlocked) {
     return (
-      <div className="flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center pt-20">
         <h2>you're blocked bitch</h2>
         <p>You cannot view their profile.</p>
       </div>

@@ -8,10 +8,11 @@ import CustomTopicSelectDropdown from 'components/topics/CustomTopicSelectDropdo
 interface GlobalBlogFeedProps {
   currentUser: string;
   currentUserDisplayName: string;
+  onExpandChange: (expanded: boolean) => void;
 }
 
 
-function GlobalBlogFeed({ currentUser, currentUserDisplayName }: GlobalBlogFeedProps) {
+function GlobalBlogFeed({ currentUser, currentUserDisplayName, onExpandChange }: GlobalBlogFeedProps) {
   const { posts, loading, hasMore, loadMoreRef } = usePaginatedPosts("blogs", "createdAt", currentUser, "authorId");
   const [searchedTopic, setSearchedTopic] = useState('');
   const filteredPosts = searchedTopic ? posts.filter((post) => post.topic === searchedTopic) : posts;
@@ -37,6 +38,7 @@ function GlobalBlogFeed({ currentUser, currentUserDisplayName }: GlobalBlogFeedP
           currentUserDisplayName={currentUserDisplayName}
           authorUid={post.authorId}
           topic={post.topic}
+          onExpandChange={onExpandChange}
         />
       ))}
       {hasMore && <div ref={loadMoreRef}>Load more...</div>}

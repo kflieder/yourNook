@@ -6,11 +6,8 @@ import CommentSection, {
 } from "../PostActions/Comments/CommentSection";
 import SharePost from "../PostActions/SharePost";
 import FollowButton from "../shared/FollowButton";
-import { MdReportGmailerrorred } from "react-icons/md";
-import Report from "../PostActions/Report";
-import Delete from "../PostActions/Delete";
-import { HiOutlineEllipsisHorizontal } from "react-icons/hi2";
 import Link from "next/link";
+import Elipsis from "components/shared/Elipsis";
 
 interface PostStyleProps {
   displayName: string;
@@ -45,19 +42,13 @@ function PostStyle({
   onThumbnailClick,
 }: PostStyleProps) {
   const [openPostId, setOpenPostId] = useState<string | null>(null);
-  const [showReportForm, setShowReportForm] = useState(false);
-  const [showEllipsis, setShowEllipsis] = useState(false);
-
+  
   const handleToggleComments = (postId: string) => {
     setOpenPostId((prev) => (prev === postId ? null : postId));
   };
 
-  const handleShowReportForm = () => {
-    setShowReportForm((prev) => !prev);
-  };
-  const handleShowEllipsis = () => {
-    setShowEllipsis((prev) => !prev);
-  };
+  
+  
 
   const handleOpenFromThumbnail = () => {
     onThumbnailClick?.(docId);
@@ -148,34 +139,12 @@ function PostStyle({
             )}
           </div>
         </div>
-        <div className="p-1 flex flex-col items-end">
-          <HiOutlineEllipsisHorizontal
-            size={34}
-            className="cursor-pointer"
-            onClick={handleShowEllipsis}
-          />
-
-          <div className="relative">
-            {showEllipsis && (
-              <div className="absolute right-0 w-36 p-1 bg-white border rounded shadow-lg z-10 text-black">
-                <ul className="">
-                  {currentUser && targetUid === currentUser && (
-                    <li>
-                      <Delete postId={docId} />
-                    </li>
-                  )}
-                  <li
-                    onClick={handleShowReportForm}
-                    className="flex hover:bg-gray-200 cursor-pointer justify-start items-center ml-2 space-x-2"
-                  >
-                    <MdReportGmailerrorred size={22} />
-                    <p>Report post</p>
-                  </li>
-                </ul>
-                {showReportForm && <Report postId={docId} />}
-              </div>
-            )}
-          </div>
+        <div className="p-1 flex flex-col items-end border absolute right-0 top-0">
+           <Elipsis
+                currentUser={currentUser}
+                targetUid={targetUid}
+                docId={docId}
+              />
         </div>
       </div>
 
