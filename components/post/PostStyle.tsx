@@ -8,6 +8,7 @@ import SharePost from "../PostActions/SharePost";
 import FollowButton from "../shared/FollowButton";
 import Link from "next/link";
 import Elipsis from "components/shared/Elipsis";
+import { IoIosCloseCircleOutline } from "react-icons/io";
 
 interface PostStyleProps {
   displayName: string;
@@ -42,32 +43,29 @@ function PostStyle({
   onThumbnailClick,
 }: PostStyleProps) {
   const [openPostId, setOpenPostId] = useState<string | null>(null);
-  
+
   const handleToggleComments = (postId: string) => {
     setOpenPostId((prev) => (prev === postId ? null : postId));
   };
-
-  
-  
 
   const handleOpenFromThumbnail = () => {
     onThumbnailClick?.(docId);
   };
 
-
-
   if (thumbnail)
     return (
-      <div className="cursor-pointer bg-gray-500/50 w-42 h-42" onClick={handleOpenFromThumbnail}>
+      <div
+        className="cursor-pointer bg-gray-500/50 w-42 h-42"
+        onClick={handleOpenFromThumbnail}
+      >
         {mediaUrl ? (
           mediaUrl.includes("video") ? (
             <video
               controls
               className="w-full max-h-42 object-contain"
               src={mediaUrl}
-
             />
-          ) : ( 
+          ) : (
             <img
               src={mediaUrl}
               alt="Post media"
@@ -75,7 +73,7 @@ function PostStyle({
             />
           )
         ) : (
-          <div className='h-42 flex justify-center items-center bg-gray-200 text-black p-2'>
+          <div className="h-42 flex justify-center items-center bg-gray-200 text-black p-2">
             <p>{textContent}</p>
           </div>
         )}
@@ -84,7 +82,7 @@ function PostStyle({
 
   const feedStyleClasses = {
     outterMostDivContainer:
-      "rounded-lg bg-gradient-to-t from-blue-950 via-gray-400 to-gray-300 text-white h-100 w-[100vw] sm:w-120 my-4 shadow-xl",
+      "rounded-lg bg-gradient-to-t from-blue-950 via-gray-400 to-gray-300 text-white h-100 w-[100vw] sm:w-120 shadow-xl",
     littleHeaderThing: "flex justify-between items-end gap-2 mb-2",
   };
 
@@ -95,7 +93,7 @@ function PostStyle({
     littleHeaderThing: "flex justify-between items-end gap-2 mb-2",
   };
 
-  return (
+  const post = (
     <div
       onClick={thumbnail ? handleOpenFromThumbnail : undefined}
       className={`relative w-full flex flex-col justify-between
@@ -106,7 +104,7 @@ function PostStyle({
          }`}
     >
       <div
-        className={`relative z-1 text-black ${
+        className={`relative z-2 text-black ${
           styleSelector === "feed"
             ? feedStyleClasses.littleHeaderThing
             : profileStyleClasses.littleHeaderThing
@@ -139,12 +137,12 @@ function PostStyle({
             )}
           </div>
         </div>
-        <div className="p-1 flex flex-col items-end border absolute right-0 top-0">
-           <Elipsis
-                currentUser={currentUser}
-                targetUid={targetUid}
-                docId={docId}
-              />
+        <div className="p-1 flex flex-col items-end absolute right-0 top-0 bg-gray-300/50 text-white rounded-full">
+          <Elipsis
+            currentUser={currentUser}
+            targetUid={targetUid}
+            docId={docId}
+          />
         </div>
       </div>
 
@@ -180,7 +178,7 @@ function PostStyle({
 
       <div className="relative rounded-b-lg bg-blue-950 flex justify-around items-center border-t p-4">
         <Likes
-          type={'likedPost'}
+          type={"likedPost"}
           docId={docId}
           currentLikes={currentLikes || []}
           collectionName={"posts"}
@@ -204,18 +202,33 @@ function PostStyle({
           collectionName={"posts"}
         />
       </div>
+    </div>
+  );
+
+  return (
+    <>
+      {post}
       {openPostId === docId && (
-        <div className="bg-white rounded shadow-2xl text-black absolute bottom-14 left-1/2 -translate-x-1/2 z-99 h-full w-3/4 overflow-y-auto hide-scrollbar">
-          <CommentSection
-            maxChar={300}
-            postId={docId}
-            postAuthorId={targetUid}
-            type='commentPost'
-            message='commented on your post!'
+        <div className="fixed top-5 sm:inset-0 z-3 flex md:flex-row flex-col justify-center items-center bg-black/50 w-full h-screen">
+          <IoIosCloseCircleOutline
+            className="absolute sm:top-30 top-20 right-0 text-white cursor-pointer z-20 sm:bg-gray-100/0 bg-black rounded-full"
+            size={36}
+            onClick={() => setOpenPostId(null)}
           />
+          <div className="w-full m-0 sm:w-120">{post}</div>
+          <div className="bg-white rounded shadow-2xl text-black overflow-y-auto hide-scrollbar w-full sm:w-120 sm:h-100 h-70
+          ">
+            <CommentSection
+              maxChar={300}
+              postId={docId}
+              postAuthorId={targetUid}
+              type="commentPost"
+              message="commented on your post!"
+            />
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 

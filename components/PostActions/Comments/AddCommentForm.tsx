@@ -68,22 +68,22 @@ function AddCommentForm({ postId, postAuthorId, maxChar, parentId, type, message
    
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center border border-gray-200">
+    <form onSubmit={handleSubmit} className="flex items-center">
       <textarea
         value={commentText}
         onChange={handleInputChange}
         placeholder="Add a comment..."
-        className="w-full px-2 pt-1 focus:outline-none focus:bg-gray-100 rounded-3xl resize-none overflow-hidden text-md"
+        className="w-full p-2 focus:outline-none border border-gray-200 focus:bg-gray-100 rounded-3xl resize-none overflow-hidden text-md"
         rows={1}
         disabled={isSubmitting}
         maxLength={maxChar}
         style={{ resize: "none" }}
         onKeyDown={handleKeyDown}
       />
-      <small className='h-full flex items-end mr-1 text-xs'>{commentText.length}/{maxChar ? maxChar : 'unlimited'}</small>
+      <div className="flex flex-col items-center">
       <button
         type="submit"
-        className={`text-white p-1 rounded-4xl text-xs ${
+        className={`text-white p-1 px-2 rounded-4xl text-xs ${
             commentText.trim()
               ? "bg-blue-950 cursor-pointer"
               : "bg-blue-950/50 cursor-not-allowed"
@@ -92,6 +92,8 @@ function AddCommentForm({ postId, postAuthorId, maxChar, parentId, type, message
       >
         {isSubmitting ? "Submitting..." : "Send"}
       </button>
+      <small className='h-full flex items-end mr-1 text-xs'>{commentText.length}/{maxChar ? maxChar : 'unlimited'}</small>
+      </div>
     </form>
   );
 }

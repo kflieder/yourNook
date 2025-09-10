@@ -75,7 +75,7 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
 
             <div className={`${activePostTab === "latest" ? "" : "hidden"}`}>
               {latestPosts.map((post) => (
-                <div key={post.id} className="w-full rounded flex justify-center">
+                <div key={post.id} className="w-full mb-4 rounded flex justify-center">
                   <LivePost
                     post={post}
                     currentUser={currentUser.uid}

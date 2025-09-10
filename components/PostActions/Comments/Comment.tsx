@@ -31,7 +31,7 @@ function Comment({
   showReplies,
   setShowReplies,
 }: CommentProps) {
-   const [showNestedReplies, setShowNestedReplies] = useState(false);
+  const [showNestedReplies, setShowNestedReplies] = useState(false);
   const useCommentersUid = getUserDocHelper(comment.uid);
   const [authorData, setAuthorData] = useState<any>(null);
 
@@ -64,67 +64,63 @@ function Comment({
     <>
       <li key={comment.id} className="flex pt-2 px-2 shadow-md">
         <div className="flex flex-col items-center">
-        <img
-          className="min-w-8 max-h-8 min-h-8 rounded-full"
-          src={authorData?.profilePicture}
-          alt={`${authorData?.displayName}'s profile`}
-        />
-        {
-          showReplies && comment.replies && comment.replies.length > 0 && (
-            <div className="h-full rounded-b-lg border border-gray-400 w-0"></div>
-          )
-        }
-        
+          <div className="w-8 h-8 rounded-full overflow-hidden shrink-0">
+            <img
+              className="w-full h-full object-cover"
+              src={authorData?.profilePicture}
+              alt={`${authorData?.displayName}'s profile`}
+            />
+          </div>
+
+          {showReplies && comment.replies && comment.replies.length > 0 && (
+            <div className="flex-1 border-l-2 border-gray-400 mt-1"></div>
+          )}
         </div>
         <div className="ml-2">
-        <div className="flex items-baseline space-x-1">
-          <strong>{comment.displayName}</strong> 
-          <span> ‧ </span>
-          <span className="text-gray-500 text-sm">
-            {comment.createdAt ? formatTimeAgo(comment.createdAt.toDate()) : 'Just Now'}
-          </span>
-        </div>
-        <p>
-          {comment.text}
-        </p>
-        <div className='space-x-1 flex items-center'>
-        <button
-          onClick={handleReplyClick}
-          className="text-gray-500 hover:underline cursor-pointer text-xs"
-        >
-          {activeReplyId === comment.id ? "Cancel Reply" : "Reply"}
-        </button>
-        {
-          comment.replies && comment.replies.length > 0 && (
+          <div className="flex items-baseline space-x-1">
+            <strong>{comment.displayName}</strong>
             <span> ‧ </span>
-          )
-        }
-        {comment.replies && comment.replies.length > 0 && (
-          <button
-            onClick={handleShowRepliesClick}
-            className="text-gray-500 hover:underline cursor-pointer text-xs"
-          >
-            {comment.parentId === null
-              ? showReplies
-                ? "Hide Replies"
-                : `Show ${comment.replies.length} replies`
-              : showNestedReplies
-              ? "Hide Replies"
-              : `Show Replies (${comment.replies.length})`}
-          </button>
-        )}
-        </div>
-        {activeReplyId === comment.id && (
-          <div className="border border-gray-300 rounded-2xl overflow-hidden">
-          <AddCommentForm
-            postId={comment.postId ?? ""}
-            parentId={comment.id}
-            postAuthorId={comment.postAuthorId}
-            maxChar={maxChar}
-            setActiveReplyIdAfterSubmit={setActiveReplyId}
-          />
+            <span className="text-gray-500 text-sm">
+              {comment.createdAt
+                ? formatTimeAgo(comment.createdAt.toDate())
+                : "Just Now"}
+            </span>
           </div>
-        )}
+          <p>{comment.text}</p>
+          <div className="space-x-1 flex items-center">
+            <button
+              onClick={handleReplyClick}
+              className="text-gray-500 hover:underline cursor-pointer text-xs"
+            >
+              {activeReplyId === comment.id ? "Cancel Reply" : "Reply"}
+            </button>
+            {comment.replies && comment.replies.length > 0 && <span> ‧ </span>}
+            {comment.replies && comment.replies.length > 0 && (
+              <button
+                onClick={handleShowRepliesClick}
+                className="text-gray-500 hover:underline cursor-pointer text-xs"
+              >
+                {comment.parentId === null
+                  ? showReplies
+                    ? "Hide Replies"
+                    : `Show ${comment.replies.length} replies`
+                  : showNestedReplies
+                  ? "Hide Replies"
+                  : `Show Replies (${comment.replies.length})`}
+              </button>
+            )}
+          </div>
+          {activeReplyId === comment.id && (
+            <div className=" rounded-2xl overflow-hidden">
+              <AddCommentForm
+                postId={comment.postId ?? ""}
+                parentId={comment.id}
+                postAuthorId={comment.postAuthorId}
+                maxChar={maxChar}
+                setActiveReplyIdAfterSubmit={setActiveReplyId}
+              />
+            </div>
+          )}
         </div>
       </li>
       {(comment.parentId === null ? showReplies : showNestedReplies) &&

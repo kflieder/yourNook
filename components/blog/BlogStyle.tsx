@@ -44,17 +44,17 @@ function BlogStyle({
 }: BlogStyleProps) {
   const [expandedBlog, setExpandedBlog] = useState<string | null>(null);
   const [expandedComments, setExpandedComments] = useState<string | null>(null);
-  const [showReportForm, setShowReportForm] = useState(false);
   const authorData = useLiveUserData(authorUid);
   const expandedBlogRef = useRef<HTMLDivElement | null>(null);
 
   const handleExpandBlog = (blogId: string) => {
-    setExpandedBlog((prev) => {
-      const isExpanding = prev !== blogId;
-      onExpandChange(isExpanding);
-      return isExpanding ? blogId : null;
-    });
-  };
+  setExpandedBlog((prev) => {
+    const isExpanding = prev !== blogId;
+    // Notify parent that a blog is expanding/collapsing
+    onExpandChange(isExpanding);
+    return isExpanding ? blogId : null;
+  });
+};
 
   const handleExpandedComments = (blogId: string) => {
     setExpandedComments((prev) => (prev === blogId ? null : blogId));
@@ -67,16 +67,7 @@ function BlogStyle({
     }
   }, [expandedBlog]);
 
-  useEffect(() => {
-    if (expandedBlog){
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, [expandedBlog]);
+  
      
 
   return (
