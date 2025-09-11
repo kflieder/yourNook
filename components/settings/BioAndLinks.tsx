@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { getUserDocHelper } from '@/utilities/userDocHelper';
-import { displayBioInfo } from '@/utilities/FetchProfileInfo/displayBioInfo';
+import { useDisplayBioInfo } from '@/utilities/FetchProfileInfo/useDisplayBioInfo';
 import { auth } from '../../lib/firebase';
 import { updateProfile } from 'firebase/auth';
 
@@ -39,7 +39,7 @@ function BioAndLinks() {
         setIsEditable(true);
     }
 
-    const { displayName, setDisplayName, pronouns, setPronouns, bio, setBio, links, setLinks } = displayBioInfo();
+    const { displayName, setDisplayName, pronouns, setPronouns, bio, setBio, links, setLinks } = useDisplayBioInfo();
 
     return (
         <div className='flex flex-col bg-white gap-4 border-2 border-blue-950 rounded p-5 w-full'>

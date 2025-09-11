@@ -17,6 +17,7 @@ import DiscussionThreadForm from "components/discussionThreads/DiscussionThreadF
 import UserDiscussionThreads from "components/discussionThreads/UserDiscussionThreads";
 import useIsMobile from "@/utilities/useIsMobile";
 import BottomBar from "components/mobileComponents/BottomBar";
+import { FaEllipsisVertical } from "react-icons/fa6";
 
 interface ProfilePageProps {
   userData: {
@@ -45,12 +46,6 @@ interface ProfilePageProps {
 
 function ProfilePage({ userData, posts }: ProfilePageProps) {
   const { username } = useAuth();
-  const isOwner = username?.uid === userData.uid;
-  if (!username) {
-    return null;
-  }
-  const currentUsersDoc = getUserDocHelper(username.uid);
-  const targetUsersDoc = getUserDocHelper(userData.uid);
   const [activeTab, setActiveTab] = useState<"posts" | "blog" | "thread">(
     "posts"
   );
@@ -66,6 +61,13 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   const postsRef = useRef<HTMLDivElement>(null);
   const [enableScroll, setEnableScroll] = useState<boolean>(false);
   const [contentType, setContentType] = useState<string[]>([]);
+  const [showBlockButton, setShowBlockButton] = useState(false);
+  if (!username) {
+    return null;
+  }
+  const currentUsersDoc = getUserDocHelper(username.uid);
+  const targetUsersDoc = getUserDocHelper(userData.uid);
+  const isOwner = username?.uid === userData.uid;
 
   const handleScroll = () => {
     if (isMobile) return;
@@ -130,7 +132,10 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   function handleTabChange(tab: "posts" | "blog" | "thread") {
     setActiveTab(tab);
   }
-  console.log(isBlocked)
+ 
+  function Elipsis() {
+    setShowBlockButton(!showBlockButton);
+  }
 
   const activeTabClass = "shadow-xl h-8";
   const buttonClass =
@@ -163,13 +168,23 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   }
 
   return (
-    <div className="sm:pt-15 pt-10">
-      <BlockButton
-        blockerUid={username.uid || ""}
-        blockedUid={userData.uid || ""}
-      />
+    <div className="sm:pt-15 pt-10 relative">
+      <div className="absolute top-15 right-0 sm:right-10 flex flex-col">
+        <FaEllipsisVertical className="cursor-pointer" onClick={Elipsis} />
+        
+           {showBlockButton && (
+            <div className='absolute rounded right-0 top-5 bg-white border p-2'>
+            <BlockButton
+                blockerUid={username.uid || ""}
+                blockedUid={userData.uid || ""}
+              />
+              </div>
+            )}
+          
+      </div>
       <div ref={bioRef} className="sm:mx-10 shadow-xl">
         <Bio userData={userData} />
+        
       </div>
       <div
         className={`hide-scrollbar sm:pt-2 sm:pl-5 flex flex-col sm:grid sm:grid-cols-5 sm:h-[95vh]`}

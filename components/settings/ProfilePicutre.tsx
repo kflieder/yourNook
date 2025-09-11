@@ -24,8 +24,12 @@ function ProfilePicutre() {
 
             await uploadBytes(storageRef, profilePicture);
             const downloadUrl = await getDownloadURL(storageRef);
-            const { updateUserData } = getUserDocHelper(username?.uid);
-            await updateUserData({ profilePicture: downloadUrl });
+            const userDocHelper = getUserDocHelper(username?.uid);
+            if (userDocHelper) {
+                await userDocHelper.updateUserData({ profilePicture: downloadUrl });
+            } else {
+                console.warn('User doc helper not available for user id', username?.uid);
+            }
 
             setProfilePicture(null);
         } catch (error) {

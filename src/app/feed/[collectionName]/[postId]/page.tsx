@@ -10,11 +10,15 @@ import LivePost from "components/post/LivePost";
 import BlogStyle from "components/blog/BlogStyle";
 import DiscussionThreadStyle from "components/discussionThreads/DiscussionThreadStyle";
 
-interface Props {
-  params: {
-    postId: string;
-    collectionName: string;
-  };
+interface Params {
+  postId: string;
+  collectionName: string;
+}
+
+interface PageProps {}
+
+interface Props extends PageProps {
+  params: Params;
 }
 
 async function Page({ params }: Props) {

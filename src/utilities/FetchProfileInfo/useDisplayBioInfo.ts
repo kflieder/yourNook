@@ -4,7 +4,7 @@ import { getUserDocHelper } from '../userDocHelper';
 import { useEffect, useState } from 'react';
 
 
-export function displayBioInfo() {
+export function useDisplayBioInfo() {
     const { username }: any = useAuth();
     const [displayName, setDisplayName] = useState(username?.displayName || '');
     const [pronouns, setPronouns] = useState({

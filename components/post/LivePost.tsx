@@ -4,9 +4,8 @@ import { useLiveUserData } from '@/utilities/useLiveUserData';
 import PostStyle from './PostStyle';
 
 function LivePost({ post, currentUser, currentUserDisplayName, thumbnail, styleSelector, onThumbnailClick }: { post: any; currentUser: string; currentUserDisplayName?: string; width?: string; thumbnail?: boolean; styleSelector?: string; onThumbnailClick?: (postId: string) => void }) {
+  const liveUser = useLiveUserData(post?.uid);
   if (!post) return null;
-
-  const liveUser = useLiveUserData(post.uid);
     return (
     <>
       <PostStyle

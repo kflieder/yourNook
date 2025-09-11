@@ -23,9 +23,7 @@ interface BioProps {
 }
 
 function Bio({ userData }: BioProps) {
-  if (!userData) {
-    return null;
-  }
+  
   const { username } = useAuth();
   const isOwner = username?.uid === userData.uid;
   const {
@@ -38,8 +36,13 @@ function Bio({ userData }: BioProps) {
   } = userData;
   const isMobile = useIsMobile();
 
+  if (!userData) {
+    return null;
+  }
+
   return !isMobile ? (
     <div className="bg-blue-50 rounded px-6 py-2 flex">
+      s
       <div className="flex min-w-50 border-r">
         <div className="">
           <div className="rounded-full w-34 h-34 overflow-hidden mb-2">

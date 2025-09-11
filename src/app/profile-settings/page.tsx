@@ -12,7 +12,7 @@ import LogOutButton from '../../../components/shared/LogOutButton'
 import AutoApproveFollowers from 'components/settings/security/AutoApproveFollowers'
 import PublicOrPrivate from 'components/settings/security/PublicOrPrivate'
 
-function page() {
+function Page() {
   const { username, loading }: any = useAuth();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'notifications' | 'feed'>('profile');
@@ -31,7 +31,7 @@ function page() {
 
 
   return (
-    <div className='grid grid-col-1sm:grid-cols-5 sm:p-10 pt-10'>
+    <div className='grid grid-col-1 sm:grid-cols-5 sm:p-10 pt-10'>
       <div className='flex sm:flex-col '>
         <button onClick={() => handleTabChange('profile')} className={`w-full text-left p-4 cursor-pointer ${activeTab === 'profile' ? 'bg-gray-200 shadow-lg' : ''}`}>
           <h1>Profile Settings</h1>
@@ -59,7 +59,7 @@ function page() {
                 <BlogThreadPosts />
               </div>
               <div className='w-full'>
-                <div className='sm:flex hidden border'>
+                <div className='sm:flex hidden'>
                 <LogOutButton />
                 </div>
                 <UniqueUrl />
@@ -93,4 +93,4 @@ function page() {
   )
 }
 
-export default page
+export default Page
