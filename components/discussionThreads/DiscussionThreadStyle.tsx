@@ -150,8 +150,8 @@ function DiscussionThreadStyle({
         </div>
       </div>
       {showComments && (
-        <div className="mt-4">
-          <CommentSection postId={postId || ""} postAuthorId={authorUid} />
+        <div className="mt-4 w-full">
+          <CommentSection postId={postId || ""} postAuthorId={authorUid} maxChar={1000} type={"commentDiscussionThread"} message={'commented on your thread'} />
         </div>
       )}
       

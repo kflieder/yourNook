@@ -79,7 +79,8 @@ function BottomBar({ currentUser }: { currentUser: string }) {
           <FaThreads size={22} />
         </div>
         {activeTab === "createPost" && (
-          <div className={`w-1/2 absolute bottom-16 right-0 z-49 bg-white p-2`}>
+          <div className={`sm:w-1/2 w-4/5
+           absolute bottom-16 right-0 z-49 bg-white p-2`}>
             <div className="flex justify-between shadow-lg">
               <h1>Create Post</h1>
               <IoIosCloseCircleOutline
@@ -93,7 +94,7 @@ function BottomBar({ currentUser }: { currentUser: string }) {
         )}
         {activeTab === "createBlog" && (
           <div
-            className={`absolute w-1/2 bottom-16 right-0 z-49 bg-white p-2 shadow-lg`}
+            className={`absolute w-4/5 sm:w-1/2 bottom-16 right-0 z-49 bg-white p-2 shadow-lg`}
           >
             <div className="flex justify-between">
               <h1>Create Blog</h1>
@@ -108,7 +109,7 @@ function BottomBar({ currentUser }: { currentUser: string }) {
         )}
         {activeTab === "createThread" && (
           <div
-            className={`absolute w-1/2 bottom-16 right-0 z-49 bg-white p-2 shadow-lg`}
+            className={`absolute w-3/4 sm:w-1/2 bottom-16 right-0 z-49 bg-white p-2 shadow-lg`}
           >
             <div className="flex justify-between">
               <h1>Create Thread</h1>

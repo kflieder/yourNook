@@ -47,6 +47,7 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
   return (
       <>
         <div className="flex items-start justify-around w-full">
+          <div className='flex w-full sm:w-1/3 justify-around'>
           <h1
             onClick={() => handleTabChange("latest")}
             className={`cursor-pointer ${
@@ -71,6 +72,7 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
           >
             Friends
           </h1>
+          </div>
         </div>
 
             <div className={`${activePostTab === "latest" ? "" : "hidden"}`}>
@@ -92,7 +94,7 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
 
           <div className={`${activePostTab === "trending" ? "" : "hidden"}`}>
             {trendingPosts.map((post) => (
-              <div key={post.id} className="w-full rounded flex justify-center">
+              <div key={post.id} className="w-full mb-4 rounded flex justify-center">
                 <LivePost
                   post={post}
                   currentUser={currentUser.uid}
@@ -106,7 +108,7 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
           </div>
           <div className={`${activePostTab === "friends" ? "" : "hidden"}`}>
             {latestFriendsPosts.map((post) => (
-              <div key={post.id} className="w-full rounded flex justify-center">
+              <div key={post.id} className="w-full mb-4 rounded flex justify-center">
                 <LivePost
                   post={post}
                   currentUser={currentUser.uid}
