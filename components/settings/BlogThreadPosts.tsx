@@ -75,7 +75,7 @@ function BlogThreadPosts() {
                 {editButton}
             </div>
 
-            <div className='flex text-lg pl-10 mb-8'>
+            <div className='flex text-lg pl-5 mb-8'>
                 <input className='mr-2' type="checkbox" id="posts" name="posts" onChange={() => handleContentTypeChange('posts')} disabled={!isEditable} checked={contentType.includes('posts')} />
                 <label className='mr-4' htmlFor="posts">Posts</label>
                 
@@ -88,7 +88,7 @@ function BlogThreadPosts() {
             </div>
             <div className=''>
                 <h2 className='text-xl'>Which would you like as the default view on your profile?</h2>
-                <div className='flex pl-14 gap-1'>
+                <div className='flex pl-2 gap-1'>
                     {
                         contentType.map((type) => (
                             <div key={type} className="flex text-lg capitalize">

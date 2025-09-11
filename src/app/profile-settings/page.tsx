@@ -31,32 +31,37 @@ function page() {
 
 
   return (
-    <div className='grid grid-cols-5 p-10'>
-      <div>
+    <div className='grid grid-col-1sm:grid-cols-5 sm:p-10 pt-10'>
+      <div className='flex sm:flex-col '>
         <button onClick={() => handleTabChange('profile')} className={`w-full text-left p-4 cursor-pointer ${activeTab === 'profile' ? 'bg-gray-200 shadow-lg' : ''}`}>
           <h1>Profile Settings</h1>
         </button>
         <button onClick={() => handleTabChange('security')} className={`w-full text-left p-4 cursor-pointer ${activeTab === 'security' ? 'bg-gray-200 shadow-lg' : ''}`}>
           <h1>Security</h1>
         </button>
-        <button onClick={() => handleTabChange('notifications')} className={`w-full text-left p-4 cursor-pointer ${activeTab === 'notifications' ? 'bg-gray-200 shadow-lg' : ''}`}>
+        {/* <button onClick={() => handleTabChange('notifications')} className={`w-full text-left p-4 cursor-pointer ${activeTab === 'notifications' ? 'bg-gray-200 shadow-lg' : ''}`}>
           <h1>Notifications</h1>
         </button>
         <button onClick={() => handleTabChange('feed')} className={`w-full text-left p-4 cursor-pointer ${activeTab === 'feed' ? 'bg-gray-200 shadow-lg' : ''}`}>
           <h1>Feed Settings</h1>
-        </button>
+        </button> */}
       </div>
       <div className='col-span-4 p-10 bg-gray-200 shadow-lg'>
 
         {
           activeTab === 'profile' ? (
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className='flex flex-col gap-10'>
+                <div className='flex sm:hidden w-full'>
+                <LogOutButton />
+                </div>
                 <ProfilePicutre />
                 <BlogThreadPosts />
               </div>
-              <div>
+              <div className='w-full'>
+                <div className='sm:flex hidden border'>
                 <LogOutButton />
+                </div>
                 <UniqueUrl />
                 <BioAndLinks />
               </div>
@@ -67,9 +72,9 @@ function page() {
             (
               <div className='flex flex-col gap-4'>
                 <ChangePassword />
-                <DeleteAccount />
                 <AutoApproveFollowers uid={username?.uid} />
                 <PublicOrPrivate currentUserUid={username?.uid} />
+                <DeleteAccount />
               </div>
             ) : activeTab === 'notifications' ? (
               <div>

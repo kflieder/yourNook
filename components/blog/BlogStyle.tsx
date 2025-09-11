@@ -24,7 +24,7 @@ interface BlogStyleProps {
   currentUser: string;
   currentUserDisplayName: string;
   topic: string;
-  onExpandChange: (expanded: boolean) => void;
+  onExpandChange?: (expanded: boolean) => void;
 }
 
 function BlogStyle({
@@ -51,7 +51,7 @@ function BlogStyle({
   setExpandedBlog((prev) => {
     const isExpanding = prev !== blogId;
     // Notify parent that a blog is expanding/collapsing
-    onExpandChange(isExpanding);
+    onExpandChange?.(isExpanding);
     return isExpanding ? blogId : null;
   });
 };
@@ -73,7 +73,7 @@ function BlogStyle({
   return (
     <div
       ref={expandedBlog ? expandedBlogRef : null}
-      className={`w-full flex flex-col rounded overflow-hidden shadow-2xl ${
+      className={`w-full flex flex-col justify-between rounded overflow-hidden shadow-2xl ${
         expandedBlog === id
           ? "absolute top-0 left-0 w-full z-49 bg-gray-100 h-[80vh] overflow-auto"
           : "relative bg-white z-1"
@@ -145,7 +145,7 @@ function BlogStyle({
         <p
           className={`${
             expandedBlog === id
-              ? "pt-6 px-10 whitespace-pre-wrap break-words overflow-auto border-2 border-gray-200 rounded h-90 hide-scrollbar"
+              ? "pt-6 px-10 whitespace-pre-wrap break-words overflow-auto border-2 border-gray-200 rounded h-105 hide-scrollbar"
               : "h-24 overflow-hidden"
           }`}
         >
@@ -199,6 +199,7 @@ function BlogStyle({
             currentUser={currentUser}
             currentUserDisplayName={currentUserDisplayName}
             collectionName={"blogs"}
+            type={"sharedBlog"}
           />
           
         </div>

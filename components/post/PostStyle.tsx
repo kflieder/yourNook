@@ -200,6 +200,7 @@ function PostStyle({
           currentUser={currentUser}
           currentUserDisplayName={currentUserDisplayName}
           collectionName={"posts"}
+          type={"sharedPost"}
         />
       </div>
     </div>

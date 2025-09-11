@@ -3,13 +3,15 @@ import React, { useState } from "react";
 import { usePaginatedPosts } from "@/utilities/usePaginatedPosts";
 import LivePost from "components/post/LivePost";
 import { useMutualFriends } from "@/utilities/useMutualFriends";
+import { log } from "console";
 
 
 interface GlobalPostFeedProps {
   currentUser: { uid: string; displayName: string; profilePicture?: string };
+  logInPage?: boolean;
 }
 
-function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
+function GlobalPostFeed({ currentUser, logInPage }: GlobalPostFeedProps) {
   const { posts: latestPosts, loading, hasMore, loadMoreRef } = usePaginatedPosts(
     "posts",
     "createdAt",
@@ -47,7 +49,7 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
   return (
       <>
         <div className="flex items-start justify-around w-full">
-          <div className='flex w-full sm:w-1/3 justify-around'>
+          <div className={`flex  justify-around gap-x-4 p-2 w-full sm:w-1/3 ${logInPage ? "hidden" : ""}`}>
           <h1
             onClick={() => handleTabChange("latest")}
             className={`cursor-pointer ${
@@ -68,7 +70,7 @@ function GlobalPostFeed({ currentUser }: GlobalPostFeedProps) {
             onClick={() => handleTabChange("friends")}
             className={`cursor-pointer ${
               activePostTab === "friends" ? "font-bold" : ""
-            }`}
+            } ${logInPage ? "hidden" : ""}`}
           >
             Friends
           </h1>

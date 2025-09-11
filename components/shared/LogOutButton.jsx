@@ -19,7 +19,7 @@ function LogOutButton() {
 
 if (!username) return null;
   return (
-    <div className='flex justify-around items-center p-4 border-2 border-blue-950 rounded-md bg-white mb-5'>
+    <div className='flex justify-around items-center p-4 border-2 border-blue-950 rounded-md bg-white sm:mb-5 mb-0 w-full'>
       <h1>Logout</h1>
     <button onClick={() => handleSignOut()} className="cursor-pointer flex">
       

@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import ToggleLoginSignUp from "../../components/auth/ToggleLoginSignUp";
+import GlobalPostFeed from "components/feeds/GlobalPostFeed";
 
 export default function Home() {
   const { username }: any = useAuth();
@@ -14,14 +15,16 @@ export default function Home() {
   }, [username, router]);
 
   return (
-    <div className="flex justify-around items-center h-150 border">
-      <div></div>
-      <div>
-      <h1 className="text-3xl font-bold underline text-center mt-4">
-        This will be the main feed
-      </h1>
+    <div className="flex justify-around sm:pt-0 pt-20 sm:h-screen">
+      <div className='sm:flex sm:flex-col hidden h-full overflow-auto hide-scrollbar pt-10'>
+        <GlobalPostFeed currentUser={{
+          uid: "",
+          displayName: "",
+          profilePicture: undefined,
+        }} logInPage={true} />
       </div>
-      <div>
+      
+      <div className='flex justify-center items-center w-full sm:w-1/3'>
         <ToggleLoginSignUp />
       </div>
     </div>

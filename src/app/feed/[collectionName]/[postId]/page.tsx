@@ -66,7 +66,7 @@ async function Page({ params }: Props) {
   }
 console.log(blog)
   return (
-    <div className="border pt-10 h-screen flex justify-center items-center">
+    <div className="border pt-10 h-screen flex justify-center items-center px-20">
       {collectionName === "posts" && (
         <LivePost
           styleSelector="feed"

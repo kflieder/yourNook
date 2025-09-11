@@ -9,12 +9,12 @@ import { IoSettingsOutline } from "react-icons/io5";
 function Header() {
   const { username: user }: any = useAuth();
   if (!user) return (
-    <div className="flex justify-between items-center px-4 py-2 bg-blue-950 text-white text-xl capitalize font-extrabold tracking-wide shadow-xl">
+    <div className="flex justify-between items-center px-2 py-1 bg-blue-950 text-white text-xl capitalize font-extrabold tracking-wide shadow-xl">
        <Image
             src="/logo.png"
             alt="Logo"
-            width={70}
-            height={70}
+            width={40}
+            height={40}
             className="rounded-full"
           />
         <h1>Please Login :D</h1>

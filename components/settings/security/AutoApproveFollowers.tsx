@@ -42,7 +42,7 @@ function AutoApproveFollowers({ uid }: AutoAcceptFollowersProps) {
         }}
         className="cursor-pointer"
       />
-      <label className="ml-2">Enable Auto Accept</label>
+      <label className="ml-2">Enable</label>
       <input 
         type="radio"
         checked={!autoApprove}
@@ -53,9 +53,9 @@ function AutoApproveFollowers({ uid }: AutoAcceptFollowersProps) {
         }}
         className="cursor-pointer ml-4"
       />
-      <label className="ml-2">Disable Auto Accept</label>
-      <button className="ml-2 border cursor-pointer" onClick={handleSubmit}>
-        submit
+      <label className="ml-2">Disable</label>
+      <button className="ml-2 border cursor-pointer rounded px-1 bg-blue-950 text-white" onClick={handleSubmit}>
+        Save
       </button>
         
     </div>

@@ -31,11 +31,11 @@ function PublicOrPrivate({ currentUserUid }: { currentUserUid: string | undefine
         Public
       </label>
       <label>
-        <input type="radio" name="privacy" checked={isPrivate} onChange={() => setIsPrivate(true)} />
+        <input className='ml-2' type="radio" name="privacy" checked={isPrivate} onChange={() => setIsPrivate(true)} />
         Private
       </label>
-        <button className="ml-2 border cursor-pointer" onClick={handleSubmit}>
-            Save Privacy Setting
+        <button className="ml-2 border cursor-pointer rounded px-1 bg-blue-950 text-white" onClick={handleSubmit}>
+            Save
         </button>
     </div>
   )

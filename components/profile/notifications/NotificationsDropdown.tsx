@@ -101,12 +101,15 @@ function NotificationsDropdown({ userId }: notificationDropDownProps) {
     switch (notification.type) {
       case "likedPost":
       case "commentPost":
+      case "sharedPost":
         return `/feed/posts/${notification.postId}`;
       case "likedBlog":
       case "commentBlog":
+      case "sharedBlog":
         return `/feed/blogs/${notification.postId}`;
       case "likedDiscussionThread":
       case "commentDiscussionThread":  
+      case "sharedDiscussionThread":
         return `/feed/discussionThreads/${notification.postId}`;
       default:
         return `/profile/${notification.fromUserId}`;

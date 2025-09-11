@@ -21,6 +21,7 @@ function DiscussionThreadStyle({
   postId,
   currentUserDisplayName,
   topic,
+  usersProfileStyle,
 }: {
   currentUser: any;
   authorUid?: any;
@@ -31,6 +32,7 @@ function DiscussionThreadStyle({
   postId?: string;
   currentUserDisplayName?: string;
   topic: string;
+  usersProfileStyle?: boolean;
 }) {
   const authorUidsDoc = getUserDocHelper(authorUid);
   const [authorUidData, setauthorUidData] = useState<any>(null);
@@ -51,7 +53,7 @@ function DiscussionThreadStyle({
 
  
   return (
-    <div className="border border-gray-300 bg-white sm:w-1/2 w-full pt-0.25 rounded-lg shadow-sm flex flex-col items-start" style={{
+    <div className={`border border-gray-300 bg-white  pt-0.25 rounded-lg shadow-sm flex flex-col items-start ${usersProfileStyle ? "w-full" : "sm:w-1/2 w-full lg:w-full"}`} style={{
             background:
               topicData.find((t) => t.topic === topic)?.textBackground ||
               "white"
@@ -138,11 +140,12 @@ function DiscussionThreadStyle({
             <SharePost
               postId={postId || ""}
               postAuthorId={authorUid || ""}
-              currentUser={currentUser?.uid || ""}
+              currentUser={currentUser?.uid || currentUser}
               currentUserDisplayName={
                 currentUserDisplayName || currentUser?.displayName || ""
               }
               collectionName={"discussionThreads"}
+              type={"sharedDiscussionThread"}
             />
             
           </div>

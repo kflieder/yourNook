@@ -41,29 +41,30 @@ function SignupForm() {
 
     return (
         <div>
-            <div className='flex flex-col border justify-center items-center'>
-                <input className="border w-56 m-2 rounded p-4" type="text"
+            <div className='flex flex-col border border-gray-300 justify-center items-center bg-white p-6 rounded-lg shadow-md'>
+                <input className="border w-56 m-2 rounded p-2" type="text"
                     placeholder="Username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                 />
-                <input className="border w-56 m-2 rounded p-4" type="email"
+                <input className="border w-56 m-2 rounded p-2" type="email"
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
-                <input className="border w-56 m-2 rounded p-4" type="password"
+                <input className="border w-56 m-2 rounded p-2" type="password"
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <input className="border w-56 m-2 rounded p-4" type="password"
+                <input className="border w-56 m-2 rounded p-2" type="password"
                     placeholder="Confirm Password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                 />
                 <button
-                    className='cursor-pointer bg-blue-500 text-white rounded p-2 m-2'
+                    className='cursor-pointer bg-blue-950 text-white rounded p-2 mt-2 w-56 disabled:opacity-50 disabled:cursor-not-allowed'
+                    disabled={!email || !password || !username || password !== confirmPassword}
                     onClick={(e) => {
                         if (password !== confirmPassword) {
                             alert("Passwords do not match!");

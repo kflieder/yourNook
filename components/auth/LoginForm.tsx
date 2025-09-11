@@ -35,23 +35,24 @@ function LoginForm() {
 
   return (
     <div>
-      <div className="flex flex-col border justify-center items-center">
+      <div className="flex flex-col border border-gray-300 justify-center items-center bg-white p-6 rounded-lg shadow-md">
         <input
-          className="border w-56 m-2 rounded p-4"
+          className="border w-56 m-2 rounded p-2"
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
-          className="border w-56 m-2 rounded p-4"
+          className="border w-56 m-2 rounded p-2"
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <button
-          className="cursor-pointer bg-blue-500 text-white rounded p-2 m-2"
+        disabled={!email || !password}
+          className="cursor-pointer bg-blue-950 w-56 text-white rounded p-2 m-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg transition-all duration-200"
           onClick={(e) => {
             console.log("Logging in with:", { email, password });
             handleLogin(e);

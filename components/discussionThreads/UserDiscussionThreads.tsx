@@ -20,6 +20,7 @@ function UserDiscussionThreads({ currentUser, targetUser }: { currentUser: any; 
         currentLikes={thread.likes} 
         postId={thread.id}
         topic={thread.topic || ''}
+        usersProfileStyle={true}
         />
       ))}
     </div>

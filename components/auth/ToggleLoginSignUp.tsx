@@ -12,14 +12,14 @@ function ToggleLoginSignUp() {
     }
 
   return (
-    <div>
+    <div className="bg-gray-300 p-6 pb-2 rounded-lg shadow-md flex flex-col items-center">
         {
             isSignup ? 
             <SignupForm /> :
             <LoginForm />
         }
         <button 
-            className='cursor-pointer bg-blue-500 text-white rounded p-2 m-2'
+            className='cursor-pointer bg-blue-950 text-white rounded p-2 m-2'
             onClick={toggleForm}>
             {isSignup ? "Already have an account? Sign In" : "Need an account? Sign Up"}
         </button>

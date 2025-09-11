@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useGetBlog } from "src/utilities/blogs/useGetBlog";
 import BlogStyle from "./BlogStyle";
 
@@ -18,8 +18,17 @@ function UserBlogs({
   currentUserDisplayName
 }: UserBlogsProps) {
   const { blogs, loading } = useGetBlog(authorId);
- 
- 
+  const [expandedBlog, setExpandedBlog] = useState(false);
+
+
+  useEffect(() => {
+    if (expandedBlog) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [expandedBlog]);
+
   return (
     <div className="flex flex-col gap-4 p-4 w-full">
       {loading && <p>Loading...</p>}
@@ -40,6 +49,9 @@ function UserBlogs({
             currentUserDisplayName={currentUserDisplayName}
             authorUid={authorId}
             topic={blog.topic}
+            onExpandChange={(expanded) => {
+              setExpandedBlog(expanded);
+            }}
           />
         </div>
       )}
