@@ -9,6 +9,10 @@ interface BlockButtonProps {
 function BlockButton({ blockerUid, blockedUid }: BlockButtonProps ) {
   const handleBlockUser = async () => {
     try {
+      if (blockedUid === blockerUid) {
+        alert("You cannot block yourself.");
+        return;
+      }
       await blockUser(blockerUid, blockedUid);
       console.log('User blocked successfully');
     } catch (error) {

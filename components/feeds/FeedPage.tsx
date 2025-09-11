@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import GlobalPostFeed from "./GlobalPostFeed";
 import { useAuth } from "@/context/AuthContext";
 import GlobalBlogFeed from "./GlobalBlogFeed";

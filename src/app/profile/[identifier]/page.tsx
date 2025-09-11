@@ -32,7 +32,7 @@ type ProfilePageProps = {
   }>;
 };
 
-export default async function UserProfile({ params }: Props) {
+export default async function UserProfile({ params }: {params: any}) {
   const { identifier } = await params;
   const db = admin.firestore();
   const usersRef = db.collection("users");

@@ -1,13 +1,11 @@
 'use client'
 import React, { useState } from 'react'
-import { useAuth } from '@/context/AuthContext'
 import { reauthenticateWithCredential, EmailAuthProvider, updatePassword, getAuth } from 'firebase/auth'
 
 function ChangePassword() {
     const [currentPassword, setCurrentPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const { username } = useAuth()
     const [isEditable, setIsEditable] = useState(false)
 
     async function handleChangePassword() {

@@ -10,18 +10,19 @@ import LivePost from "components/post/LivePost";
 import BlogStyle from "components/blog/BlogStyle";
 import DiscussionThreadStyle from "components/discussionThreads/DiscussionThreadStyle";
 
-interface Params {
-  postId: string;
-  collectionName: string;
-}
+
 
 interface PageProps {}
 
 interface Props extends PageProps {
   params: Params;
 }
+type Params = {
+  postId: string;
+  collectionName: string;
+};
 
-async function Page({ params }: Props) {
+async function Page({ params }: { params: any}) {
   const { postId, collectionName } = params;
   const docRef = doc(db, collectionName, postId);
   const docSnap = await getDoc(docRef);

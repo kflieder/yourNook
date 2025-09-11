@@ -88,8 +88,6 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-
-    
   }, []);
 
   useEffect(() => {
@@ -132,7 +130,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   function handleTabChange(tab: "posts" | "blog" | "thread") {
     setActiveTab(tab);
   }
- 
+
   function Elipsis() {
     setShowBlockButton(!showBlockButton);
   }
@@ -169,29 +167,32 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
 
   return (
     <div className="sm:pt-15 pt-10 relative">
-      <div className="absolute top-15 right-0 sm:right-10 flex flex-col">
-        <FaEllipsisVertical className="cursor-pointer" onClick={Elipsis} />
-        
-           {showBlockButton && (
-            <div className='absolute rounded right-0 top-5 bg-white border p-2'>
-            <BlockButton
+      {!isOwner && (
+        <div className="absolute top-15 right-0 sm:right-10 flex flex-col">
+          <FaEllipsisVertical className="cursor-pointer" onClick={Elipsis} />
+
+          {showBlockButton && (
+            <div className="absolute rounded right-0 top-5 bg-white border p-2">
+              <BlockButton
                 blockerUid={username.uid || ""}
                 blockedUid={userData.uid || ""}
               />
-              </div>
-            )}
-          
-      </div>
+            </div>
+          )}
+        </div>
+      )}
+
       <div ref={bioRef} className="sm:mx-10 shadow-xl">
         <Bio userData={userData} />
-        
       </div>
       <div
         className={`hide-scrollbar sm:pt-2 sm:pl-5 flex flex-col sm:grid sm:grid-cols-5 sm:h-[95vh]`}
       >
         <div
           ref={postsRef}
-          className={`hide-scrollbar pb-5 sm:pb-20 ${isOwner ? "col-span-3" : "col-span-5"} 
+          className={`hide-scrollbar pb-5 sm:pb-20 ${
+            isOwner ? "col-span-3" : "col-span-5"
+          } 
           h-[75vh] sm:h-auto 
            ${
              isMobile
@@ -244,10 +245,10 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
                 currentUserDisplayName={username.displayName || ""}
               />
             ) : activeTab === "thread" ? (
-                <UserDiscussionThreads
-                  currentUser={username}
-                  targetUser={userData.uid || ""}
-                />
+              <UserDiscussionThreads
+                currentUser={username}
+                targetUser={userData.uid || ""}
+              />
             ) : null}
           </div>
         </div>

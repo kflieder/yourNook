@@ -16,7 +16,7 @@ interface LikesProps {
     message: string;
 }
 
-function Likes({ docId, currentLikes, collectionName, targetUid, currentUser, currentUserDisplayName, type, message }: LikesProps) {
+function Likes({ docId, currentLikes, collectionName, targetUid, currentUser, type, message }: LikesProps) {
   const { username } = useAuth();
   const [likes, setLikes] = useState<string[]>(currentLikes || []);
   const [loading, setLoading] = useState(false);

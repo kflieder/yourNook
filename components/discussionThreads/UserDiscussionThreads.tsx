@@ -1,4 +1,4 @@
-import React, { use } from 'react'
+import React from 'react'
 import DiscussionThreadStyle from './DiscussionThreadStyle'
 import { useGetDiscussionThread } from 'src/utilities/threads/useGetDiscussionThread';
 

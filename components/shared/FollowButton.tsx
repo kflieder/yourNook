@@ -13,7 +13,7 @@ interface FollowButtonProps {
   currentUserUid?: string; // Optional prop for current user UID
 }
 
-function FollowButton({ targetUid, currentUserUid }: FollowButtonProps) {
+function FollowButton({ targetUid }: FollowButtonProps) {
   const { username: currentUser }: any = useAuth();
   const currentUserDoc = getUserDocHelper(currentUser?.uid);
   const targetUserDoc = getUserDocHelper(targetUid);

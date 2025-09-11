@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { getUserDocHelper } from '../userDocHelper';
 
-export function displayProfilePic() {
+export function useDisplayProfilePic() {
     const { username, loading }: any = useAuth();
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [profilePicture, setProfilePicture] = useState<File | null>(null);

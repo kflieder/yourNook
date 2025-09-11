@@ -22,7 +22,6 @@ export function AnswerFollowRequestButtons({
   const currentUserDoc = getUserDocHelper(currentUserUid);
   const targetUserDoc = getUserDocHelper(targetUid);
   const liveCurrentUser = useLiveUserData(currentUserUid);
-  const liveTargetUser = useLiveUserData(targetUid);
 
   async function updateFollowers() {
     if (!currentUserDoc || !targetUserDoc) return;

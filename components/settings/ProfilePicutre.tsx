@@ -4,7 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import { getUserDocHelper } from '@/utilities/userDocHelper';
 import { storage } from '../../lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { displayProfilePic } from '@/utilities/FetchProfileInfo/displayProfilePic';
+import { useDisplayProfilePic } from '@/utilities/FetchProfileInfo/useDisplayProfilePic';
 
 
 function ProfilePicutre() {
@@ -12,7 +12,7 @@ function ProfilePicutre() {
     const { profilePicture,
         previewUrl,
         setProfilePicture,
-        setPreviewUrl } = displayProfilePic();
+        setPreviewUrl } = useDisplayProfilePic();
 
 
     async function handleUploadProfilePic() {
