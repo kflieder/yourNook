@@ -217,8 +217,7 @@ function PostStyle({
             onClick={() => setOpenPostId(null)}
           />
           <div className="w-full m-0 sm:w-120">{post}</div>
-          <div className="bg-white rounded shadow-2xl text-black overflow-y-auto hide-scrollbar w-full sm:w-120 sm:h-100 h-70
-          ">
+          <div className="bg-white rounded shadow-2xl text-black overflow-y-auto hide-scrollbar w-full sm:w-120 sm:h-50 md:h-100 h-65 absolute sm:relative top-70 sm:top-auto">
             <CommentSection
               maxChar={300}
               postId={docId}

@@ -36,7 +36,7 @@ function Header() {
       <div>
        <div className="flex items-center gap-2 text-base">
         <Link href={`/profile/${user?.uid}`}>
-          <RenderUsername />{" :)"}
+          <RenderUsername />
         </Link>
           <NotificationsDropdown userId={user.uid} />
           <Link href="/profile-settings">
