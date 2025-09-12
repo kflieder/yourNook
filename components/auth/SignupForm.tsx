@@ -32,6 +32,8 @@ function SignupForm() {
                 uid: userCredential.user.uid,
                 autoApproveFollow: true,
                 private: false,
+                defaultContentType: 'posts',
+                contentType: ['posts', 'blog', 'thread']
             });
             router.push('/profile/' + username.toLowerCase().replace(/\s+/g, '-'));
         } catch (error) {
