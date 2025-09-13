@@ -91,7 +91,7 @@ function FollowerCountPopup({ userId }: { userId: string }) {
         <p className="text-sm">Followers</p>
         </div>
         {expandedFollowers && (
-          <div className="absolute bg-white border rounded p-4 shadow-lg z-30">
+          <div className="absolute bg-white border rounded p-4 shadow-lg z-50">
             <ul>
               {followerProfiles.map((follower) => (
                 <Link href={`/profile/${follower.uid}`} key={follower.uid}>
@@ -113,7 +113,7 @@ function FollowerCountPopup({ userId }: { userId: string }) {
         
         
         {expandedFollowing && (
-          <div className="absolute bg-white border rounded p-4 shadow-lg z-30">
+          <div className="absolute bg-white border rounded p-4 shadow-lg z-50">
             <ul>
               {following.map((follow) => (
                 <Link href={`/profile/${follow.uid}`} key={follow.uid}>
