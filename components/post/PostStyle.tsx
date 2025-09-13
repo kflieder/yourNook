@@ -142,6 +142,7 @@ function PostStyle({
             currentUser={currentUser}
             targetUid={targetUid}
             docId={docId}
+            collection={"posts"}
           />
         </div>
       </div>

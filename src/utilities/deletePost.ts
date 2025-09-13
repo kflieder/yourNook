@@ -1,8 +1,8 @@
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 
-export default async function deletePost(postId: string) {
-  const postRef = doc(db, "posts", postId);
+export default async function deletePost(postId: string, collection: string) {
+  const postRef = doc(db, collection, postId);
 
   try {
     await deleteDoc(postRef);

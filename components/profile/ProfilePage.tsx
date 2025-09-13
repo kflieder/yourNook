@@ -37,6 +37,7 @@ interface ProfilePageProps {
     defaultContentType?: string;
     private?: boolean;
     autoApproveFollow?: boolean;
+    isAdmin?: boolean;
   };
   posts: Array<{
     id: string;

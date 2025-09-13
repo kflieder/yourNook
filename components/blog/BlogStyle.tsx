@@ -99,6 +99,7 @@ function BlogStyle({
           currentUser={currentUser}
           targetUid={authorUid}
           docId={id}
+          collection={"blogs"}
         />
       </div>
       <div

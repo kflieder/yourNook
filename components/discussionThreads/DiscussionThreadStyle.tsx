@@ -76,6 +76,7 @@ function DiscussionThreadStyle({
           currentUser={currentUser}
           targetUid={authorUid}
           docId={postId || ""}
+          collection={"discussionThreads"}
         />
       </div>
       <div className="border p-2 w-full border-gray-300 bg-white rounded-lg shadow-sm flex items-start">

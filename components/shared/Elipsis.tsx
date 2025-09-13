@@ -4,19 +4,36 @@ import { MdReportGmailerrorred } from "react-icons/md";
 import Report from "components/PostActions/Report";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { HiOutlineEllipsisHorizontal } from "react-icons/hi2";
+import { getUserDocHelper } from "@/utilities/userDocHelper";
 
 function Elipsis({
   currentUser,
   targetUid,
   docId,
+  collection,
 }: {
   currentUser: string | null;
   targetUid: string;
   docId: string;
+  collection: string;
 }) {
   const [showReportForm, setShowReportForm] = useState(false);
   const closeEllipsisRef = useRef<HTMLDivElement | null>(null);
   const [showEllipsis, setShowEllipsis] = useState(false);
+ 
+  const [currentUserDoc, setCurrentUserDoc] = useState<any>(null);
+
+  useEffect(() => {
+    const loadUserData = async () => {
+      if (!currentUser) return;
+       const { fetchUserData } = getUserDocHelper(currentUser);
+       const data = await fetchUserData();
+       setCurrentUserDoc(data)
+    }
+    loadUserData();
+  }, [currentUser]) 
+
+ 
 
   const handleShowReportForm = () => {
     setShowReportForm((prev) => !prev);
@@ -39,6 +56,8 @@ function Elipsis({
     };
   }, []);
 
+  console.log("Current User:", currentUser);
+
   return (
     <div ref={closeEllipsisRef}>
       <div >
@@ -56,9 +75,9 @@ function Elipsis({
               showReportForm ? "max-h-0 overflow-hidden" : "max-h-96"
             }`}
           >
-            {currentUser && targetUid === currentUser && (
+            {((currentUser && targetUid === currentUser) || currentUserDoc?.isAdmin) && (
               <li className="flex border border-gray-300 rounded hover:bg-gray-200 cursor-pointer justify-start items-start space-x-0.5 w-36 text-sm">
-                <Delete postId={docId} />
+                <Delete postId={docId} collection={collection} />
               </li>
             )}
             <li

@@ -25,6 +25,7 @@ type ProfilePageProps = {
     uniqueUrl?: string;
     profilePicture?: string;
     uid?: string;
+    isAdmin?: boolean;
   };
   posts: Array<{
     id: string;
@@ -82,6 +83,7 @@ export default async function UserProfile({ params }: {params: any}) {
   if (!userData) {
   return notFound();
 }
+
 
   return (
     <div>

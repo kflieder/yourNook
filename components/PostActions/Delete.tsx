@@ -2,10 +2,10 @@ import React from 'react'
 import deletePost from '@/utilities/deletePost'
 import { FaRegTrashCan } from "react-icons/fa6";
 
-function Delete({postId}: { postId: string }) {
+function Delete({postId, collection}: { postId: string, collection: string }) {
   async function handleDelete() {
     try {
-      await deletePost(postId);
+      await deletePost(postId, collection);
       console.log("Post deleted successfully");
       console.log("Delete function called with postId:", postId);
     console.log('hi')
