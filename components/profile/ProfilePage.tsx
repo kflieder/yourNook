@@ -183,7 +183,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
         </div>
       )}
 
-      <div ref={bioRef} className="sm:mx-10 shadow-xl">
+      <div ref={bioRef} className="sm:mx-10 sm:pt-10 shadow-xl">
         <Bio userData={userData} />
       </div>
       <div
