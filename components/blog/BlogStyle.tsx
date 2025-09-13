@@ -25,6 +25,7 @@ interface BlogStyleProps {
   currentUserDisplayName: string;
   topic: string;
   onExpandChange?: (expanded: boolean) => void;
+  styleSelector?: string;
 }
 
 function BlogStyle({
@@ -40,7 +41,8 @@ function BlogStyle({
   currentUserDisplayName,
   authorUid,
   topic,
-  onExpandChange
+  onExpandChange,
+  styleSelector,
 }: BlogStyleProps) {
   const [expandedBlog, setExpandedBlog] = useState<string | null>(null);
   const [expandedComments, setExpandedComments] = useState<string | null>(null);
@@ -48,36 +50,37 @@ function BlogStyle({
   const expandedBlogRef = useRef<HTMLDivElement | null>(null);
 
   const handleExpandBlog = (blogId: string) => {
-  setExpandedBlog((prev) => {
-    const isExpanding = prev !== blogId;
-    // Notify parent that a blog is expanding/collapsing
-    onExpandChange?.(isExpanding);
-    return isExpanding ? blogId : null;
-  });
-};
+    setExpandedBlog((prev) => {
+      const isExpanding = prev !== blogId;
+      // Notify parent that a blog is expanding/collapsing
+      onExpandChange?.(isExpanding);
+      return isExpanding ? blogId : null;
+    });
+  };
 
   const handleExpandedComments = (blogId: string) => {
     setExpandedComments((prev) => (prev === blogId ? null : blogId));
   };
 
-
   useEffect(() => {
     if (expandedBlogRef.current) {
-      expandedBlogRef.current.scrollIntoView({ behavior: "auto", block: "center" });
+      expandedBlogRef.current.scrollIntoView({
+        behavior: "auto",
+        block: "center",
+      });
     }
   }, [expandedBlog]);
-
-  
-     
 
   return (
     <div
       ref={expandedBlog ? expandedBlogRef : null}
       className={`w-full flex flex-col justify-between rounded overflow-hidden shadow-2xl ${
-        expandedBlog === id
-          ? "absolute top-0 left-0 w-full z-49 bg-gray-100 h-[80vh] overflow-auto"
-          : "relative bg-white z-1"
-      }`}
+  expandedBlog === id
+    ? styleSelector === "userProfile"
+      ? "absolute top-20 left-0 w-full z-49 bg-gray-100 sm:h-[65%] overflow-auto"
+      : "absolute top-20 left-0 w-full z-49 bg-gray-100 sm:h-[80%] overflow-auto"
+    : "relative bg-white z-1"
+}`}
     >
       <div
         style={{
@@ -102,16 +105,13 @@ function BlogStyle({
           collection={"blogs"}
         />
       </div>
-      <div
-        className="flex flex-col items-center rounded bg-white"
-      >
+      <div className="flex relative flex-col items-center rounded bg-white overflow-hidden">
         <div className="flex w-full items-center p-4 gap-4">
           <h2
             className="p-1 px-2 rounded-full"
             style={{
               color:
-                topicData.find((t) => t.topic === topic)?.textColor ||
-                "black",
+                topicData.find((t) => t.topic === topic)?.textColor || "black",
               background:
                 topicData.find((t) => t.topic === topic)?.textBackground ||
                 "white",
@@ -126,39 +126,41 @@ function BlogStyle({
                   month: "long",
                   day: "numeric",
                 })
-              : createdAt
-                  ?.toDate?.()
-                  ?.toLocaleDateString?.(undefined, {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  }) ?? "Unknown"}
+              : createdAt?.toDate?.()?.toLocaleDateString?.(undefined, {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                }) ?? "Unknown"}
           </p>
         </div>
-        <div className='relative w-full px-6 space-y-2'>
-        <h2
-          className={`font-bold text-md capitalize ${
-            expandedBlog === id ? "text-2xl pb-2" : "text-xl"
-          }`}
+        {/* title and content \/ */}
+        <div className="relative w-full px-6 space-y-2">
+          <h2
+            className={`font-bold text-md capitalize ${
+              expandedBlog === id ? "text-2xl pb-2" : "text-xl"
+            }`}
+          >
+            {title}
+          </h2>
+          <p
+            className={`${
+              expandedBlog === id
+                ? "pt-2 px-5 whitespace-pre-wrap break-words h-[50vh] overflow-auto border-2 border-gray-200 rounded hide-scrollbar"
+                : "h-24 overflow-hidden"
+            }`}
+          >
+            {content}
+          </p>
+        </div>
+        <button
+          className="absolute bottom-2 right-2 text-white px-2 py-1 rounded-full cursor-pointer bg-gray-600/80"
+          onClick={() => handleExpandBlog(id)}
         >
-          {title}
-        </h2>
-        <p
-          className={`${
-            expandedBlog === id
-              ? "pt-6 px-10 whitespace-pre-wrap break-words overflow-auto border-2 border-gray-200 rounded h-105 hide-scrollbar"
-              : "h-24 overflow-hidden"
-          }`}
-        >
-          {content}
-        </p>
-        <button className='absolute bottom-2 right-2 text-white px-2 py-1 rounded-full cursor-pointer bg-gray-600/80' onClick={() => handleExpandBlog(id)}>
           {expandedBlog === id ? "Close" : "Read More"}
         </button>
-        </div>
-
         {imageUrl && <img src={imageUrl} alt={title} />}
       </div>
+      {/* Author Info/footer */}
       <div className="flex items-center space-x-2 border-t p-2  w-full">
         <Link href={`/profile/${authorUid}`}>
           <img
@@ -202,7 +204,6 @@ function BlogStyle({
             collectionName={"blogs"}
             type={"sharedBlog"}
           />
-          
         </div>
       </div>
       {expandedComments === id && (
@@ -212,8 +213,8 @@ function BlogStyle({
             postId={id}
             postAuthorId={authorUid}
             type="commentBlog"
-          message="commented on your blog!"
-        />
+            message="commented on your blog!"
+          />
         </div>
       )}
     </div>

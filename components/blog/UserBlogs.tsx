@@ -52,6 +52,7 @@ function UserBlogs({
             onExpandChange={(expanded) => {
               setExpandedBlog(expanded);
             }}
+            styleSelector="userProfile"
           />
         </div>
       )}

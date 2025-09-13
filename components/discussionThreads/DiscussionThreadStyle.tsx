@@ -73,7 +73,7 @@ function DiscussionThreadStyle({
           {topic}
         </div>
         <Elipsis
-          currentUser={currentUser}
+          currentUser={currentUser?.uid || currentUser}
           targetUid={authorUid}
           docId={postId || ""}
           collection={"discussionThreads"}

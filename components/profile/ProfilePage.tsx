@@ -234,7 +234,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
           </div>
           {/* tabs div ^^ */}
 
-          <div className="flex flex-col justify-center items-center pt-4 sm:pb-0">
+          <div className="flex flex-col justify-center items-center pt-4 sm:pb-0 pb-15">
             {activeTab === "posts" ? (
               <UserPosts posts={posts} />
             ) : activeTab === "blog" ? (
