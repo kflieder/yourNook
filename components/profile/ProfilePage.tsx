@@ -169,8 +169,8 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   return (
     <div className="sm:pt-15 pt-10 relative">
       {!isOwner && (
-        <div className="absolute top-15 right-0 sm:right-10 flex flex-col">
-          <FaEllipsisVertical className="cursor-pointer" onClick={Elipsis} />
+        <div className="absolute top-16 right-0 sm:right-10 flex flex-col">
+          <FaEllipsisVertical size={22} className="cursor-pointer" onClick={Elipsis} />
 
           {showBlockButton && (
             <div className="absolute rounded right-0 top-5 bg-white border p-2">
@@ -183,7 +183,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
         </div>
       )}
 
-      <div ref={bioRef} className="sm:mx-10 sm:pt-10 shadow-xl">
+      <div ref={bioRef} className="sm:mx-10 shadow-xl">
         <Bio userData={userData} />
       </div>
       <div

@@ -83,27 +83,29 @@ function Bio({ userData }: BioProps) {
           </div>
         </div>
       </div>
-      <div className="px-6 flex flex-col justify-between w-full">
-        <div className="text-sm">
+      <div className="px-6 flex flex-col w-full">
+        <div className="text-sm h-full flex justify-center items-center text-center">
           <p>{bio}</p>
         </div>
 
         <div className="">
+          
+        </div>
+        <div className="flex flex-col justify-center items-center">
           <div className="">
             <FollowerCountPopup userId={userData.uid ?? ""} />
           </div>
-        </div>
-        <div className="flex justify-center items-center">
-          <h2 className="mr-2">
+          <h2 className="mr-2 flex items-center space-x-2">
             <ImLink />
-          </h2>
-          <a
+            <a
             href={`https://${links}`}
             target="_blank"
             rel="noopener noreferrer"
           >
             {links}
           </a>
+          </h2>
+          
         </div>
       </div>
     </div>
