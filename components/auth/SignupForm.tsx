@@ -66,7 +66,7 @@ function SignupForm() {
                 />
                 <button
                     className='cursor-pointer bg-blue-950 text-white rounded p-2 mt-2 w-56 disabled:opacity-50 disabled:cursor-not-allowed'
-                    disabled={!email || !password || !username || password !== confirmPassword}
+                    disabled={!email || !password || !username}
                     onClick={(e) => {
                         if (password !== confirmPassword) {
                             alert("Passwords do not match!");
