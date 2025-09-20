@@ -118,7 +118,7 @@ Upload malicious code, spam, or fraudulent content.
 
 6. Intellectual Property
 
-All rights to the Platform’s design, branding, software, and features remain the property of [Platform Name].
+All rights to the Platform’s design, branding, software, and features remain the property of yourNook.
 
 Users retain rights to their own original content but grant the Platform the license described in Section 3.
 
