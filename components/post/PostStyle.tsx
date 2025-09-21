@@ -82,15 +82,16 @@ function PostStyle({
 
   const feedStyleClasses = {
     outterMostDivContainer:
-      "rounded-lg bg-gradient-to-t from-blue-950 via-gray-400 to-gray-300 text-white h-100 w-[100vw] sm:w-120 shadow-xl",
-    littleHeaderThing: "flex justify-between items-end gap-2 mb-2",
+      "w-full max-w-xl mx-auto overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-2xl dark:border-neutral-800 dark:bg-neutral-900",
+    littleHeaderThing: "flex items-center justify-between p-4",
+    body: "relative bg-neutral-100 dark:bg-neutral-800",
   };
 
   const profileStyleClasses = {
-    outterMostDivContainer: `flex flex-col justify-between rounded-lg bg-gradient-to-t from-blue-950 via-gray-400 to-gray-300 text-white min-h-98 w-[100vw] sm:w-120 shadow-xl ${
+    outterMostDivContainer: `w-full max-w-xl mx-auto overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm dark:border-neutral-800 dark:bg-neutral-900 ${
       thumbnail ? "cursor-pointer" : ""
     }`,
-    littleHeaderThing: "flex justify-between items-end gap-2 mb-2",
+    littleHeaderThing: "flex items-center justify-between p-4",
   };
 
   const post = (
@@ -111,33 +112,40 @@ function PostStyle({
         }
         `}
       >
-        <div className="flex bg-gray-100/70 rounded p-1 items-center gap-2">
+        <div className="flex items-center gap-3 w-full">
           {profilePicture ? (
-            <Link href={`/profile/${targetUid}`}>
+            <Link
+              className="shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 rounded-full"
+              href={`/profile/${targetUid}`}
+            >
               <img
                 src={profilePicture}
                 alt="Profile"
-                className="border-2 w-12 h-12 rounded-full"
+                className="h-11 w-11 rounded-full object-cover"
               />
             </Link>
           ) : null}
-          <div className="flex flex-col">
-            <div className="flex items-center gap-2">
+          <div className="w-full">
+            <div className="flex items-center justify-between gap-2 w-full">
               <Link href={`/profile/${targetUid}`}>
-                <h3 className="font-bold capitalize text-xl">{displayName}</h3>
+                <h3 className="truncate font-semibold text-neutral-900 dark:text-neutral-50 capitalize">
+                  {displayName}
+                </h3>
               </Link>
-              {currentUser && targetUid !== currentUser && (
-                <FollowButton targetUid={targetUid} />
-              )}
             </div>
+            <div className="flex items-center justify-between">
             {createdAt && (
               <span className="text-sm">
                 Posted on: {new Date(createdAt).toLocaleDateString()}
               </span>
             )}
+            {currentUser && targetUid !== currentUser && (
+                <FollowButton targetUid={targetUid} />
+              )}
+            </div>
           </div>
         </div>
-        <div className="p-1 flex flex-col items-end absolute right-0 top-0 bg-gray-300/50 text-white rounded-full">
+        <div className="p-1 flex flex-col items-end absolute right-0 top-0 rounded-full">
           <Elipsis
             currentUser={currentUser}
             targetUid={targetUid}
@@ -147,62 +155,56 @@ function PostStyle({
         </div>
       </div>
 
-      <div className="absolute inset-0 flex justify-center items-center">
+      <div className="relative bg-neutral-100 dark:bg-neutral-800 border border-gray-300">
         {mediaUrl?.includes("video") ? (
-          <div className="flex absolute w-full max-h-96 top-0 inset-0">
+          <>
             <video
               controls
-              className="w-full h-full object-contain"
+              className="w-full h-auto object-contain aspect-[4/5] sm:aspect-video"
               src={mediaUrl}
             />
-            <p>{textContent}</p>
-          </div>
-        ) : mediaUrl ? (
-          <div className="flex absolute w-full max-h-[60vh] sm:max-h-96 top-0 inset-0">
-            <img
-              src={mediaUrl}
-              alt="Post media"
-              className="w-full h-full object-contain"
-            />
-            {textContent && (
-              <p className="absolute bottom-15 sm:bottom-10 left-0 p-2 w-full text-center bg-gray-400/80 rounded">
-                {textContent}
-              </p>
-            )}
-          </div>
+          </>
         ) : (
-          <p className="bg-white flex justify-center items-center w-full h-46 text-lg text-black text-center">
-            {textContent}
-          </p>
+          mediaUrl && (
+            <>
+              <img
+                src={mediaUrl}
+                alt="Post media"
+                className="w-full h-auto object-contain aspect-[5/5] sm:aspect-video"
+              />
+            </>
+          )
         )}
+        {textContent && <p className="w-full text-center flex justify-center items-center px-5">{textContent}</p>}
       </div>
-
-      <div className="relative rounded-b-lg bg-blue-950 flex justify-around items-center border-t p-4">
-        <Likes
-          type={"likedPost"}
-          docId={docId}
-          currentLikes={currentLikes || []}
-          collectionName={"posts"}
-          targetUid={targetUid}
-          currentUser={currentUser}
-          displayName={displayName}
-          currentUserDisplayName={currentUserDisplayName}
-          message={"liked your post!"}
-        />
-        <div
-          onClick={() => handleToggleComments(docId)}
-          className="ml-2 cursor-pointer"
-        >
-          <CommentCount postId={docId} />
+      <div className="px-2 sm:px-10 py-2">
+        <div className="flex items-center justify-between">
+          <Likes
+            type={"likedPost"}
+            docId={docId}
+            currentLikes={currentLikes || []}
+            collectionName={"posts"}
+            targetUid={targetUid}
+            currentUser={currentUser}
+            displayName={displayName}
+            currentUserDisplayName={currentUserDisplayName}
+            message={"liked your post!"}
+          />
+          <div
+            onClick={() => handleToggleComments(docId)}
+            className="ml-2 cursor-pointer"
+          >
+            <CommentCount postId={docId} />
+          </div>
+          <SharePost
+            postId={docId}
+            postAuthorId={targetUid}
+            currentUser={currentUser}
+            currentUserDisplayName={currentUserDisplayName}
+            collectionName={"posts"}
+            type={"sharedPost"}
+          />
         </div>
-        <SharePost
-          postId={docId}
-          postAuthorId={targetUid}
-          currentUser={currentUser}
-          currentUserDisplayName={currentUserDisplayName}
-          collectionName={"posts"}
-          type={"sharedPost"}
-        />
       </div>
     </div>
   );

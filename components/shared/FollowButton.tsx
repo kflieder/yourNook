@@ -116,13 +116,17 @@ function FollowButton({ targetUid }: FollowButtonProps) {
           <span>Request Pending</span>
         ) : (
           <button
-            onClick={handleFollowButtonClick}
-            className="text-gray-600 hover:text-black cursor-pointer"
-          >
-            {
-              isFollower && !isFollowing ? 'Follow Back' : isFollowing ? "Unfollow" : "Follow"
-            }
-          </button>
+                        onClick={handleFollowButtonClick}
+                        className={
+                            `px-3 py-1.5 text-sm font-medium rounded-full transition-colors` +
+                            ` ${isFollowing
+                                ? "bg-neutral-100 text-neutral-900 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-100 dark:hover:bg-neutral-700"
+                                : "bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-white"}`
+                        }
+                        aria-pressed={isFollowing}
+                    >
+                        {isFollowing ? "Following" : "Follow"}
+                    </button>
         )
       }
       
