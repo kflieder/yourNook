@@ -60,7 +60,7 @@ function FeedPage() {
 
   return (
     <div className="flex flex-col items-center justify-center h-full ">
-      <div className={`fixed top-15 z-49 shadow-lg grid grid-cols-3 justify-around bg-gray-300 sm:w-3/4 w-full rounded-3xl sm:text-base text-xs transition-transform duration-1000 ${showTabs ? "translate-y-0" : "-translate-y-20"}`}>
+      <div className={`fixed top-15 z-49 shadow-lg grid grid-cols-3 justify-around bg-gray-300 sm:w-3/4 w-full rounded-3xl sm:text-base text-xs transition-all duration-1000 ${showTabs ? "translate-y-0" : "-translate-y-20"}`}>
         <button
           onClick={() => handleTabChange("posts")}
           className={activeTab === "posts" ? activeButtonStyle : buttonStyle}
