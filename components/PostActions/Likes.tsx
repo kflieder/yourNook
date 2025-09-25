@@ -1,9 +1,10 @@
 'use client'
-import React, { useState }from 'react'
+import React, { useEffect, useState, useRef }from 'react'
 import { useAuth } from '@/context/AuthContext';
 import { doc, updateDoc, arrayUnion, arrayRemove, increment } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { sendNotification } from '@/utilities/sendNotification';
+import  CustomAlertModal  from '../customAlertModal/CustomAlertModal';
 interface LikesProps {
     docId: string;
     currentLikes: string[];
@@ -20,11 +21,32 @@ function Likes({ docId, currentLikes, collectionName, targetUid, currentUser, ty
   const { username } = useAuth();
   const [likes, setLikes] = useState<string[]>(currentLikes || []);
   const [loading, setLoading] = useState(false);
-
+  const [showAlert, setShowAlert] = useState(false);
+  const alertRef = useRef<HTMLDivElement>(null);
   const hasLiked = username && likes.includes(username.uid);
 
+
+  useEffect(() => {
+   function handleClickOutside(event: MouseEvent) {
+    if (!showAlert) return;
+       const target = event.target as HTMLElement;
+         if (alertRef.current && !alertRef.current.contains(target)) {
+           setShowAlert(false);
+       }
+   }
+
+   document.addEventListener('mousedown', handleClickOutside);
+   return () => {
+       document.removeEventListener('mousedown', handleClickOutside);
+   };
+  }, [showAlert])
+
   const toggleLike = async () => {
-    if (!username || loading) return;
+    if (loading) return;
+    if (!username) {
+        setShowAlert(true);
+        return;
+    }
     setLoading(true);
 
     const postRef = doc(db, collectionName, docId);
@@ -58,9 +80,13 @@ function Likes({ docId, currentLikes, collectionName, targetUid, currentUser, ty
     }
   }
   return (
-    <button onClick={toggleLike} disabled={loading} className="cursor-pointer">
-      {hasLiked ? '❤️' : '🤍'} {likes.length}
-    </button>
+    <>
+      <button onClick={toggleLike} disabled={loading} className="cursor-pointer relative">
+        {hasLiked ? '❤️' : '🤍'} {likes.length}
+        
+      </button>
+      {showAlert && <div className='absolute left-0 bottom-0' ref={alertRef}><CustomAlertModal  message="Hello, Welcome to yourNook. Please log in or sign up to like posts." position={{ bottom: 40, left: 0 }} /></div>}
+    </>
   )
 }
 

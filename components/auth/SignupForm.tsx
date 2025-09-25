@@ -144,8 +144,8 @@ We may update these Terms from time to time. Continued use of the Platform after
 
 If you have questions about these Terms, please contact us at: yourNook@yourNook.com`;
   return (
-    <div>
-      <div className="flex flex-col border border-gray-300 justify-center items-center bg-white p-6 rounded-lg shadow-md">
+    <>
+      <div className="flex flex-col border border-gray-300 justify-center items-center bg-white p-2 sm:p-6 rounded-lg shadow-md">
         <input
           className="border w-56 m-2 rounded p-1"
           type="text"
@@ -221,7 +221,7 @@ If you have questions about these Terms, please contact us at: yourNook@yourNook
           </span>
         </div>
         <button
-          className="cursor-pointer bg-blue-950 text-white rounded p-2 mt-2 w-56 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="cursor-pointer bg-blue-950 text-white rounded p-1 mt-1 w-56 disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={
             !email ||
             !password ||
@@ -243,7 +243,7 @@ If you have questions about these Terms, please contact us at: yourNook@yourNook
         </button>
         {/* <p>Already have an account? <a href="/login">Login</a></p> */}
       </div>
-    </div>
+    </>
   );
 }
 

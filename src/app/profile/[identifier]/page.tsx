@@ -1,7 +1,8 @@
 // app/profile/[identifier]/page.tsx
 import admin from "../../../../lib/firebaseAdmin";
 import ProfilePage from "../../../../components/profile/ProfilePage";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
+import AdminProfilePage from "components/profile/AdminProfilePage";
 
 export const dynamic = "force-dynamic"; // Ensure this page is always dynamic
 
@@ -33,7 +34,7 @@ type ProfilePageProps = {
   }>;
 };
 
-export default async function UserProfile({ params }: {params: any}) {
+export default async function UserProfile({ params }: { params: any }) {
   const { identifier } = await params;
   const db = admin.firestore();
   const usersRef = db.collection("users");
@@ -42,6 +43,7 @@ export default async function UserProfile({ params }: {params: any}) {
     .limit(1)
     .get();
   let userData;
+  
 
   console.log("Fetching user profile for identifier:", identifier);
 
@@ -61,7 +63,6 @@ export default async function UserProfile({ params }: {params: any}) {
       return notFound(); // 404 page
     }
   }
- 
 
   // Step 3: Fetch posts by the user
   const postsSnapshot = await db
@@ -81,16 +82,27 @@ export default async function UserProfile({ params }: {params: any}) {
   });
 
   if (!userData) {
-  return notFound();
-}
-
+    return notFound();
+  }
+  
 
   return (
     <div>
-      <ProfilePage
-        userData={userData as ProfilePageProps["userData"]}
-        posts={posts}
-      />
+      {userData.isAdmin ? (
+        <>
+          <AdminProfilePage
+            userData={userData as ProfilePageProps["userData"]}
+            posts={posts}
+          />
+        </>
+      ) : (
+        <>
+          <ProfilePage
+            userData={userData as ProfilePageProps["userData"]}
+            posts={posts}
+          />
+        </>
+      )}
     </div>
   );
 }

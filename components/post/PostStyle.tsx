@@ -178,7 +178,7 @@ function PostStyle({
         {textContent && <p className="w-full text-center flex justify-center items-center px-5">{textContent}</p>}
       </div>
       <div className="px-2 sm:px-10 py-2">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-around">
           <Likes
             type={"likedPost"}
             docId={docId}
@@ -215,7 +215,7 @@ function PostStyle({
       {openPostId === docId && (
         <div className="fixed top-5 sm:inset-0 z-3 flex md:flex-row flex-col justify-center items-center bg-black/50 w-full h-screen">
           <IoIosCloseCircleOutline
-            className="absolute sm:top-30 top-20 right-0 text-white cursor-pointer z-20 sm:bg-gray-100/0 bg-black rounded-full"
+            className="absolute sm:top-50 top-20 right-0 text-white cursor-pointer z-20 sm:bg-gray-100/0 bg-black rounded-full"
             size={36}
             onClick={() => setOpenPostId(null)}
           />

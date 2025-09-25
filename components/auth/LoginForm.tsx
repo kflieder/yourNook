@@ -35,16 +35,16 @@ function LoginForm() {
 
   return (
     <div>
-      <div className="flex flex-col border border-gray-300 justify-center items-center bg-white p-6 rounded-lg shadow-md">
+      <div className="flex flex-col border border-gray-300 justify-center items-center bg-white p-2 sm:p-6 rounded-lg shadow-md">
         <input
-          className="border w-56 m-2 rounded p-2"
+          className="border w-56 m-1 rounded p-1"
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
-          className="border w-56 m-2 rounded p-2"
+          className="border w-56 m-2 rounded p-1"
           type="password"
           placeholder="Password"
           value={password}
@@ -52,7 +52,7 @@ function LoginForm() {
         />
         <button
         disabled={!email || !password}
-          className="cursor-pointer bg-blue-950 w-56 text-white rounded p-2 m-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg transition-all duration-200"
+          className="cursor-pointer bg-blue-950 w-56 text-white rounded p-1 m-1 text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg transition-all duration-200"
           onClick={(e) => {
             console.log("Logging in with:", { email, password });
             handleLogin(e);

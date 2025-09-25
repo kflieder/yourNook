@@ -49,7 +49,7 @@ function CommentSection({
   return (
     <>
       {comments.length === 0 ? (
-        <div className="h-full flex flex-col justify-end">
+        <div className="h-full flex flex-col justify-end rounded-4xl">
           <span className="flex flex-col h-full justify-center items-center">
             <p className="font-extrabold text-xl">No Comments yet,</p> be the
             first!
