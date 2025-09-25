@@ -81,8 +81,10 @@ function FeedPage() {
         </button>
       </div>
 
-      <div className={`w-full grid grid-cols-1 lg:grid-cols-2 lg:pl-10 justify-between h-screen transition-[padding] duration-300 ${showTabs ? "pt-[100px]" : "pt-0"} pb-20`}>
+      <div className={`w-full grid grid-cols-1 lg:grid-cols-2 lg:pl-10 justify-between h-screen pb-20`}>
+        
         <div ref={feedRef} className={`flex flex-col gap-y-4 overflow-x-hidden hide-scrollbar ${expandedBlog ? "overflow-hidden" : "overflow-scroll"}`}>
+          <div className="pt-25">
         {activeTab === "posts" && (
           <GlobalPostFeed
             currentUser={{
@@ -104,6 +106,7 @@ function FeedPage() {
         {activeTab === "threads" && (
           <GlobalDiscussionThreadFeed currentUser={currentUser.uid} />
         )}
+          </div>
         </div>
         <div className="hidden lg:flex justify-center items-center">
           <div className="w-116 h-full flex flex-col justify-center gap-y-8">
