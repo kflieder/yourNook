@@ -4,6 +4,7 @@
 import "./globals.css";
 import { AuthProvider } from "../context/AuthContext";
 import Header from "../../components/shared/Header";
+import AlertProvider from "components/customAlertModal/AlertProvider";
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",
@@ -17,12 +18,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="hide-scrollbar">
-      <body className='hide-scrollbar'>
+      <body className="hide-scrollbar">
         <div className="rainbow-bg hide-scrollbar"></div>
-       <AuthProvider>
-          <Header />
-          {children}
-        </AuthProvider>
+        <AlertProvider>
+          <AuthProvider>
+            <Header />
+            {children}
+          </AuthProvider>
+        </AlertProvider>
       </body>
     </html>
   );

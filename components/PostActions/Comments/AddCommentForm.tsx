@@ -1,8 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { usePostComments } from "@/utilities/usePostComments";
 import { useAuth } from "@/context/AuthContext";
 import { sendNotification } from "@/utilities/sendNotification";
+import CustomAlertModal from "components/customAlertModal/CustomAlertModal";
+import { useAlert } from "components/customAlertModal/AlertProvider";
 interface AddCommentFormProps {
   postId: string;
   postAuthorId: string;
@@ -18,10 +20,16 @@ function AddCommentForm({ postId, postAuthorId, maxChar, parentId, type, message
   const { addComment } = usePostComments(postId);
   const [commentText, setCommentText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const alertRef = useRef<HTMLDivElement>(null);
+  const { show } = useAlert();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!commentText.trim() || !currentUser) return;
+    if (!commentText.trim()) return;
+    if (!currentUser) {
+      show("Hello! Welcome to yourNook. Please log in or sign up to add a comment.", { bottom: 40, right: 0 }, alertRef);
+      return;
+    }
 
     setIsSubmitting(true);
     try {
@@ -68,7 +76,8 @@ function AddCommentForm({ postId, postAuthorId, maxChar, parentId, type, message
    
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center">
+    <form onSubmit={handleSubmit} className="flex items-center relative">
+     
       <textarea
         value={commentText}
         onChange={handleInputChange}
@@ -80,7 +89,7 @@ function AddCommentForm({ postId, postAuthorId, maxChar, parentId, type, message
         style={{ resize: "none" }}
         onKeyDown={handleKeyDown}
       />
-      <div className="flex flex-col items-center">
+      <div ref={alertRef} className="flex flex-col items-center">
       <button
         type="submit"
         className={`text-white p-1 px-2 rounded-4xl text-xs ${

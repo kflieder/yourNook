@@ -213,20 +213,16 @@ function PostStyle({
     <>
       {post}
       {openPostId === docId && (
-        <div className="fixed top-5 sm:inset-0 z-3 flex md:flex-row flex-col justify-center items-center bg-black/50 w-full h-screen">
-          <IoIosCloseCircleOutline
-            className="absolute sm:top-50 top-20 right-0 text-white cursor-pointer z-20 sm:bg-gray-100/0 bg-black rounded-full"
-            size={36}
-            onClick={() => setOpenPostId(null)}
-          />
+        <div className="fixed bottom-10 sm:inset-0 z-3 flex md:flex-row flex-col justify-center items-center bg-black/50 w-full h-screen p-2">
           <div className="w-full m-0 sm:w-120">{post}</div>
-          <div className="bg-white rounded shadow-2xl text-black overflow-y-auto hide-scrollbar w-full sm:w-120 sm:h-50 md:h-100 h-65 absolute sm:relative top-70 sm:top-auto">
+          <div className="bg-white rounded-2xl shadow-2xl text-black text-sm overflow-y-auto hide-scrollbar w-full sm:w-120 sm:h-50 md:max-h-120 md:min-h-92 h-65 absolute sm:relative sm:bottom-0 bottom-10 sm:top-auto">
             <CommentSection
               maxChar={300}
               postId={docId}
               postAuthorId={targetUid}
               type="commentPost"
               message="commented on your post!"
+              clickXfunction={() => setOpenPostId(null)}
             />
           </div>
         </div>

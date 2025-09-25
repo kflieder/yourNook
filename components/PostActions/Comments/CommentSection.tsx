@@ -4,13 +4,15 @@ import { usePostComments } from "@/utilities/usePostComments";
 import Comment from "./Comment";
 import AddCommentForm from "./AddCommentForm";
 import { LuMessageCircle } from "react-icons/lu";
+import { IoIosCloseCircleOutline } from "react-icons/io";
 
 interface CommentSectionProps {
   postId: string;
   postAuthorId: string;
   maxChar?: number;
   type?: string;
-  message?: string; // for notifications
+  message?: string;
+  clickXfunction?: () => void;
 }
 
 function CommentSection({
@@ -18,7 +20,8 @@ function CommentSection({
   postAuthorId,
   maxChar,
   type,
-  message, // for notifications
+  message, 
+  clickXfunction,
 }: CommentSectionProps) {
   const { comments } = usePostComments(postId);
   const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
@@ -62,10 +65,17 @@ function CommentSection({
             parentId={null}
             message={message}
           />
+          <div className="absolute top-0 right-0 p-2">
+            <IoIosCloseCircleOutline
+              className="text-gray-500 cursor-pointer"
+              size={24}
+              onClick={clickXfunction}
+            />
+          </div>
         </div>
       ) : (
-        <div className=" flex flex-col justify-between h-full">
-          <ul>
+        <div className="flex flex-col justify-between h-full">
+          <ul className="overflow-y-auto max-h-[60vh] p-2 hide-scrollbar">
             {commentTree.map((comment) => (
               <Comment
                 key={comment.id}
@@ -87,6 +97,15 @@ function CommentSection({
               type={type}
               message={message}
               parentId={null}
+              
+            />
+            
+          </div>
+          <div className="absolute top-0 right-0 p-2">
+            <IoIosCloseCircleOutline
+              className="text-gray-500 cursor-pointer"
+              size={24}
+              onClick={clickXfunction}
             />
           </div>
         </div>
