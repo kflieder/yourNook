@@ -126,11 +126,11 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
             {activeTab === "posts" ? (
               <UserPosts posts={posts} />
             ) : activeTab === "blog" ? (
-              <div className='flex h-[50vh] w-full justify-center items-center text-2xl'>
+              <div className='flex h-[50vh] w-full justify-center items-center text-2xl text-center sm:px-0 px-10 border'>
                 <h1>Please <Link href="/" className='text-blue-500'>Log In</Link> or <Link href="/" className='text-blue-500'>Sign Up</Link> to View Blogs</h1>
               </div>
             ) : activeTab === "thread" ? (
-              <div className='flex h-[50vh] w-full justify-center items-center text-2xl'>
+              <div className='flex h-[50vh] w-full justify-center items-center text-2xl text-center sm:px-0 px-10'>
                 <h1>Please <Link href="/" className='text-blue-500'>Log In</Link> or <Link href="/" className='text-blue-500'>Sign Up</Link> to View Threads</h1>
               </div>
             ) : null}
