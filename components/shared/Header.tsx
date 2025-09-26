@@ -10,6 +10,7 @@ function Header() {
   const { username: user }: any = useAuth();
   if (!user) return (
     <div className="flex justify-between items-center px-2 py-1 bg-blue-950 text-white text-xl capitalize font-extrabold tracking-wide shadow-xl">
+      <Link href={`/`}>
        <Image
             src="/logo.png"
             alt="Logo"
@@ -17,7 +18,8 @@ function Header() {
             height={40}
             className="rounded-full"
           />
-        <h1>Please Login :D</h1>
+      </Link>
+        <h1>Please <Link href="/" className="text-blue-200 underline">Log In</Link> :D</h1>
       </div>
   );
   return (

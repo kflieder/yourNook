@@ -9,6 +9,7 @@ import DMComponent from "components/profile/DMs/DMComponent";
 import CreatePost from "components/profile/CreatePost";
 import BlogForm from "components/blog/BlogForm";
 import DiscussionThreadForm from "components/discussionThreads/DiscussionThreadForm";
+import Link from "next/link";
 
 function FeedPage() {
   const { username: currentUser } = useAuth();
@@ -46,7 +47,11 @@ function FeedPage() {
 
 
   if (!currentUser) {
-    return <div>Loading...</div>;
+    return (
+      <div className='h-[50vh] flex justify-center items-center'>
+        <h1 className="text-4xl">Please <Link href="/" className="text-blue-500 underline">Log In</Link> or <Link href="/" className="text-blue-500 underline">Sign Up</Link> to view your feed</h1>
+      </div>
+    );
   }
 
   function handleTabChange(tab: "posts" | "blogs" | "threads") {

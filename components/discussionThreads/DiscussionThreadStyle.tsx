@@ -127,7 +127,7 @@ function DiscussionThreadStyle({
               currentLikes={currentLikes || []}
               collectionName={"discussionThreads"}
               targetUid={authorUid}
-              currentUser={currentUser.uid || currentUser}
+              currentUser={currentUser.uid || currentUser || ""}
               displayName={authorUidData?.displayName || "Unknown Author"}
               currentUserDisplayName={
                 currentUserDisplayName ||
@@ -141,7 +141,7 @@ function DiscussionThreadStyle({
             <SharePost
               postId={postId || ""}
               postAuthorId={authorUid || ""}
-              currentUser={currentUser?.uid || currentUser}
+              currentUser={currentUser?.uid || currentUser || ""}
               currentUserDisplayName={
                 currentUserDisplayName || currentUser?.displayName || ""
               }

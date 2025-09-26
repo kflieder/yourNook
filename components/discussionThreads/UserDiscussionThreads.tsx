@@ -4,7 +4,7 @@ import { useGetDiscussionThread } from 'src/utilities/threads/useGetDiscussionTh
 
 function UserDiscussionThreads({ currentUser, targetUser }: { currentUser: any; targetUser: string }) {
   const { discussionThreads, loading } = useGetDiscussionThread(targetUser); 
-  console.log("Discussion Threads:", discussionThreads);
+  
   return (
     <div className='space-y-4 sm:pr-20 px-2 sm:pl-16'>
       {loading && <p>Loading discussion threads...</p>}

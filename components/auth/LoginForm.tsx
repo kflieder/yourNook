@@ -36,6 +36,13 @@ function LoginForm() {
     }
   }
 
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleLogin(e as unknown as React.FormEvent);
+    }
+  }
+
   return (
     <div>
       <div className="flex flex-col border border-gray-300 justify-center items-center bg-white p-2 sm:p-6 rounded-lg shadow-md">
@@ -52,6 +59,7 @@ function LoginForm() {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
         <button
         ref={alertref}

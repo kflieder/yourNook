@@ -18,6 +18,7 @@ import UserDiscussionThreads from "components/discussionThreads/UserDiscussionTh
 import useIsMobile from "@/utilities/useIsMobile";
 import BottomBar from "components/shared/BottomBar";
 import { FaEllipsisVertical } from "react-icons/fa6";
+import Link from "next/link";
 
 interface ProfilePageProps {
   userData: {
@@ -61,10 +62,92 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   const bioRef = useRef<HTMLDivElement>(null);
   const postsRef = useRef<HTMLDivElement>(null);
   const [enableScroll, setEnableScroll] = useState<boolean>(false);
-  const [contentType, setContentType] = useState<string[]>([]);
+  const [contentType, setContentType] = useState<string[]>(
+  userData.contentType && userData.contentType.length > 0
+    ? userData.contentType
+    : ['posts']
+);
   const [showBlockButton, setShowBlockButton] = useState(false);
+
+  const activeTabClass = "shadow-xl h-8";
+  const buttonClass =
+    "w-1/3 cursor-pointer bg-blue-950/80 text-white hover:shadow-xl transition-all duration-200 h-6";
+
+
+  const publicProfileContent = (
+    <>
+    <div>
+      <Bio userData={userData} />
+    </div>
+    <div
+          ref={postsRef}
+          className={`hide-scrollbar pb-5 sm:pb-20
+          h-[75vh] sm:h-auto 
+           ${
+             isMobile
+               ? "overflow-scroll touch-pan-y"
+               : enableScroll
+               ? "sm:overflow-scroll"
+               : "sm:overflow-hidden"
+           }`}
+        >
+          <div className="sticky top-0 sm:top-2.5 z-40 flex justify-center space-x-4 p-4 bg-white/70 backdrop-blur-sm rounded">
+            {contentType.includes("posts") && (
+              <button
+                onClick={() => handleTabChange("posts")}
+                className={`${buttonClass}
+              ${activeTab === "posts" ? activeTabClass : ""}`}
+              >
+                Posts
+              </button>
+            )}
+            {contentType.includes("blog") && (
+              <button
+                onClick={() => handleTabChange("blog")}
+                className={`${buttonClass}
+              ${activeTab === "blog" ? activeTabClass : ""}`}
+              >
+                Blogs
+              </button>
+            )}
+            {contentType.includes("thread") && (
+              <button
+                onClick={() => handleTabChange("thread")}
+                className={`${buttonClass}
+              ${activeTab === "thread" ? activeTabClass : ""}`}
+              >
+                Threads
+              </button>
+            )}
+          </div>
+          {/* tabs div ^^ */}
+
+          <div className="flex flex-col justify-center items-center pt-4 sm:pb-0 pb-15">
+            {activeTab === "posts" ? (
+              <UserPosts posts={posts} />
+            ) : activeTab === "blog" ? (
+              <div className='flex h-[50vh] w-full justify-center items-center text-2xl'>
+                <h1>Please <Link href="/" className='text-blue-500'>Log In</Link> or <Link href="/" className='text-blue-500'>Sign Up</Link> to View Blogs</h1>
+              </div>
+            ) : activeTab === "thread" ? (
+              <div className='flex h-[50vh] w-full justify-center items-center text-2xl'>
+                <h1>Please <Link href="/" className='text-blue-500'>Log In</Link> or <Link href="/" className='text-blue-500'>Sign Up</Link> to View Threads</h1>
+              </div>
+            ) : null}
+          </div>
+        </div>
+    </>
+  );
   if (!username) {
-    return null;
+    if (userData.private) {
+      return (
+        <div className="flex flex-col items-center justify-center pt-20">
+          <h2>This profile is private.</h2>
+          <p>You must be logged in to view their content.</p>
+        </div>
+      );
+    }
+    return <div className="sm:pt-15 pt-10">{publicProfileContent}</div>;
   }
   const currentUsersDoc = getUserDocHelper(username.uid);
   const targetUsersDoc = getUserDocHelper(userData.uid);
@@ -136,10 +219,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
     setShowBlockButton(!showBlockButton);
   }
 
-  const activeTabClass = "shadow-xl h-8";
-  const buttonClass =
-    "w-1/3 cursor-pointer bg-blue-950/80 text-white hover:shadow-xl transition-all duration-200 h-6";
-
+ 
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center">
@@ -160,7 +240,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   } else if (isBlocked) {
     return (
       <div className="flex flex-col items-center justify-center pt-20">
-        <h2>you're blocked bitch</h2>
+        <h2>You're blocked</h2>
         <p>You cannot view their profile.</p>
       </div>
     );

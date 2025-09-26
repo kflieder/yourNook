@@ -45,8 +45,9 @@ function UserBlogs({
             authorDisplayName={authorDisplayName}
             profilePicture={profilePicture}
             currentLikes={blog.likes}
-            currentUser={currentUser}
-            currentUserDisplayName={currentUserDisplayName}
+            currentUser={currentUser || null}
+            currentUserDisplayName={currentUserDisplayName || ''
+            }
             authorUid={authorId}
             topic={blog.topic}
             onExpandChange={(expanded) => {

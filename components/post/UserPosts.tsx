@@ -67,7 +67,7 @@ function UserPosts({
   return (
     <div
       className={`relative rounded w-full grid justify-center items-center  ${
-        showThumbnails ? "grid-cols-3 md:grid-cols-4" : "grid-cols-1 h-[70vh] sm:h-[85vh] overflow-auto"
+        showThumbnails ? "grid-cols-3 md:grid-cols-4 lg:grid-cols-5" : "grid-cols-1 h-[70vh] sm:h-[85vh] overflow-auto"
       } gap-4 hide-scrollbar`}
     >
       {clickedPostId && (

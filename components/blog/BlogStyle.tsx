@@ -21,7 +21,7 @@ interface BlogStyleProps {
   authorUid: string;
   profilePicture: string;
   currentLikes: string[];
-  currentUser: string;
+  currentUser?: string;
   currentUserDisplayName: string;
   topic: string;
   onExpandChange?: (expanded: boolean) => void;
@@ -99,7 +99,7 @@ function BlogStyle({
           {topicData.find((t) => t.topic === topic)?.icon}
         </span>
         <Elipsis
-          currentUser={currentUser}
+          currentUser={currentUser || ""}
           targetUid={authorUid}
           docId={id}
           collection={"blogs"}
@@ -185,7 +185,7 @@ function BlogStyle({
             currentLikes={currentLikes || []}
             collectionName={"blogs"}
             targetUid={authorUid}
-            currentUser={currentUser}
+            currentUser={currentUser || ""}
             displayName={authorDisplayName}
             currentUserDisplayName={currentUserDisplayName}
             message={"liked your blog!"}

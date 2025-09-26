@@ -11,6 +11,7 @@ import DeleteAccount from '../../../components/settings/security/DeleteAccount'
 import LogOutButton from '../../../components/shared/LogOutButton'
 import AutoApproveFollowers from 'components/settings/security/AutoApproveFollowers'
 import PublicOrPrivate from 'components/settings/security/PublicOrPrivate'
+import ForgotPassword from 'components/settings/security/ForgotPassword'
 
 function Page() {
   const { username, loading }: any = useAuth();
@@ -75,7 +76,7 @@ function Page() {
                 <ChangePassword />
                 <AutoApproveFollowers uid={username?.uid} />
                 <PublicOrPrivate currentUserUid={username?.uid} />
-                
+                <ForgotPassword />
               </div>
               <DeleteAccount />
               </>
