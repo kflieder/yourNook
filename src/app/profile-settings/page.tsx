@@ -31,9 +31,9 @@ function Page() {
 
 
   return (
-    <div className='grid grid-col-1 sm:grid-cols-5 sm:p-10 pt-10'>
+    <div className='grid grid-col-1 sm:grid-cols-5 sm:p-10 sm:pt-15 pt-10'>
       <div className='flex sm:flex-col '>
-        <button onClick={() => handleTabChange('profile')} className={`w-full text-left p-4 cursor-pointer ${activeTab === 'profile' ? 'bg-gray-200 shadow-lg' : ''}`}>
+        <button onClick={() => handleTabChange('profile')} className={`w-full text-left p-4 sm:text-md cursor-pointer ${activeTab === 'profile' ? 'bg-gray-200 shadow-lg' : ''}`}>
           <h1>Profile Settings</h1>
         </button>
         <button onClick={() => handleTabChange('security')} className={`w-full text-left p-4 cursor-pointer ${activeTab === 'security' ? 'bg-gray-200 shadow-lg' : ''}`}>
@@ -70,12 +70,15 @@ function Page() {
 
           ) : activeTab === 'security' ?
             (
-              <div className='flex flex-col gap-4'>
+              <>
+              <div className='flex flex-col gap-4 justify-center items-center pb-10'>
                 <ChangePassword />
                 <AutoApproveFollowers uid={username?.uid} />
                 <PublicOrPrivate currentUserUid={username?.uid} />
-                <DeleteAccount />
+                
               </div>
+              <DeleteAccount />
+              </>
             ) : activeTab === 'notifications' ? (
               <div>
                 <h2>Notifications Settings</h2>

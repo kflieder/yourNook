@@ -95,7 +95,7 @@ function AlertProvider({ children }: { children: ReactNode }) {
     return (
       <div
         id="global-alert"
-        className="fixed bg-white rounded-lg shadow-lg z-50 w-50 sm:w-96"
+        className="fixed bg-white rounded-lg shadow-lg z-50 w-auto max-w-64"
         style={{
           bottom: position.bottom,
           left: position.left !== undefined ? position.left : undefined,
@@ -103,20 +103,20 @@ function AlertProvider({ children }: { children: ReactNode }) {
         }}
       >
         {messages.length === 1 ? (
-          <p className="border border-red-400 p-4 rounded-2xl m-2">
+          <p className="border border-red-400 p-4 rounded-2xl m-2 text-center">
             {messages[0]}
           </p>
         ) : (
-          <div>
+          <ul>
             {messages.map((msg, index) => (
-              <p
+              <li
                 key={index}
                 className="border border-red-400 p-4 rounded-2xl mb-2 last:mb-0"
               >
                 {msg}
-              </p>
+              </li>
             ))}
-          </div>
+          </ul>
         )}
       </div>
     );

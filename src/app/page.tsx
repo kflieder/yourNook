@@ -15,7 +15,7 @@ export default function Home() {
   }, [username, router]);
 
   return (
-    <div className="flex justify-around pt-5 md:pt-20 sm:h-screen sm:mr-0 mr-5">
+    <div className="flex justify-around pt-5 md:pt-10 sm:h-screen sm:mr-10">
       <div className='md:flex sm:flex-col hidden h-full overflow-auto hide-scrollbar pt-5 md:pt-10 lg:w-full w-1/2'>
         <GlobalPostFeed currentUser={{
           uid: "",

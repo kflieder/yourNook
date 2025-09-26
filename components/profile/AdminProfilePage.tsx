@@ -15,7 +15,7 @@ import DMComponent from "./DMs/DMComponent";
 import DiscussionThreadForm from "components/discussionThreads/DiscussionThreadForm";
 import UserDiscussionThreads from "components/discussionThreads/UserDiscussionThreads";
 import useIsMobile from "@/utilities/useIsMobile";
-import BottomBar from "components/mobileComponents/BottomBar";
+import BottomBar from "components/shared/BottomBar";
 import { FaEllipsisVertical } from "react-icons/fa6";
 
 interface ProfilePageProps {
@@ -309,7 +309,7 @@ function ProfilePage({ userData, posts }: ProfilePageProps) {
   return (
     <>
     {
-      userData.isAdmin ? (
+      userData.isAdmin && isOwner ? (
         <>
         <div className="flex justify-center space-x-4 p-4 bg-white/70 backdrop-blur-sm rounded pt-20">
         <h1 className='cursor-pointer' onClick={() => setActiveAdminTab("adminDashboard")}>Admin Dashboard</h1>

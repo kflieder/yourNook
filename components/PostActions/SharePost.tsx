@@ -1,6 +1,7 @@
-import React from 'react'
+import React, {useRef} from 'react'
 import { FaShare } from "react-icons/fa";
 import { sendNotification } from '@/utilities/sendNotification';
+import { useAlert } from 'components/customAlertModal/AlertProvider';
 
 interface SharePostProps {
   postId: string;
@@ -12,11 +13,14 @@ interface SharePostProps {
 }
 
 function SharePost({ postId, postAuthorId, currentUser, currentUserDisplayName, collectionName, type }: SharePostProps) {
+    const { show } = useAlert();
+    const alertRef = useRef<HTMLDivElement | null>(null);
+
     const handleshare = async (postId: string) => {
         try {
            const url = `${window.location.origin}/feed/${collectionName}/${postId}`;
               await navigator.clipboard.writeText(url);
-              alert('Post link copied to clipboard!'); 
+              show('Post link copied to clipboard!', { bottom: 20, right: 0 }, alertRef);
               await sendNotification({
                 postId: postId,
                 toUserId: postAuthorId,
@@ -24,23 +28,14 @@ function SharePost({ postId, postAuthorId, currentUser, currentUserDisplayName, 
                 fromUserId: currentUser,
                 message: `${currentUserDisplayName || "Someone"} shared your post!`
               });
-              console.log('postAuthorId:', postAuthorId);
-              console.log('currentUser:', currentUser);
-              console.log('currentUserDisplayName:', currentUserDisplayName);
-              console.log('type:', type);
-              console.log('postId:', postId);
-              console.log('collectionName:', collectionName);
-              console.log('url:', url);
-              console.log('currentUserDisplayName:', currentUserDisplayName);
-              console.log('currentUser:', currentUser);
-              console.log('postAuthorId:', postAuthorId);
         } catch (error) {
-           console.error("Error copying post link:", error); 
+           console.error("Error copying post link:", error);
+           show("Failed to copy post link. Please try again.", { bottom: 20, right: 0 }, alertRef);
         }
     }
 
   return (
-    <div>
+    <div ref={alertRef}>
       <FaShare size={20}
         className="cursor-pointer"
         onClick={() => handleshare(postId)} 

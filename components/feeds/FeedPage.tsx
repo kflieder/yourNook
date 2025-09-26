@@ -4,7 +4,7 @@ import GlobalPostFeed from "./GlobalPostFeed";
 import { useAuth } from "@/context/AuthContext";
 import GlobalBlogFeed from "./GlobalBlogFeed";
 import GlobalDiscussionThreadFeed from "./GlobalDiscussionThreadFeed";
-import BottomBar from "components/mobileComponents/BottomBar";
+import BottomBar from "components/shared/BottomBar";
 import DMComponent from "components/profile/DMs/DMComponent";
 import CreatePost from "components/profile/CreatePost";
 import BlogForm from "components/blog/BlogForm";
@@ -17,7 +17,6 @@ function FeedPage() {
   >("posts");
   const [expandedBlog, setExpandedBlog] = useState(false);
   const [showTabs, setShowTabs] = useState(true);
-  const lastScrollY = useRef(0);
   const feedRef = useRef<HTMLDivElement>(null);
 
  React.useEffect(() => {
@@ -53,7 +52,7 @@ function FeedPage() {
   function handleTabChange(tab: "posts" | "blogs" | "threads") {
     setActiveTab(tab);
   }
-  console.log(expandedBlog);
+  
 
   const buttonStyle = "px-4 py-2 rounded-3xl focus:outline-none cursor-pointer";
   const activeButtonStyle = `${buttonStyle} bg-blue-950 text-white`;
@@ -84,7 +83,7 @@ function FeedPage() {
       <div className={`w-full grid grid-cols-1 lg:grid-cols-2 lg:pl-10 justify-between h-screen pb-20`}>
         
         <div ref={feedRef} className={`flex flex-col gap-y-4 overflow-x-hidden hide-scrollbar ${expandedBlog ? "overflow-hidden" : "overflow-scroll"}`}>
-          <div className="pt-25">
+          <div className="pt-30">
         {activeTab === "posts" && (
           <GlobalPostFeed
             currentUser={{

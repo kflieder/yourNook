@@ -1,11 +1,14 @@
-import React from 'react'
+import React, {useRef} from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { deleteUser } from 'firebase/auth'
 import { getUserDocHelper } from '@/utilities/userDocHelper'
+import { useAlert } from 'components/customAlertModal/AlertProvider'
 
 function DeleteAccount() {
     const { username, firebaseUser } = useAuth()
     const [showModal, setShowModal] = React.useState(false);
+    const { show } = useAlert();
+    const buttonRef = useRef<HTMLButtonElement>(null);
 
     function handleFirstClick() {
         setShowModal(true);
@@ -25,7 +28,7 @@ function DeleteAccount() {
                         >   Cancel</button>
                         <button
                             onClick={handleDeleteAccount}
-                            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                            className="px-4 py-2 bg-red-400 cursor-pointer text-white rounded hover:bg-red-600"
                         >   Delete Account</button>
                     </div>
                 </div>
@@ -51,15 +54,15 @@ function DeleteAccount() {
             // Optionally, redirect to a different page or show a success message
         } catch (error) {
             console.error('Error deleting account:', error)
-            alert('Failed to delete account. Please try again.')
+            show("Error deleting account. Please try again.", { bottom: 20, left: 20 }, buttonRef);
         }
     }
 
 
 
   return (
-    <div>
-        <button onClick={handleFirstClick} className="w-full p-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+    <div className='pt-10 border-t'>
+        <button ref={buttonRef} onClick={handleFirstClick} className="w-full p-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 cursor-pointer">
             Delete Account
         </button>
         {showModal && alertModal()}

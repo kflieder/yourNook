@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase'; 
 import { getUserDocHelper } from '@/utilities/userDocHelper'; 
 import { useAuth } from '@/context/AuthContext'
 import { useUniqueUrl } from '@/utilities/FetchProfileInfo/useUniqueUrl'; 
+import { useAlert } from 'components/customAlertModal/AlertProvider';
 
 function UniqueUrl() {
     const { username }: any = useAuth();
     const [isEditable, setIsEditable] = useState(false);
+    const { show } = useAlert();
+    const buttonRef = useRef<HTMLButtonElement>(null);
    
 
    const {
@@ -31,7 +34,7 @@ function UniqueUrl() {
         const q = query(collection(db, 'users'), where('uniqueUrl', '==', uniqueUrl));
         const querySnapshot = await getDocs(q);
         if (!querySnapshot.empty) {
-            alert('This URL is unavailable!');
+            show('This URL is unavailable', { bottom: 30, right: 0 }, buttonRef);
         } else {
             await updateUserData({ uniqueUrl: uniqueUrl.trim().toLowerCase() });
             
@@ -49,15 +52,27 @@ function UniqueUrl() {
         <div>
         {
             isEditable ? (
+                <div className='flex text-xs sm:text-sm'>
                 <button
-                    className="cursor-pointer px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    ref={buttonRef}
+                    className="cursor-pointer px-2 py-1 bg-blue-950 text-white rounded hover:bg-gray-500"
                     onClick={handleSave}
                 >
                     Save
                 </button>
+                <button
+                    className="cursor-pointer ml-2 px-2 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+                    onClick={() => {    
+                        setUniqueUrl(originalUrl);
+                        setIsEditable(false);
+                    }}
+                >
+                    Cancel
+                </button>
+                </div>
             ) : (
                 <button
-                    className="cursor-pointer px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+                    className="cursor-pointer px-2 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
                     onClick={handleEdit}
                 >
                     Edit
@@ -75,7 +90,7 @@ function UniqueUrl() {
                 placeholder="Enter your unique URL"
                 id="uniqueUrl"
                 name="uniqueUrl"
-                className={`w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                className={`w-full p-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-800 ${
                     !isEditable ? 'text-gray-400 bg-gray-100 cursor-not-allowed' : ''
                   }`}
                 onChange={(e) => setUniqueUrl(e.target.value)}

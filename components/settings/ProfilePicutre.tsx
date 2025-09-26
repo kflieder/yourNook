@@ -41,7 +41,7 @@ function ProfilePicutre() {
 
     return (
         <div className="flex flex-col bg-white border-2 border-blue-950 rounded p-5 items-center gap-4">
-            <div className='border p-5'>
+            <div className='border p-2 rounded shrink-0'>
 
                 
                     <div>
@@ -71,16 +71,27 @@ function ProfilePicutre() {
                 />
                 {
                     !profilePicture ? (
-                        <label htmlFor="profilePicture" className="inline-block text-center px-4 py-2 rounded cursor-pointer transition-colors bg-gray-200 hover:bg-gray-300">
+                        <label htmlFor="profilePicture" className="inline-block text-center px-2 py-1 rounded cursor-pointer transition-colors bg-gray-200 hover:bg-gray-300">
                             Choose Picture
                         </label>
                     ) : (
+                        <div>
                         <button
                             onClick={handleUploadProfilePic}
-                            className="inline-block text-center px-4 py-2 rounded cursor-pointer transition-colors bg-blue-500"
+                            className="inline-block text-center px-2 py-1 rounded cursor-pointer transition-colors bg-blue-950 text-white hover:bg-blue-800"
                         >
                             Upload Picture
                         </button>
+                        <button
+                            onClick={() => {
+                                setProfilePicture(previewUrl ? null : null);
+                                setPreviewUrl(username?.profilePicture || null);
+                            }}
+                            className="ml-4 inline-block text-center px-2 py-1 rounded cursor-pointer transition-colors bg-gray-200 hover:bg-gray-300"
+                        >
+                            Cancel
+                        </button>
+                        </div>
                     )
 
                 }

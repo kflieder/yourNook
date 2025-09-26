@@ -1,11 +1,14 @@
 "use client";
 import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../lib/firebase";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import { useAlert } from "components/customAlertModal/AlertProvider";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { show } = useAlert();
+  const alertref = useRef<HTMLButtonElement>(null);
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -29,7 +32,7 @@ function LoginForm() {
       });       
     } catch (error) {
       console.log("error logging in:", error);
-      alert("Login failed. Please check your email and password.");
+      show("Login failed. Please check your email and password and try again.", { bottom: 25, right: 0 }, alertref);
     }
   }
 
@@ -51,6 +54,7 @@ function LoginForm() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button
+        ref={alertref}
         disabled={!email || !password}
           className="cursor-pointer bg-blue-950 w-56 text-white rounded p-1 m-1 text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg transition-all duration-200"
           onClick={(e) => {

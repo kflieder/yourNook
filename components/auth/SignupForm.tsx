@@ -1,10 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../lib/firebase";
 import { useRouter } from "next/navigation";
 import { getUserDocHelper } from "@/utilities/userDocHelper";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import { useAlert } from "components/customAlertModal/AlertProvider";
 
 function SignupForm() {
   const [email, setEmail] = useState("");
@@ -16,6 +17,8 @@ function SignupForm() {
   const [communityAttestationChecked, setCommunityAttestationChecked] =
     useState(false);
   const [showTerms, setShowTerms] = useState(false);
+  const { show: showAlert } = useAlert();
+  const alertRef = useRef<HTMLButtonElement>(null);
 
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault();
@@ -64,7 +67,6 @@ function SignupForm() {
   const handleShowTerms = () => {
     setShowTerms(!showTerms);
   };
-
 
   const termsOfServiceText = `Terms of Service
 
@@ -184,7 +186,10 @@ If you have questions about these Terms, please contact us at: yourNook@yourNook
           <span className="text-xs relative">
             By checking this box I agree to the Terms of Service and Privacy
             Policy
-            <p onClick={handleShowTerms} className="text-blue-500 cursor-pointer text-xs">
+            <p
+              onClick={handleShowTerms}
+              className="text-blue-500 cursor-pointer text-xs"
+            >
               Read the Terms of Service here
             </p>
             {showTerms && (
@@ -196,12 +201,12 @@ If you have questions about these Terms, please contact us at: yourNook@yourNook
                 />
                 <h2 className="text-lg font-bold mb-2">Terms of Service</h2>
                 <p className="text-sm h-46 overflow-auto">
-                    {termsOfServiceText.split("\n").map((line, index) => (
-                      <span key={index}>
-                        {line}
-                        <br />
-                      </span>
-                    ))}
+                  {termsOfServiceText.split("\n").map((line, index) => (
+                    <span key={index}>
+                      {line}
+                      <br />
+                    </span>
+                  ))}
                 </p>
               </div>
             )}
@@ -220,27 +225,54 @@ If you have questions about these Terms, please contact us at: yourNook@yourNook
             discrimination of any kind will not be tolerated.
           </span>
         </div>
-        <button
-          className="cursor-pointer bg-blue-950 text-white rounded p-1 mt-1 w-56 disabled:opacity-50 disabled:cursor-not-allowed"
-          disabled={
-            !email ||
+        <div className="relative inline-block group">
+          <button
+            ref={alertRef}
+            className="cursor-pointer bg-blue-950 text-white rounded p-1 mt-1 w-56 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={
+              !email ||
+              !password ||
+              !username ||
+              !termsOfServiceChecked ||
+              !communityAttestationChecked
+            }
+            onClick={(e) => {
+              const messages = [];
+              const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+              if (password !== confirmPassword) {
+                messages.push("Passwords do not match.");
+              }
+              if (password.length < 6) {
+                messages.push("Password must be at least 6 characters.");
+              }
+              if (!emailRegex.test(email)) {
+                messages.push("Please enter a valid email address.");
+              }
+
+              if (messages.length > 0) {
+                showAlert(
+                  messages.join(" "),
+                  { bottom: 30, right: -15 },
+                  alertRef
+                );
+                return;
+              }
+              handleSignup(e);
+            }}
+          >
+            Sign Up
+          </button>
+          {(!email ||
             !password ||
             !username ||
             !termsOfServiceChecked ||
-            !communityAttestationChecked
-          }
-          onClick={(e) => {
-            if (password !== confirmPassword) {
-              alert("Passwords do not match!");
-              return;
-            }
-            handleSignup(e);
-
-            console.log("Signing up with:", { username, email, password });
-          }}
-        >
-          Sign Up
-        </button>
+            !communityAttestationChecked) && (
+            <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-64 p-2 rounded bg-gray-800 text-white text-sm text-center opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200">
+              Please fill all fields and check all boxes to enable Sign Up.
+            </div>
+          )}
+        </div>
         {/* <p>Already have an account? <a href="/login">Login</a></p> */}
       </div>
     </>

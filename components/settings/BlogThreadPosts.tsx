@@ -1,8 +1,9 @@
 'use client';
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { useAuth } from '@/context/AuthContext';
+import { useAlert } from 'components/customAlertModal/AlertProvider';
 
 const contentTypeLabels: { [key: string]: string } = {
   posts: "Posts",
@@ -15,6 +16,8 @@ function BlogThreadPosts() {
     const [defaultContentType, setDefaultContentType] = useState<string>('posts');
     const { username }: any = useAuth();
     const [isEditable, setIsEditable] = useState(false);
+    const { show } = useAlert();
+    const buttonRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
         async function fetchSettings() {
@@ -42,7 +45,7 @@ function BlogThreadPosts() {
         }, { merge: true })
         console.log(username.uid);
         setIsEditable(false);
-        alert('Settings saved successfully!');
+        show("Settings updated successfully!", { bottom: 20, right: 0 }, buttonRef);
     }
 
     function handleEdit() {
@@ -60,22 +63,25 @@ function BlogThreadPosts() {
         <div>
             {
                 isEditable ? (
-                    <button className="cursor-pointer text-sm px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400" onClick={handleSubmit}>Save</button>
+                    <div className='flex flex-col gap-1'>
+                    <button ref={buttonRef} className="cursor-pointer text-sm px-1 py-0.5 bg-blue-950 text-white rounded hover:bg-gray-400" onClick={handleSubmit}>Save</button>
+                    <button className="cursor-pointer text-sm px-1 py-0.5 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 ml-2" onClick={() => setIsEditable(false)}>Cancel</button>
+                    </div>
                 ) : (
-                    <button className="cursor-pointer text-sm px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400" onClick={handleEdit}>Edit</button>
+                    <button className="cursor-pointer text-sm px-2 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400" onClick={handleEdit}>Edit</button>
                 )
             }
         </div>
     )
 
     return (
-        <div className='flex flex-col border-2 border-blue-950 p-8 rounded bg-white'>
-            <div className="flex justify-between w-full text-xl items-center">
+        <div className='flex flex-col border-2 border-blue-950 p-2 rounded bg-white'>
+            <div className="flex justify-between w-full text-lg items-start">
                 <h2>What content would you like to create?</h2>
                 {editButton}
             </div>
 
-            <div className='flex text-lg pl-5 mb-8'>
+            <div className='flex pl-2 text-sm mb-4'>
                 <input className='mr-2' type="checkbox" id="posts" name="posts" onChange={() => handleContentTypeChange('posts')} disabled={!isEditable} checked={contentType.includes('posts')} />
                 <label className='mr-4' htmlFor="posts">Posts</label>
                 
@@ -87,11 +93,11 @@ function BlogThreadPosts() {
         
             </div>
             <div className=''>
-                <h2 className='text-xl'>Which would you like as the default view on your profile?</h2>
+                <h2 className='text-lg'>Which would you like as the default view on your profile?</h2>
                 <div className='flex pl-2 gap-1'>
                     {
                         contentType.map((type) => (
-                            <div key={type} className="flex text-lg capitalize">
+                            <div key={type} className="flex text-sm capitalize">
                                 <input className='mr-1' type="radio" id={`radio-${type}`} name="contentType" onChange={() => setDefaultContentType(type)} disabled={!isEditable} checked={defaultContentType === type} />
                                 <label className='mr-4' key={type} htmlFor={type}>{contentTypeLabels[type]}</label>
                             </div>

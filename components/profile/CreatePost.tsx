@@ -8,6 +8,7 @@ import { storage } from "../../lib/firebase";
 import { TbPhotoPlus } from "react-icons/tb";
 import { GoDeviceCameraVideo } from "react-icons/go";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import { useAlert } from "../customAlertModal/AlertProvider";
 
 function CreatePost() {
   const { username } = useAuth();
@@ -17,6 +18,8 @@ function CreatePost() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [inputKey, setInputKey] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const { show } = useAlert();
+  const alertRef = useRef<HTMLButtonElement | null>(null);
 
   async function handleCreatePost(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -34,7 +37,8 @@ function CreatePost() {
       fileInputRef.current?.files?.length === 0 &&
       mediaFile === null
     ) {
-      alert("File Selection Failed. Please select a media file.");
+      show("Please select a photo :)", { bottom: 30, right: 0 }, alertRef);
+      setIsLoading(false);
       return;
     }
 
@@ -157,6 +161,7 @@ function CreatePost() {
             </div>
           </div>
           <button
+            ref={alertRef}
             disabled={!content && !mediaFile}
             type="submit"
             className="flex bg-blue-950 text-white px-2 py-1 text-sm rounded-lg hover:bg-gray-500 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"

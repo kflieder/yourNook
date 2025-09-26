@@ -16,7 +16,7 @@ import DiscussionThreadStyle from "components/discussionThreads/DiscussionThread
 import DiscussionThreadForm from "components/discussionThreads/DiscussionThreadForm";
 import UserDiscussionThreads from "components/discussionThreads/UserDiscussionThreads";
 import useIsMobile from "@/utilities/useIsMobile";
-import BottomBar from "components/mobileComponents/BottomBar";
+import BottomBar from "components/shared/BottomBar";
 import { FaEllipsisVertical } from "react-icons/fa6";
 
 interface ProfilePageProps {

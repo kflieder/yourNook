@@ -1,5 +1,6 @@
-import React from 'react'
+import React, {useRef} from 'react'
 import { blockUser } from '@/utilities/blockUserHelper'
+import { useAlert } from 'components/customAlertModal/AlertProvider';
 
 interface BlockButtonProps {
   blockerUid: string;
@@ -7,10 +8,12 @@ interface BlockButtonProps {
 }
 
 function BlockButton({ blockerUid, blockedUid }: BlockButtonProps ) {
+  const { show } = useAlert();
+  const alertRef = useRef<HTMLButtonElement>(null);
   const handleBlockUser = async () => {
     try {
       if (blockedUid === blockerUid) {
-        alert("You cannot block yourself.");
+        show("You cannot block yourself.", { bottom: 50, left: 0 }, alertRef);
         return;
       }
       await blockUser(blockerUid, blockedUid);
@@ -20,7 +23,7 @@ function BlockButton({ blockerUid, blockedUid }: BlockButtonProps ) {
     }
   };
   return (
-    <button className='cursor-pointer' onClick={handleBlockUser}>
+    <button ref={alertRef} className='cursor-pointer' onClick={handleBlockUser}>
       Block User
     </button>
   );

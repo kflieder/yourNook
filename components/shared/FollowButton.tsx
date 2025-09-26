@@ -1,11 +1,11 @@
 'use client';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { getUserDocHelper } from "@/utilities/userDocHelper";
 import { useLiveUserData } from "@/utilities/useLiveUserData";
 import { sendNotification } from "@/utilities/sendNotification";
 import { createFollowRequest, getFollowRequestStatus } from "@/utilities/followRequestHelper";
-
+import { useAlert } from "components/customAlertModal/AlertProvider";
 
 
 interface FollowButtonProps {
@@ -23,7 +23,8 @@ function FollowButton({ targetUid }: FollowButtonProps) {
   const [isFollower, setIsFollower] = useState(false);
   const needsApproval = liveTargetUser?.autoApproveFollow === false;
   const [followRequestStatus, setFollowRequestStatus] = useState<"pending" | "accepted" | "rejected" | null>(null);
-  
+  const { show } = useAlert();
+  const alertRef = useRef<HTMLButtonElement>(null);
 
   if (!currentUser || !targetUid) return null;
 
@@ -91,7 +92,7 @@ function FollowButton({ targetUid }: FollowButtonProps) {
     if (isFollowing) {
       handleUnfollow();
     } else if (needsApproval) {
-      alert("This user requires approval to follow.");
+      show("Follow request sent. Waiting for approval.", { bottom: 30, left: 0 }, alertRef);
       await createFollowRequest(targetUid, {
         uid: currentUser.uid,
         displayName: currentUser.displayName
@@ -116,12 +117,13 @@ function FollowButton({ targetUid }: FollowButtonProps) {
           <span>Request Pending</span>
         ) : (
           <button
-                        onClick={handleFollowButtonClick}
-                        className={
-                            `px-3 py-1.5 text-sm font-medium rounded-full transition-colors` +
-                            ` ${isFollowing
-                                ? "bg-neutral-100 text-neutral-900 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-100 dark:hover:bg-neutral-700"
-                                : "bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-white"}`
+            ref={alertRef}
+            onClick={handleFollowButtonClick}
+            className={
+              `cursor-pointer px-3 py-0.5 text-sm font-medium rounded-full transition-colors` +
+              ` ${isFollowing
+                ? "bg-neutral-100 text-neutral-900 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-100 dark:hover:bg-neutral-700"
+                                : "bg-neutral-900 text-white hover:bg-gray-500 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-white"}`
                         }
                         aria-pressed={isFollowing}
                     >

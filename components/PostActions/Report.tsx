@@ -1,8 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { db } from "../../lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { useAuth } from "@/context/AuthContext";
+import { useAlert } from "components/customAlertModal/AlertProvider";
 
 type ReportButtonProps = {
   postId: string;
@@ -13,6 +14,8 @@ function Report({ postId }: ReportButtonProps) {
   const [reasons, setReasons] = useState<string[]>([]);
   const [customReason, setCustomReason] = useState("");
   const [isSubtmitted, setIsSubmitted] = useState(false);
+  const { show } = useAlert();
+  const alertRef = useRef<HTMLButtonElement | null>(null);
 
   const reportOptions = [
     "Inappropriate content",
@@ -32,9 +35,14 @@ function Report({ postId }: ReportButtonProps) {
 
   async function handleSubmitReport(e: React.FormEvent) {
     e.preventDefault();
-    if (!currentUser || reasons.length === 0) {
+    if (!currentUser ) {
+      show("Please log in to report a post.", { bottom: 30, left: 0 }, alertRef);
       return;
     }
+      if (reasons.length === 0) {
+        show("Please select at least one reason for reporting.", { bottom: 30, left: 0 }, alertRef);
+        return;
+      }
 
     try {
       await addDoc(collection(db, "reports"), {
@@ -44,7 +52,7 @@ function Report({ postId }: ReportButtonProps) {
         customReason: customReason.trim(),
         reportedAt: serverTimestamp(),
       });
-      alert("Report submitted successfully");
+      show("Report submitted successfully", { bottom: 80, right: 10 }, alertRef);
       setReasons([]);
       setCustomReason("");
       setIsSubmitted(true);
@@ -79,6 +87,7 @@ function Report({ postId }: ReportButtonProps) {
           />
           <div className='w-full flex justify-end'>
           <button
+            ref={alertRef}
             disabled={!currentUser || reasons.length === 0}
             type="submit"
             className="flex items-center bg-red-500 text-white px-2 text-sm rounded hover:bg-red-600 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
@@ -88,7 +97,7 @@ function Report({ postId }: ReportButtonProps) {
           </div>
         </form>
       ) : (
-        <p className="text-green-500">Thank you for your report!</p>
+        <p className="text-green-500 p-2">Thank you for your report!</p>
       )}
     </>
   );

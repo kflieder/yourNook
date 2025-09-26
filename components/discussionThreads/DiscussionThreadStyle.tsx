@@ -53,7 +53,7 @@ function DiscussionThreadStyle({
 
  
   return (
-    <div className={`border border-gray-300 bg-white  pt-0.25 rounded-lg shadow-sm flex flex-col items-start ${usersProfileStyle ? "w-full" : "sm:w-1/2 w-full lg:w-full"}`} style={{
+    <div className={`border border-gray-300 bg-white  pt-0.25 rounded-lg shadow-sm flex flex-col items-start ${usersProfileStyle ? "w-full" : "w-full lg:w-full"}`} style={{
             background:
               topicData.find((t) => t.topic === topic)?.textBackground ||
               "white"

@@ -8,6 +8,7 @@ interface AutoAcceptFollowersProps {
 function AutoApproveFollowers({ uid }: AutoAcceptFollowersProps) {
     const userDoc = getUserDocHelper(uid);
     const [autoApprove, setAutoApprove] = useState<boolean>(false);
+    const [isEditable, setIsEditable] = useState(false);
 
     const fetchAutoApproveStatus = async () => {
         const userData = await userDoc?.fetchUserData();
@@ -19,8 +20,11 @@ function AutoApproveFollowers({ uid }: AutoAcceptFollowersProps) {
 
     function handleSubmit() {
         userDoc?.updateUserData({ autoApproveFollow: autoApprove });
+        setIsEditable(false);
     }
-
+    function toggleEditable() {
+        setIsEditable(!isEditable);
+    }
   
 
     useEffect(() => {
@@ -29,10 +33,13 @@ function AutoApproveFollowers({ uid }: AutoAcceptFollowersProps) {
    
 
   return (
-    <div>
+    <div className='border bg-white border-blue-950 rounded p-2 sm:w-1/2 w-full'>
       <h1>Auto Accept Followers</h1>
-      <p>Automatically accept follow requests from users you follow.</p>
+      <p className='text-sm'>Automatically accept follow requests from users you follow.</p>
+      <div className='flex justify-between'>
+      <div className='flex items-center'>
       <input
+        disabled={!isEditable}
         type="radio"
         checked={autoApprove}
         onChange={async (e) => {
@@ -42,8 +49,9 @@ function AutoApproveFollowers({ uid }: AutoAcceptFollowersProps) {
         }}
         className="cursor-pointer"
       />
-      <label className="ml-2">Enable</label>
+      <label className="ml-1">Enable</label>
       <input 
+        disabled={!isEditable}
         type="radio"
         checked={!autoApprove}
         onChange={async (e) => {
@@ -53,11 +61,20 @@ function AutoApproveFollowers({ uid }: AutoAcceptFollowersProps) {
         }}
         className="cursor-pointer ml-4"
       />
-      <label className="ml-2">Disable</label>
-      <button className="ml-2 border cursor-pointer rounded px-1 bg-blue-950 text-white" onClick={handleSubmit}>
-        Save
-      </button>
-        
+      <label className="ml-1">Disable</label>
+      </div>
+      {
+        isEditable ? (
+          <button className="ml-2 border text-sm cursor-pointer rounded px-1 bg-blue-950 text-white" onClick={handleSubmit}>
+            Save
+          </button>
+        ) : (
+          <button className="ml-2 text-sm border cursor-pointer rounded px-1 bg-gray-600 text-white" onClick={toggleEditable}>
+            Edit
+          </button>
+        )
+      }
+        </div>
     </div>
   )
 }
