@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../lib/firebase";
 import { useRouter } from "next/navigation";
@@ -19,6 +19,22 @@ function SignupForm() {
   const [showTerms, setShowTerms] = useState(false);
   const { show: showAlert } = useAlert();
   const alertRef = useRef<HTMLButtonElement>(null);
+  const termsRef = useRef<HTMLDivElement>(null);
+
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (termsRef.current && !termsRef.current.contains(event.target as Node)) {
+        setShowTerms(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [termsRef]);
+
 
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault();
@@ -183,7 +199,7 @@ If you have questions about these Terms, please contact us at: yourNook@yourNook
             checked={termsOfServiceChecked}
             onChange={handleTermsOfServiceChange}
           />
-          <span className="text-xs relative">
+          <span className="text-xs sm:text-sm md:text-lg relative">
             By checking this box I agree to the Terms of Service and Privacy
             Policy
             <p
@@ -193,7 +209,7 @@ If you have questions about these Terms, please contact us at: yourNook@yourNook
               Read the Terms of Service here
             </p>
             {showTerms && (
-              <div className="absolute top-12 left-0 bg-white border p-4 w-64 h-64 overflow-hidden z-20 shadow-lg">
+              <div ref={termsRef} className="absolute top-12 left-0 bg-white border p-4 w-64 h-64 overflow-hidden z-20 shadow-lg">
                 <IoIosCloseCircleOutline
                   className="absolute top-2 right-2 cursor-pointer"
                   size={20}
@@ -219,7 +235,7 @@ If you have questions about these Terms, please contact us at: yourNook@yourNook
             checked={communityAttestationChecked}
             onChange={handleCommunityAttestationChange}
           />
-          <span className="text-xs">
+          <span className="text-xs sm:text-sm md:text-base">
             By checking this box I attest that I am a part of the LGBT or POC
             communities, or an ally of one of these communities. Hate or
             discrimination of any kind will not be tolerated.

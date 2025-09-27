@@ -22,9 +22,9 @@ function ForgotPassword() {
             console.error("Error resetting password:", error);
         }
     }
-
+ 
   return (
-    <div ref={alertRef} className='flex flex-col gap-4 justify-center items-center w-full sm:w-1/2 p-4 border rounded bg-white'>
+    <div ref={alertRef} className='flex flex-col gap-4 justify-center items-center w-full p-4 border rounded bg-white'>
       <h1>Forgot Password</h1>
       <p>Please enter your email address to reset your password.</p>
       <input className='border rounded p-1' type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />

@@ -56,7 +56,6 @@ function Elipsis({
     };
   }, []);
 
-  console.log("Current User:", currentUser);
 
   return (
     <div ref={closeEllipsisRef}>

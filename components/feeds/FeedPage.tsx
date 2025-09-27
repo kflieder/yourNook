@@ -63,7 +63,7 @@ function FeedPage() {
   const activeButtonStyle = `${buttonStyle} bg-blue-950 text-white`;
 
   return (
-    <div className="flex flex-col items-center justify-center h-full ">
+    <div className="flex flex-col items-center justify-center h-full">
       <div className={`fixed top-15 z-49 shadow-lg grid grid-cols-3 justify-around bg-gray-300 sm:w-3/4 w-full rounded-3xl sm:text-base text-xs transition-all duration-300 ${showTabs ? "translate-y-0" : "-translate-y-20"}`}>
         <button
           onClick={() => handleTabChange("posts")}
@@ -85,7 +85,7 @@ function FeedPage() {
         </button>
       </div>
 
-      <div className={`w-full grid grid-cols-1 lg:grid-cols-2 lg:pl-10 justify-between h-screen pb-20`}>
+      <div className={`w-full grid grid-cols-1 lg:grid-cols-2 lg:pl-10 justify-between h-screen pb-10`}>
         
         <div ref={feedRef} className={`flex flex-col gap-y-4 overflow-x-hidden hide-scrollbar ${expandedBlog ? "overflow-hidden" : "overflow-scroll"}`}>
           <div className="pt-30">

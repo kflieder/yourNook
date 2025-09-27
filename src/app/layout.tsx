@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="hide-scrollbar">
+    <html lang="en" className='hide-scrollbar m-0 p-0'>
       <body className="hide-scrollbar">
         <div className="rainbow-bg hide-scrollbar"></div>
         <AlertProvider>

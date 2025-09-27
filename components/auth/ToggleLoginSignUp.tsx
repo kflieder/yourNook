@@ -12,7 +12,7 @@ function ToggleLoginSignUp() {
     }
 
   return (
-    <div className="bg-gray-300 p-4 pb-1 text-sm rounded-lg shadow-md flex flex-col items-center w-3/4 sm:w-full">
+    <div className="bg-gray-300 p-4 pb-1 text-sm sm:text-lg rounded-lg shadow-md flex flex-col items-center w-3/4 sm:w-full">
         {
             isSignup ? 
             <SignupForm /> :

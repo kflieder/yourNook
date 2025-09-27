@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
@@ -15,25 +15,31 @@ export default function Home() {
   }, [username, router]);
 
   return (
-    <div className="flex justify-around pt-5 md:pt-10 sm:h-screen sm:mr-10">
-      <div className='md:flex sm:flex-col hidden h-full overflow-auto hide-scrollbar pt-5 md:pt-10 lg:w-full w-1/2'>
-        <GlobalPostFeed currentUser={{
-          uid: "",
-          displayName: "",
-          profilePicture: undefined,
-        }} logInPage={true} />
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-[93vh] overflow-auto hide-scrollbar sm:pt-0 pt-5">
+
+      <div className="order-1 md:order-2 flex justify-center items-center">
+
+        <div className="md:w-3/4 w-full flex justify-center items-center">
+          <ToggleLoginSignUp />
+        </div>
+
       </div>
 
-      <div className='flex flex-col sm:flex justify-center items-center w-full sm:w-1/3 mt-5 sm:mt-0 lg:mr-10'>
-        <ToggleLoginSignUp />
-        <div className='sm:hidden block mt-4 text-center text-gray-600 text-xs w-3/4 h-124 overflow-auto hide-scrollbar'>
-        <GlobalPostFeed currentUser={{
-          uid: "",
-          displayName: "",
-          profilePicture: undefined,
-        }} logInPage={true} />
+      <div className="order-2 md:order-1 h-[93vh] py-10 overflow-auto hide-scrollbar flex justify-center">
+
+        <div className="w-full sm:px-4 h-[93vh] overflow-auto hide-scrollbar pb-10">
+          <GlobalPostFeed
+            currentUser={{
+              uid: "",
+              displayName: "",
+              profilePicture: undefined,
+            }}
+            logInPage={true}
+          />
         </div>
+
       </div>
+
     </div>
-  )
+  );
 }

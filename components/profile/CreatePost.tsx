@@ -85,10 +85,10 @@ function CreatePost() {
       }
       setInputKey((prev) => prev + 1);
       console.log("Post was added to Firestore!");
-      alert("Post created successfully!");
+      show("Post created successfully!", { bottom: 30, right: 0 }, alertRef);
     } catch (error) {
       console.error("Error creating post:", error);
-      alert("Failed to create post. Please try again later.");
+      show("Failed to create post. Please try again later.", { bottom: 30, right: 0 }, alertRef);
     } finally {
       setIsLoading(false);
     }

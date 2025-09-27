@@ -76,7 +76,9 @@ function Page() {
                 <ChangePassword />
                 <AutoApproveFollowers uid={username?.uid} />
                 <PublicOrPrivate currentUserUid={username?.uid} />
+                <div className='sm:w-1/2 w-full'>
                 <ForgotPassword />
+                </div>
               </div>
               <DeleteAccount />
               </>
