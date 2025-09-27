@@ -90,6 +90,9 @@ function GlobalPostFeed({ currentUser, logInPage }: GlobalPostFeedProps) {
               ))}
               {hasMore && <div ref={loadMoreRef} />}
               {loading && <p>Loading...</p>}
+              {!hasMore && !loading && (
+                <p className="text-center text-gray-700 pt-3">You’ve reached the end of the internet… just kidding! 😎 We’re a growing community. Feel free to add a post or check back later for fresh content!</p>
+              )}
             </div>
           
 
